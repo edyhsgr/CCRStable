@@ -13,24 +13,28 @@
 ##########
 
 ##########
-##INPUTS
-
+#####
 #DIMENSIONS
 SIZE<-18
 STEP<-0
+#####
 
+#####
 #IMPOSED TFR OPTION
 ImposedTFR<-1.5
 ffab<-.4886
 UseImposedTFR<-"NO"
+#####
 
+#####
 #SELECTION OF US CENSUS BUREAU 2000, 2005, 2010 INTERCENSAL POPULATION ESTIMATES BY AGE (RELEASED IN 2012) (https://www.census.gov/data/tables/time-series/demo/popest/intercensal-2000-2010-state.html)
 K<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AgeSex200020052010_CA_USCBIntercensal_2012.csv",header=TRUE,sep=",")
 TMinusOneAge<-K$CA_F_2000
 TMinusZeroAge<-K$CA_F_2005
+#####
 
 #####
-##CALCULATIONS
+#CALCULATIONS
 Ratios<-array(0,dim=length(TMinusOneAge))
 for (i in 2:length(TMinusOneAge)) {Ratios[i]<-TMinusZeroAge[i]/TMinusOneAge[i-1]}
 Ratios[1]<-TMinusZeroAge[1]/sum(TMinusOneAge[4:9])
@@ -47,7 +51,7 @@ A<-B+S
 #####
 
 #####
-##CALCULATORS
+#CALCULATORS
 CCRProject<-function(A,TMinusZeroAge,STEP){
 TMinusZeroAge<-A%*%TMinusZeroAge
 TMinusZeroAge<-data.frame(TMinusZeroAge)
@@ -60,7 +64,7 @@ while(CCRNew$STEP<51) {CCRNew<-CCRProject(A,CCRNew$TMinusZeroAge,CCRNew$STEP)}
 #####
 
 #####
-##GRAPHS
+#GRAPHS
 plot(K$CA_F_2000/sum(K$CA_F_2000),type="l",col=1,ylim=c(0,.1),xlab="Age group number",ylab="Population (proportional)")
 lines(K$CA_F_2005/sum(K$CA_F_2005),col=2)
 lines(CCRNew$TMinusZeroAge[]/sum(CCRNew$TMinusZeroAge),col=3)
