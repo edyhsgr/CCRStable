@@ -1,5 +1,5 @@
 ##########
-#R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW - JUST NASCENT WORK
+#R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - JUST NASCENT WORK, STILL FIGURING/LEARNING AND CHECKING
 #
 #EDDIE HUNSINGER, AUGUST 2019
 #https://edyhsgr.github.io/eddieh/
@@ -14,60 +14,102 @@
 
 ##########
 #####
+##INPUTS
+
 #DIMENSIONS
 SIZE<-18
-STEP<-0
-#####
+STEPS<-5
+STEPSSTABLE<-100
+CURRENTSTEP<-0
+CURRENTSTEPSTABLE<-0
+PROJECTIONYEAR<-STEPS*5+2015
+FERTWIDTH<-35
 
-#####
 #IMPOSED TFR OPTION
-ImposedTFR<-1.5
+ImposedTFR<-2.1
 ffab<-.4886
 UseImposedTFR<-"NO"
-#####
+
+#SELECTION OF US CENSUS BUREAU VINTAGE 2018 POPULATION ESTIMATES BY AGE (https://www.census.gov/programs-surveys/popest/data/tables.html)
+K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/PEP_2018_PEPAGE_FemaleByCounty.csv",header=TRUE,sep=","))
+TMinusOneAgeInit<-subset(K,Year==2010)
+TMinusOneAgeInit<-TMinusOneAgeInit$Alameda
+TMinusOneAge<-TMinusOneAgeInit
+
+TMinusZeroAgeInit<-subset(K,Year==2015)
+TMinusZeroAgeInit<-TMinusZeroAgeInit$Alameda
+TMinusZeroAge<-TMinusZeroAgeInit
 
 #####
-#SELECTION OF US CENSUS BUREAU 2000, 2005, 2010 INTERCENSAL POPULATION ESTIMATES BY AGE (RELEASED IN 2012) (https://www.census.gov/data/tables/time-series/demo/popest/intercensal-2000-2010-state.html)
-K<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AgeSex200020052010_CA_USCBIntercensal_2012.csv",header=TRUE,sep=",")
-TMinusOneAge<-K$CA_F_2000
-TMinusZeroAge<-K$CA_F_2005
-#####
-
-#####
-#CALCULATIONS
+##CALCULATIONS
 Ratios<-array(0,dim=length(TMinusOneAge))
 for (i in 2:length(TMinusOneAge)) {Ratios[i]<-TMinusZeroAge[i]/TMinusOneAge[i-1]}
-Ratios[1]<-TMinusZeroAge[1]/sum(TMinusOneAge[4:9])
+Ratios[1]<-TMinusZeroAge[1]/sum(TMinusOneAge[4:10])
 
 S<-array(0,c(SIZE,SIZE))
 S<-rbind(0,cbind(diag(Ratios[2:SIZE]),0))
 
 B<-0*S
-B[1,4:9]<-Ratios[1]
-ImpliedTFR<-sum(B)*(1/.4886) #(Need to check - just going off intuition in this version)
-if(UseImposedTFR=="YES") {B[1,4:10]<-(ImposedTFR/ImpliedTFR)*B[1,4:10]} #(Need to check - just going off intuition in this version)
+B[1,4:10]<-Ratios[1]
+ImpliedTFR<-sum(B)/ffab #(Need to work with/check)
+
+ImpliedTFR2010<-(TMinusOneAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+ImpliedTFR2015<-(TMinusZeroAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+
+if(UseImposedTFR=="YES") {B[1,4:10]<-(ImposedTFR/ImpliedTFR2015)*B[1,4:10]} #(Need to work with/check)
 
 A<-B+S
-#####
 
-#####
-#CALCULATORS
-CCRProject<-function(A,TMinusZeroAge,STEP){
+CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP){
 TMinusZeroAge<-A%*%TMinusZeroAge
 TMinusZeroAge<-data.frame(TMinusZeroAge)
-return(c(TMinusZeroAge,STEP=STEP+1))
+return(c(TMinusZeroAge,CURRENTSTEP=CURRENTSTEP+1))
 }
 
-CCRNew<-CCRProject(A,TMinusZeroAge,STEP)
+CCRNew<-CCRProject(A,TMinusZeroAge,CURRENTSTEP)
+while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(A,CCRNew$TMinusZeroAge,CCRNew$CURRENTSTEP)}
+ImpliedTFRNew<-(CCRNew$TMinusZeroAge[1]/ffab/5)/sum(CCRNew$TMinusZeroAge[4:10])*FERTWIDTH
 
-while(CCRNew$STEP<51) {CCRNew<-CCRProject(A,CCRNew$TMinusZeroAge,CCRNew$STEP)}
-#####
+TMinusZeroAge<-TMinusZeroAgeInit
+CCRStable<-CCRProject(A,TMinusZeroAge,CURRENTSTEPSTABLE)
+while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
+ImpliedTFRStable<-(CCRStable$TMinusZeroAge[1]/ffab/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
+
+TotalNew<-round(sum(CCRNew$TMinusZeroAge))
+TotalTMinusOneInit<-sum(TMinusOneAgeInit)
+TotalTMinusZeroInit<-sum(TMinusZeroAgeInit)
 
 #####
-#GRAPHS
-plot(K$CA_F_2000/sum(K$CA_F_2000),type="l",col=1,ylim=c(0,.1),xlab="Age group number",ylab="Population (proportional)")
-lines(K$CA_F_2005/sum(K$CA_F_2005),col=2)
-lines(CCRNew$TMinusZeroAge[]/sum(CCRNew$TMinusZeroAge),col=3)
-#####
+##GRAPHS (SOME ~HACKY LABELING SO MAY NOT RENDER WELL)
+agegroups<-c("0 to 4", "5 to 9", "10 to 14", "15 to 19", "20 to 24", "25 to 29", "30 to 34", "35 to 39", "40 to 44", "45 to 49", "50 to 54", "55 to 59", "60 to 64", "65 to 69", "70 to 74", "75 to 79", "80 to 84", "85+")
+plot(TMinusOneAgeInit/sum(TMinusOneAgeInit),type="l",col="orange",main="Female Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)")
+lines(TMinusZeroAgeInit/sum(TMinusZeroAgeInit),col="blue")
+lines(CCRNew$TMinusZeroAge[]/sum(CCRNew$TMinusZeroAge),col="dark green",lty=1)
+lines(CCRStable$TMinusZeroAge[]/sum(CCRStable$TMinusZeroAge),col="dark green",lty=2)
+mtext(side=1,"Age groups",line=4)
+axis(side=1,at=1:SIZE,las=2,labels=agegroups,cex.axis=0.9)
+axis(side=2)
+legend(11.5, .10, legend=c("2010 (estimate)","2015 (estimate)",c(PROJECTIONYEAR),"Stable"),
+       col=c("orange","blue","dark green","dark green"), lty=c(1,1,1,2),cex=1.2)
+mtext(side=1,c("(projection)"),line=-28.25,adj=.905,cex=1.2)
+
+mtext(side=1,c("Total 2010:"),line=-12,adj=.125,col="orange")
+mtext(side=1,c(TotalTMinusOneInit),line=-12,adj=.3,col="orange")
+
+mtext(side=1,c("Total 2015:"),line=-11,adj=.125,col="blue")
+mtext(side=1,c(TotalTMinusZeroInit),line=-11,adj=.3,col="blue")
+
+mtext(side=1,c("Total "),line=-10,adj=.117,col="dark green")
+mtext(side=1,c(PROJECTIONYEAR),line=-10,adj=.18,col="dark green")
+mtext(side=1,c(":"),line=-10,adj=.225,col="dark green")
+mtext(side=1,c(TotalNew),line=-10,adj=.3,col="dark green")
+
+mtext(side=1,c("Implied TFR:"),line=-8,adj=.13,col="orange")
+mtext(side=1,c(round(ImpliedTFR2015,2)),line=-8,adj=.29,col="orange")
+
+mtext(side=1,c("Implied TFR:"),line=-7,adj=.13,col="blue")
+mtext(side=1,c(round(ImpliedTFR2010,2)),line=-7,adj=.29,col="blue")
+
+mtext(side=1,c("Implied TFR:"),line=-6,adj=.13,col="dark green")
+mtext(side=1,c(round(ImpliedTFRNew,2)),line=-6,adj=.29,col="dark green")
 ##########
-
