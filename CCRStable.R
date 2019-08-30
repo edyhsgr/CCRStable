@@ -56,12 +56,11 @@ ImpliedTFR<-sum(B)/ffab #(Need to work with/check)
 ImpliedTFR2010<-(TMinusOneAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 ImpliedTFR2015<-(TMinusZeroAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 
-if(UseImposedTFR=="YES") {B[1,4:10]<-(ImposedTFR/ImpliedTFR2015)*B[1,4:10]} #(Need to work with/check)
-
 A<-B+S
 
 CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP){
 TMinusZeroAge<-A%*%TMinusZeroAge
+if(UseImposedTFR=="YES") {TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab}
 TMinusZeroAge<-data.frame(TMinusZeroAge)
 return(c(TMinusZeroAge,CURRENTSTEP=CURRENTSTEP+1))
 }
