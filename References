@@ -1,4 +1,8 @@
-References and related info: 
+References, resources, and related info: 
+
+  Software: 
+    -R: https://www.r-project.org/
+    -Shiny for R: https://shiny.rstudio.com/
 
   Population estimates inputs: 
     -US Census Bureau Vintage 2018 Population Estimates: https://www.census.gov/programs-surveys/popest.html
@@ -10,4 +14,4 @@ References and related info:
   More information on cohort change ratios: 
     -Baker, Swanson, Tayman, and Tedrow (2017): https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033
   
--EddieHunsinger, August 2019
+-Eddie Hunsinger (California Department of Finance), August 2019
