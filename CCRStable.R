@@ -23,7 +23,7 @@ STEPSSTABLE<-100
 CURRENTSTEP<-0
 CURRENTSTEPSTABLE<-0
 PROJECTIONYEAR<-STEPS*5+2015
-FERTWIDTH<-34
+FERTWIDTH<-35
 
 #IMPOSED TFR OPTION
 ImposedTFR<-2.1
@@ -114,3 +114,4 @@ mtext(side=1,c(PROJECTIONYEAR),line=-6,adj=.185,col="dark green")
 mtext(side=1,c(":"),line=-6,adj=.23,col="dark green")
 mtext(side=1,c(round(ImpliedTFRNew,2)),line=-6,adj=.29,col="dark green")
 ##########
+
