@@ -90,7 +90,6 @@ axis(side=1,at=1:SIZE,las=2,labels=agegroups,cex.axis=0.9)
 axis(side=2)
 legend(11.5, .10, legend=c("2010 (estimate)","2015 (estimate)",c(PROJECTIONYEAR),"Stable"),
        col=c("orange","blue","dark green","dark green"), lty=c(1,1,1,2),lwd=c(4,4,4,2),cex=1.2)
-mtext(side=1,c("(projection)"),line=-28.25,adj=.905,cex=1.2)
 
 mtext(side=1,c("Total 2010:"),line=-12,adj=.125,col="orange")
 mtext(side=1,c(TotalTMinusOneInit),line=-12,adj=.3,col="orange")
