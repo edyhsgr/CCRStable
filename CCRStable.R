@@ -51,7 +51,7 @@ S<-rbind(0,cbind(diag(Ratios[2:SIZE]),0))
 
 B<-0*S
 B[1,4:10]<-Ratios[1]
-SumFirstRows<-sum(B)/ffab #(May work with)
+SumFirstRow<-sum(B)/ffab #(May work with)
 
 ImpliedTFR2010<-(TMinusOneAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 ImpliedTFR2015<-(TMinusZeroAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
