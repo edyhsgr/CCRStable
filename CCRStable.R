@@ -62,7 +62,6 @@ TMinusZeroAge_M<-TMinusZeroAgeInit_M
 
 TMinusZeroAge<-TMinusZeroAgeInit<-c(TMinusZeroAge_F,TMinusZeroAge_M)
 
-
 #####
 ##CALCULATIONS
 Ratios<-array(0,dim=length(TMinusOneAge))
