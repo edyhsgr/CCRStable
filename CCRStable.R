@@ -1,7 +1,7 @@
 ##########
 #R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - JUST NASCENT WORK, STILL FIGURING/LEARNING AND CHECKING
 #
-#EDDIE HUNSINGER, AUGUST 2019
+#EDDIE HUNSINGER, AUGUST 2019 (UPDATED SEPTEMBER 2019)
 #https://edyhsgr.github.io/eddieh/
 #
 #IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, BE SURE TO CITE THE SOURCE
@@ -17,8 +17,9 @@
 ##INPUTS
 
 #DIMENSIONS
-SIZE<-18
-STEPS<-5
+SIZE<-36
+HALFSIZE<-SIZE/2
+STEPS<-1
 STEPSSTABLE<-100
 CURRENTSTEP<-0
 CURRENTSTEPSTABLE<-0
@@ -30,77 +31,147 @@ ImposedTFR<-2.1
 ffab<-.4886
 UseImposedTFR<-"NO"
 
-#SELECTION OF US CENSUS BUREAU VINTAGE 2018 POPULATION ESTIMATES BY AGE (https://www.census.gov/programs-surveys/popest/data/tables.html)
-K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/PEP_2018_PEPAGE_FemaleByCounty.csv",header=TRUE,sep=","))
-TMinusOneAgeInit<-subset(K,Year==2010)
-TMinusOneAgeInit<-TMinusOneAgeInit$Alameda
-TMinusOneAge<-TMinusOneAgeInit
+#SELECT BY SEX
+SelectBySex<-"Total"
 
-TMinusZeroAgeInit<-subset(K,Year==2015)
-TMinusZeroAgeInit<-TMinusZeroAgeInit$Alameda
-TMinusZeroAge<-TMinusZeroAgeInit
+#DATA
+#SELECTION OF US CENSUS BUREAU VINTAGE 2018 POPULATION ESTIMATES BY AGE
+#https://www2.census.gov/programs-surveys/popest/datasets/2010-2018/counties/asrh/cc-est2018-alldata-06.csv 
+#https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2018/
+K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/cc-est2018-alldata-06_Extract.csv",header=TRUE,sep=","))
+
+Name<-paste("Alameda County")
+
+TMinusOneAgeInit_F<-subset(K,CTYNAME=="Alameda County" & YEAR==3 & AGEGRP>0)
+TMinusOneAgeInit_F<-TMinusOneAgeInit_F$TOT_FEMALE
+TMinusOneAge_F<-TMinusOneAgeInit_F
+
+TMinusOneAgeInit_M<-subset(K,CTYNAME=="Alameda County" & YEAR==3 & AGEGRP>0)
+TMinusOneAgeInit_M<-TMinusOneAgeInit_M$TOT_MALE
+TMinusOneAge_M<-TMinusOneAgeInit_M
+
+TMinusOneAge<-TMinusOneAgeInit<-c(TMinusOneAge_F,TMinusOneAge_M)
+
+TMinusZeroAgeInit_F<-subset(K,CTYNAME=="Alameda County" & YEAR==8 & AGEGRP>0)
+TMinusZeroAgeInit_F<-TMinusZeroAgeInit_F$TOT_FEMALE
+TMinusZeroAge_F<-TMinusZeroAgeInit_F
+
+TMinusZeroAgeInit_M<-subset(K,CTYNAME=="Alameda County" & YEAR==8 & AGEGRP>0)
+TMinusZeroAgeInit_M<-TMinusZeroAgeInit_M$TOT_MALE
+TMinusZeroAge_M<-TMinusZeroAgeInit_M
+
+TMinusZeroAge<-TMinusZeroAgeInit<-c(TMinusZeroAge_F,TMinusZeroAge_M)
+
 
 #####
 ##CALCULATIONS
 Ratios<-array(0,dim=length(TMinusOneAge))
 for (i in 2:length(TMinusOneAge)) {Ratios[i]<-TMinusZeroAge[i]/TMinusOneAge[i-1]}
-Ratios[1]<-TMinusZeroAge[1]/sum(TMinusOneAge[4:10])
+Ratios[1]<-(TMinusZeroAge[1]+TMinusZeroAge[HALFSIZE+1])/sum(TMinusOneAge[4:10])
 
-S<-array(0,c(SIZE,SIZE))
-S<-rbind(0,cbind(diag(Ratios[2:SIZE]),0))
+S_F<-array(0,c(HALFSIZE,HALFSIZE))
+S_F<-rbind(0,cbind(diag(Ratios[2:(HALFSIZE)]),0))
+B_F<-0*S_F
+B_F[1,4:10]<-Ratios[1]*ffab
+A_F<-B_F+S_F
 
-B<-0*S
-B[1,4:10]<-Ratios[1]
-SumFirstRow<-sum(B)/ffab #(May work with)
+S_M<-array(0,c(HALFSIZE,HALFSIZE))
+S_M<-rbind(0,cbind(diag(Ratios[20:SIZE]),0))
+B_M<-0*S_M
+B_M[1,4:10]<-Ratios[1]*(1-ffab)
 
-ImpliedTFR2010<-(TMinusOneAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
-ImpliedTFR2015<-(TMinusZeroAgeInit[1]/ffab/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+A_Zero<-array(0,c(HALFSIZE,HALFSIZE))
 
-A<-B+S
+Acolone<-cbind(A_F,A_Zero)
+Acoltwo<-cbind(B_M,S_M)
+A<-rbind(Acolone,Acoltwo)
+
+SumFirstRows<-(sum(B_F)+sum(B_M)) #(May work with)
+
+ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 
 CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP){
 TMinusZeroAge<-A%*%TMinusZeroAge
 if(UseImposedTFR=="YES") {TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab}
+if(UseImposedTFR=="YES") {TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}
 TMinusZeroAge<-data.frame(TMinusZeroAge)
 return(c(TMinusZeroAge,CURRENTSTEP=CURRENTSTEP+1))
 }
 
 CCRNew<-CCRProject(A,TMinusZeroAge,CURRENTSTEP)
 while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(A,CCRNew$TMinusZeroAge,CCRNew$CURRENTSTEP)}
-ImpliedTFRNew<-(CCRNew$TMinusZeroAge[1]/ffab/5)/sum(CCRNew$TMinusZeroAge[4:10])*FERTWIDTH
+ImpliedTFRNew<-((CCRNew$TMinusZeroAge[1]+CCRNew$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRNew$TMinusZeroAge[4:10])*FERTWIDTH
 
 TMinusZeroAge<-TMinusZeroAgeInit
 CCRStable<-CCRProject(A,TMinusZeroAge,CURRENTSTEPSTABLE)
 while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
-ImpliedTFRStable<-(CCRStable$TMinusZeroAge[1]/ffab/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
-
-TotalNew<-round(sum(CCRNew$TMinusZeroAge))
-TotalTMinusOneInit<-sum(TMinusOneAgeInit)
-TotalTMinusZeroInit<-sum(TMinusZeroAgeInit)
+ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
 
 #####
-##GRAPHS (SOME ~HACKY LABELING SO MAY NOT RENDER WELL)
+##TABLING
+NewAge_F<-round(CCRNew$TMinusZeroAge[1:HALFSIZE],0)
+StableAge_F<-round(CCRStable$TMinusZeroAge[1:HALFSIZE],0)
+TMinusOneAgeInit_F<-TMinusOneAgeInit[1:HALFSIZE]
+TMinusZeroAgeInit_F<-TMinusZeroAgeInit[1:HALFSIZE]
+
+NewAge_M<-round(CCRNew$TMinusZeroAge[(HALFSIZE+1):SIZE],0)
+StableAge_M<-round(CCRStable$TMinusZeroAge[(HALFSIZE+1):SIZE],0)
+TMinusOneAgeInit_M<-TMinusOneAgeInit[(HALFSIZE+1):SIZE]
+TMinusZeroAgeInit_M<-TMinusZeroAgeInit[(HALFSIZE+1):SIZE]
+
+NewAge_T<-NewAge_F+NewAge_M
+StableAge_T<-StableAge_F+StableAge_M
+TMinusOneAgeInit_T<-TMinusOneAgeInit_F+TMinusOneAgeInit_M
+TMinusZeroAgeInit_T<-TMinusZeroAgeInit_F+TMinusZeroAgeInit_M
+
+NewAge<-array(c(NewAge_T,NewAge_F,NewAge_M),c(HALFSIZE,3))
+StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(HALFSIZE,3))
+TMinusOneAgeInit<-array(c(TMinusOneAgeInit_T,TMinusOneAgeInit_F,TMinusOneAgeInit_M),c(HALFSIZE,3))
+TMinusZeroAgeInit<-array(c(TMinusZeroAgeInit_T,TMinusZeroAgeInit_F,TMinusZeroAgeInit_M),c(HALFSIZE,3))
+
+#####
+##GRAPHS (SOME ~HACKY LABELING SO MAY [LIKELY] NOT RENDER WELL)
 agegroups<-c("0 to 4", "5 to 9", "10 to 14", "15 to 19", "20 to 24", "25 to 29", "30 to 34", "35 to 39", "40 to 44", "45 to 49", "50 to 54", "55 to 59", "60 to 64", "65 to 69", "70 to 74", "75 to 79", "80 to 84", "85+")
-plot(TMinusOneAgeInit/sum(TMinusOneAgeInit),type="l",col="orange",main="Female Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)
-lines(TMinusZeroAgeInit/sum(TMinusZeroAgeInit),col="blue",lwd=4)
-lines(CCRNew$TMinusZeroAge[]/sum(CCRNew$TMinusZeroAge),col="dark green",lty=1,lwd=4)
-lines(CCRStable$TMinusZeroAge[]/sum(CCRStable$TMinusZeroAge),col="dark green",lty=2,lwd=2)
+if(SelectBySex=="Total") {plot(TMinusOneAgeInit[,1]/sum(TMinusOneAgeInit[,1]),type="l",col="orange",main="Total Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
+if(SelectBySex=="Female") {plot(TMinusOneAgeInit[,2]/sum(TMinusOneAgeInit[,2]),type="l",col="orange",main="Female Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
+if(SelectBySex=="Male") {plot(TMinusOneAgeInit[,3]/sum(TMinusOneAgeInit[,3]),type="l",col="orange",main="Male Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
+
+if(SelectBySex=="Total") {lines(TMinusZeroAgeInit[,1]/sum(TMinusZeroAgeInit[,1]),col="blue",lwd=4)}
+if(SelectBySex=="Female") {lines(TMinusZeroAgeInit[,2]/sum(TMinusZeroAgeInit[,2]),col="blue",lwd=4)}
+if(SelectBySex=="Male") {lines(TMinusZeroAgeInit[,3]/sum(TMinusZeroAgeInit[,3]),col="blue",lwd=4)}
+
+if(SelectBySex=="Total") {lines(NewAge[,1]/sum(NewAge[,1]),col="dark green",lty=1,lwd=4)}
+if(SelectBySex=="Female") {lines(NewAge[,2]/sum(NewAge[,2]),col="dark green",lty=1,lwd=4)}
+if(SelectBySex=="Male") {lines(NewAge[,3]/sum(NewAge[,3]),col="dark green",lty=1,lwd=4)}
+
+if(SelectBySex=="Total") {lines(StableAge[,1]/sum(StableAge[,1]),col="dark green",lty=3,lwd=2)}
+if(SelectBySex=="Female") {lines(StableAge[,2]/sum(StableAge[,2]),col="dark green",lty=3,lwd=2)}
+if(SelectBySex=="Male") {lines(StableAge[,3]/sum(StableAge[,3]),col="dark green",lty=3,lwd=2)}
+
 mtext(side=1,"Age groups",line=4)
-axis(side=1,at=1:SIZE,las=2,labels=agegroups,cex.axis=0.9)
+axis(side=1,at=1:HALFSIZE,las=2,labels=agegroups,cex.axis=0.9)
 axis(side=2)
 legend(11.5, .10, legend=c("2010 (estimate)","2015 (estimate)",c(PROJECTIONYEAR),"Stable"),
-       col=c("orange","blue","dark green","dark green"), lty=c(1,1,1,2),lwd=c(4,4,4,2),cex=1.2)
+       col=c("orange","blue","dark green","dark green"), lty=c(1,1,1,3),lwd=c(4,4,4,2),cex=1.2)
+mtext(side=1,c("(projection)"),line=-28.25,adj=.905,cex=1.2)
 
-mtext(side=1,c("Total 2010:"),line=-12,adj=.125,col="orange")
-mtext(side=1,c(TotalTMinusOneInit),line=-12,adj=.3,col="orange")
+mtext(side=1,c("Sum 2010:"),line=-12,adj=.125,col="orange")
+if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusOneAgeInit[,1])),line=-12,adj=.3,col="orange")}
+if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusOneAgeInit[,2])),line=-12,adj=.3,col="orange")}
+if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusOneAgeInit[,3])),line=-12,adj=.3,col="orange")}
 
-mtext(side=1,c("Total 2015:"),line=-11,adj=.125,col="blue")
-mtext(side=1,c(TotalTMinusZeroInit),line=-11,adj=.3,col="blue")
+mtext(side=1,c("Sum 2015:"),line=-11,adj=.125,col="blue")
+if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusZeroAgeInit[,1])),line=-11,adj=.3,col="blue")}
+if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusZeroAgeInit[,2])),line=-11,adj=.3,col="blue")}
+if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusZeroAgeInit[,3])),line=-11,adj=.3,col="blue")}
 
-mtext(side=1,c("Total "),line=-10,adj=.117,col="dark green")
+mtext(side=1,c("Sum "),line=-10,adj=.117,col="dark green")
 mtext(side=1,c(PROJECTIONYEAR),line=-10,adj=.18,col="dark green")
 mtext(side=1,c(":"),line=-10,adj=.225,col="dark green")
-mtext(side=1,c(TotalNew),line=-10,adj=.3,col="dark green")
+if(SelectBySex=="Total") {mtext(side=1,c(sum(NewAge[,1])),line=-10,adj=.3,col="dark green")}
+if(SelectBySex=="Female") {mtext(side=1,c(sum(NewAge[,2])),line=-10,adj=.3,col="dark green")}
+if(SelectBySex=="Male") {mtext(side=1,c(sum(NewAge[,3])),line=-10,adj=.3,col="dark green")}
 
 mtext(side=1,c("iTFR 2010:"),line=-8,adj=.13,col="orange")
 mtext(side=1,c(round(ImpliedTFR2010,2)),line=-8,adj=.29,col="orange")
@@ -112,5 +183,12 @@ mtext(side=1,c("iTFR"),line=-6,adj=.12,col="dark green")
 mtext(side=1,c(PROJECTIONYEAR),line=-6,adj=.185,col="dark green")
 mtext(side=1,c(":"),line=-6,adj=.23,col="dark green")
 mtext(side=1,c(round(ImpliedTFRNew,2)),line=-6,adj=.29,col="dark green")
+
+GROWTHRATE<-paste(text=c("R (2015 to ",PROJECTIONYEAR,"): ", round(log(sum(NewAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPS*5)*100,2)),collapse="")
+mtext(side=1,c(GROWTHRATE),line=-4,adj=.15,col="dark green")
+
+STABLEGROWTHRATE<-paste(text=c("r (2015 forward):   ", round(log(sum(StableAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPSSTABLE*5)*100,2)),collapse="")
+mtext(side=1,c(STABLEGROWTHRATE),line=-3,adj=.15,col="dark green")
+
 ##########
 
