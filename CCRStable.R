@@ -189,6 +189,5 @@ mtext(side=1,c(GROWTHRATE),line=-4,adj=.15,col="dark green")
 
 STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):   ", round(log(sum(StableAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPSSTABLE*5)*100,2)),collapse="")
 mtext(side=1,c(STABLEGROWTHRATE),line=-3,adj=.15,col="dark green")
-
 ##########
 
