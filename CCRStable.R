@@ -109,8 +109,8 @@ TMinusZeroAge<-TMinusZeroAgeInit
 CCRStable<-CCRProject(A,TMinusZeroAge,CURRENTSTEP)
 while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) 
 	{CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
-#while(sum(abs((CCRStable$TMinusZeroAge/sum(CCRStable$TMinusZeroAge))-(CCRStable$TMinusOneAge/sum(CCRStable$TMinusOneAge)))>1e-10)) #JUST TESTING/LEARNING
-#	{CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}						    #JUST TESTING/LEARNING
+#while(sum(abs((CCRStable$TMinusZeroAge/sum(CCRStable$TMinusZeroAge))-(CCRStable$TMinusOneAge/sum(CCRStable$TMinusOneAge)))>1e-10)) #JUST TESTING
+#	{CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}						    #JUST TESTING
 ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
 
 #####
