@@ -187,7 +187,7 @@ mtext(side=1,c(round(ImpliedTFRNew,2)),line=-6,adj=.29,col="dark green")
 GROWTHRATE<-paste(text=c("R (2015 to ",PROJECTIONYEAR,"): ", round(log(sum(NewAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPS*5)*100,2)),collapse="")
 mtext(side=1,c(GROWTHRATE),line=-4,adj=.15,col="dark green")
 
-STABLEGROWTHRATE<-paste(text=c("r (2015 forward):   ", round(log(sum(StableAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPSSTABLE*5)*100,2)),collapse="")
+STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):   ", round(log(sum(StableAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPSSTABLE*5)*100,2)),collapse="")
 mtext(side=1,c(STABLEGROWTHRATE),line=-3,adj=.15,col="dark green")
 
 ##########
