@@ -144,15 +144,15 @@ if(SelectBySex=="Total") {lines(NewAge[,1]/sum(NewAge[,1]),col="dark green",lty=
 if(SelectBySex=="Female") {lines(NewAge[,2]/sum(NewAge[,2]),col="dark green",lty=1,lwd=4)}
 if(SelectBySex=="Male") {lines(NewAge[,3]/sum(NewAge[,3]),col="dark green",lty=1,lwd=4)}
 
-if(SelectBySex=="Total") {lines(StableAge[,1]/sum(StableAge[,1]),col="dark green",lty=3,lwd=2)}
-if(SelectBySex=="Female") {lines(StableAge[,2]/sum(StableAge[,2]),col="dark green",lty=3,lwd=2)}
-if(SelectBySex=="Male") {lines(StableAge[,3]/sum(StableAge[,3]),col="dark green",lty=3,lwd=2)}
+if(SelectBySex=="Total") {lines(StableAge[,1]/sum(StableAge[,1]),col="black",lty=3,lwd=2)}
+if(SelectBySex=="Female") {lines(StableAge[,2]/sum(StableAge[,2]),col="black",lty=3,lwd=2)}
+if(SelectBySex=="Male") {lines(StableAge[,3]/sum(StableAge[,3]),col="black",lty=3,lwd=2)}
 
 mtext(side=1,"Age groups",line=4)
 axis(side=1,at=1:HALFSIZE,las=2,labels=agegroups,cex.axis=0.9)
 axis(side=2)
 legend(11.5, .10, legend=c("2010 (estimate)","2015 (estimate)",c(PROJECTIONYEAR),"Stable"),
-       col=c("orange","blue","dark green","dark green"), lty=c(1,1,1,3),lwd=c(4,4,4,2),cex=1.2)
+       col=c("orange","blue","dark green","black"), lty=c(1,1,1,3),lwd=c(4,4,4,2),cex=1.2)
 mtext(side=1,c("(projection)"),line=-28.25,adj=.905,cex=1.2)
 
 mtext(side=1,c("Sum 2010:"),line=-12,adj=.125,col="orange")
@@ -187,6 +187,6 @@ GROWTHRATE<-paste(text=c("R (2015 to ",PROJECTIONYEAR,"): ", round(log(sum(NewAg
 mtext(side=1,c(GROWTHRATE),line=-4,adj=.15,col="dark green")
 
 STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):   ", round(log(sum(StableAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPSSTABLE*5)*100,2)),collapse="")
-mtext(side=1,c(STABLEGROWTHRATE),line=-3,adj=.15,col="dark green")
+mtext(side=1,c(STABLEGROWTHRATE),line=-3,adj=.15,col="black")
 ##########
 
