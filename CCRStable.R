@@ -139,11 +139,11 @@ TMinusZeroAgeInit<-array(c(TMinusZeroAgeInit_T,TMinusZeroAgeInit_F,TMinusZeroAge
 ##GRAPHS (SOME ~HACKY LABELING SO MAY [LIKELY] NOT RENDER WELL)
 agegroups<-c("0 to 4", "5 to 9", "10 to 14", "15 to 19", "20 to 24", "25 to 29", "30 to 34", "35 to 39", "40 to 44", "45 to 49", "50 to 54", "55 to 59", "60 to 64", "65 to 69", "70 to 74", "75 to 79", "80 to 84", "85+")
 if(SelectBySex=="Total") 
-	{plot(TMinusOneAgeInit[,1]/sum(TMinusOneAgeInit[,1]),type="l",col="orange",main="Total Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
+	{plot(TMinusOneAgeInit[,1]/sum(TMinusOneAgeInit[,1]),type="l",col="orange",main=paste(text=c("Alameda, ",SelectBySex),collapse=""),ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
 if(SelectBySex=="Female") 
-	{plot(TMinusOneAgeInit[,2]/sum(TMinusOneAgeInit[,2]),type="l",col="orange",main="Female Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
+	{plot(TMinusOneAgeInit[,2]/sum(TMinusOneAgeInit[,2]),type="l",col="orange",main=paste(text=c("Alameda, ",SelectBySex),collapse=""),ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
 if(SelectBySex=="Male") 
-	{plot(TMinusOneAgeInit[,3]/sum(TMinusOneAgeInit[,3]),type="l",col="orange",main="Male Population",ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
+	{plot(TMinusOneAgeInit[,3]/sum(TMinusOneAgeInit[,3]),type="l",col="orange",main=paste(text=c("Alameda, ",SelectBySex),collapse=""),ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
 
 if(SelectBySex=="Total") 
 	{lines(TMinusZeroAgeInit[,1]/sum(TMinusZeroAgeInit[,1]),col="blue",lwd=4)}
