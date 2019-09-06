@@ -31,6 +31,10 @@ ImposedTFR<-2.1
 ffab<-.4886
 UseImposedTFR<-"NO"
 
+##ADJUST BY MIGRATION OPTION
+NetMigrationAdjustLevel<-1/100
+NetMigrationAdjust<-"NO"
+
 #SELECT BY SEX
 SelectBySex<-"Total"
 
@@ -94,6 +98,8 @@ ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMi
 CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP)
 	{TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
 	TMinusZeroAge<-A%*%TMinusZeroAge
+		if(NetMigrationAdjust=="YES")
+			{TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
 		if(UseImposedTFR=="YES") 
 			{TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab}
 		if(UseImposedTFR=="YES") 
@@ -105,23 +111,25 @@ CCRNew<-CCRProject(A,TMinusZeroAge,CURRENTSTEP)
 while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(A,CCRNew$TMinusZeroAge,CCRNew$CURRENTSTEP)}
 ImpliedTFRNew<-((CCRNew$TMinusZeroAge[1]+CCRNew$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRNew$TMinusZeroAge[4:10])*FERTWIDTH
 
+CCRatios<-array(0,length(TMinusOneAge)+1)
+for (i in 2:length(CCRatios)) {CCRatios[i]<-CCRNew$TMinusZeroAge[i]/CCRNew$TMinusOneAge[i-1]}
+CCRatiosF<-CCRatios[2:18]
+CCRatiosM<-CCRatios[20:36]
+
 TMinusZeroAge<-TMinusZeroAgeInit
-CCRStable<-CCRProject(A,TMinusZeroAge,CURRENTSTEP)
-while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) 
-	{CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
-#while(sum(abs((CCRStable$TMinusZeroAge/sum(CCRStable$TMinusZeroAge))-(CCRStable$TMinusOneAge/sum(CCRStable$TMinusOneAge)))>1e-10)) #JUST TESTING
-#	{CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}						    #JUST TESTING
+CCRStable<-CCRProject(A,TMinusZeroAge,0)
+while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
 ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
 
 #####
 ##TABLING
-NewAge_F<-round(CCRNew$TMinusZeroAge[1:HALFSIZE],0)
-StableAge_F<-round(CCRStable$TMinusZeroAge[1:HALFSIZE],0)
+NewAge_F<-CCRNew$TMinusZeroAge[1:HALFSIZE]
+StableAge_F<-CCRStable$TMinusZeroAge[1:HALFSIZE]
 TMinusOneAgeInit_F<-TMinusOneAgeInit[1:HALFSIZE]
 TMinusZeroAgeInit_F<-TMinusZeroAgeInit[1:HALFSIZE]
 
-NewAge_M<-round(CCRNew$TMinusZeroAge[(HALFSIZE+1):SIZE],0)
-StableAge_M<-round(CCRStable$TMinusZeroAge[(HALFSIZE+1):SIZE],0)
+NewAge_M<-CCRNew$TMinusZeroAge[(HALFSIZE+1):SIZE]
+StableAge_M<-CCRStable$TMinusZeroAge[(HALFSIZE+1):SIZE]
 TMinusOneAgeInit_M<-TMinusOneAgeInit[(HALFSIZE+1):SIZE]
 TMinusZeroAgeInit_M<-TMinusZeroAgeInit[(HALFSIZE+1):SIZE]
 
@@ -135,8 +143,10 @@ StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(HALFSIZE,3))
 TMinusOneAgeInit<-array(c(TMinusOneAgeInit_T,TMinusOneAgeInit_F,TMinusOneAgeInit_M),c(HALFSIZE,3))
 TMinusZeroAgeInit<-array(c(TMinusZeroAgeInit_T,TMinusZeroAgeInit_F,TMinusZeroAgeInit_M),c(HALFSIZE,3))
 
+
 #####
 ##GRAPHS (SOME ~HACKY LABELING SO MAY [LIKELY] NOT RENDER WELL)
+#FIRST GRAPH
 agegroups<-c("0 to 4", "5 to 9", "10 to 14", "15 to 19", "20 to 24", "25 to 29", "30 to 34", "35 to 39", "40 to 44", "45 to 49", "50 to 54", "55 to 59", "60 to 64", "65 to 69", "70 to 74", "75 to 79", "80 to 84", "85+")
 if(SelectBySex=="Total") 
 	{plot(TMinusOneAgeInit[,1]/sum(TMinusOneAgeInit[,1]),type="l",col="orange",main=paste(text=c("Alameda, ",SelectBySex),collapse=""),ylim=c(0,.1),axes=FALSE,xlab="",ylab="Population (proportional)",lwd=4)}
@@ -224,5 +234,23 @@ if(SelectBySex=="Total") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ",
 if(SelectBySex=="Female") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,2])/sum(TMinusZeroAgeInit[,2]))/(STEPSSTABLE*5)*100,2)),collapse="")}
 if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,3])/sum(TMinusZeroAgeInit[,3]))/(STEPSSTABLE*5)*100,2)),collapse="")}
 mtext(side=1,c(STABLEGROWTHRATE),line=-2,adj=.15,col="black")
+
+##SECOND GRAPH
+agegroups2<-c("5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
+plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Applied Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.5,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
+lines(Ratios[20:36],type="l",col="gold",lwd=4)
+lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
+lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
+mtext(side=1,"Age groups",line=4,cex=.75)
+axis(side=1,at=1:(HALFSIZE-1),labels=agegroups2,las=2,cex.axis=0.9)
+axis(side=2)
+legend(8,1.75, legend=c("Female","Male", "Female, with migration adjustment","Male, with migration adjustment"),
+       col=c("dodger blue","gold","dodger blue","gold"), lty=c(1,1,2,2),lwd=c(4,4,2,2),cex=1.2)
+
+#THIRD GRAPH
+barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(TMinusZeroAgeInit[,2])*2,0),col="dodgerblue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
+
+#FOURTH GRAPH
+barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(TMinusZeroAgeInit[,2])*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 ##########
 
