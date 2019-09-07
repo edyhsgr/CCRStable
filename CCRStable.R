@@ -26,6 +26,10 @@ CURRENTSTEPSTABLE<-0
 PROJECTIONYEAR<-STEPS*5+2015
 FERTWIDTH<-35
 
+#SELECTING RATIOS BASIS
+FirstYear<-3
+SecondYear<-3+5
+
 #IMPOSED TFR OPTION
 ImposedTFR<-2.1
 ffab<-.4886
@@ -56,6 +60,16 @@ TMinusOneAge_M<-TMinusOneAgeInit_M
 
 TMinusOneAge<-TMinusOneAgeInit<-c(TMinusOneAge_F,TMinusOneAge_M)
 
+TMinusOneAgeInitRatios_F<-subset(K,CTYNAME=="Alameda County" & YEAR==FirstYear & AGEGRP>0)
+TMinusOneAgeInitRatios_F<-TMinusOneAgeInitRatios_F$TOT_FEMALE
+TMinusOneAgeRatios_F<-TMinusOneAgeInitRatios_F
+
+TMinusOneAgeInitRatios_M<-subset(K,CTYNAME=="Alameda County" & YEAR==FirstYear & AGEGRP>0)
+TMinusOneAgeInitRatios_M<-TMinusOneAgeInitRatios_M$TOT_MALE
+TMinusOneAgeRatios_M<-TMinusOneAgeInitRatios_M
+
+TMinusOneAgeRatios<-TMinusOneAgeInitRatios<-c(TMinusOneAgeRatios_F,TMinusOneAgeRatios_M)
+
 TMinusZeroAgeInit_F<-subset(K,CTYNAME=="Alameda County" & YEAR==8 & AGEGRP>0)
 TMinusZeroAgeInit_F<-TMinusZeroAgeInit_F$TOT_FEMALE
 TMinusZeroAge_F<-TMinusZeroAgeInit_F
@@ -65,6 +79,16 @@ TMinusZeroAgeInit_M<-TMinusZeroAgeInit_M$TOT_MALE
 TMinusZeroAge_M<-TMinusZeroAgeInit_M
 
 TMinusZeroAge<-TMinusZeroAgeInit<-c(TMinusZeroAge_F,TMinusZeroAge_M)
+
+TMinusZeroAgeInitRatios_F<-subset(K,CTYNAME=="Alameda County" & YEAR==SecondYear & AGEGRP>0)
+TMinusZeroAgeInitRatios_F<-TMinusZeroAgeInitRatios_F$TOT_FEMALE
+TMinusZeroAgeRatios_F<-TMinusZeroAgeInitRatios_F
+
+TMinusZeroAgeInitRatios_M<-subset(K,CTYNAME=="Alameda County" & YEAR==SecondYear & AGEGRP>0)
+TMinusZeroAgeInitRatios_M<-TMinusZeroAgeInitRatios_M$TOT_MALE
+TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M
+
+TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-c(TMinusZeroAgeRatios_F,TMinusZeroAgeRatios_M)
 
 #SOME GENERIC CA MIGRATION DATA (PLACEHOLDER)
 Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
