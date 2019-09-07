@@ -37,7 +37,7 @@ UseImposedTFR<-"NO"
 
 ##ADJUST BY MIGRATION OPTION
 NetMigrationAdjustLevel<-1/100
-NetMigrationAdjust<-"NO"
+NetMigrationAdjust<-"YES"
 
 #SELECT BY SEX
 SelectBySex<-"Total"
@@ -125,13 +125,19 @@ ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMi
 
 CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP)
 	{TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
-	TMinusZeroAge<-A%*%TMinusZeroAge
-		if(NetMigrationAdjust=="YES")
-			{TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
-		if(UseImposedTFR=="YES") 
-			{TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab}
-		if(UseImposedTFR=="YES") 
-			{TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}
+		if(CURRENTSTEP>0){
+			TMinusZeroAge<-A%*%TMinusZeroAge
+				if(NetMigrationAdjust=="YES")
+				{TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
+				}
+		if(CURRENTSTEP>0){
+			if(UseImposedTFR=="YES") 
+				{TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab}
+				}
+		if(CURRENTSTEP>0){
+			if(UseImposedTFR=="YES") 
+				{TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}
+				}
 	TMinusZeroAge<-data.frame(TMinusZeroAge)
 	return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,CURRENTSTEP=CURRENTSTEP+1))}
 
@@ -204,12 +210,11 @@ if(SelectBySex=="Female")
 if(SelectBySex=="Male") 
 	{lines(StableAge[,3]/sum(StableAge[,3]),col="dark green",lty=3,lwd=2)}
 
-mtext(side=1,"Age groups",line=4)
+mtext(side=1,"Age groups",line=4,cex=.75)
 axis(side=1,at=1:HALFSIZE,las=2,labels=agegroups,cex.axis=0.9)
 axis(side=2)
-legend(11.5, .10, legend=c("2010 (estimate)","2015 (estimate)",c(PROJECTIONYEAR),"Stable"),
-       col=c("orange","blue","dark green","dark green"), lty=c(1,1,1,3),lwd=c(4,4,4,2),cex=1.2)
-mtext(side=1,c("(projection)"),line=-28.25,adj=.905,cex=1.2)
+legend(11.5, .12, legend=c("2010 (estimate)","2015 (estimate)",paste(c(PROJECTIONYEAR),"(projection)"),"Stable"),
+       col=c("orange","blue","dark green","black"), lty=c(1,1,1,3),lwd=c(4,4,4,1.5),cex=1.2)
 
 mtext(side=1,c("Sum 2010:"),line=-12,adj=.125,col="orange")
 if(SelectBySex=="Total") 
@@ -228,14 +233,14 @@ if(SelectBySex=="Male")
 	{mtext(side=1,c(sum(TMinusZeroAgeInit[,3])),line=-11,adj=.3,col="blue")}
 
 mtext(side=1,c("Sum "),line=-10,adj=.117,col="dark green")
-mtext(side=1,c(PROJECTIONYEAR),line=-10,adj=.18,col="dark green")
+mtext(side=1,paste(c(PROJECTIONYEAR,": "),collapse=""),line=-10,adj=.18,col="dark green")
 mtext(side=1,c(":"),line=-10,adj=.225,col="dark green")
 if(SelectBySex=="Total") 
-	{mtext(side=1,c(sum(NewAge[,1])),line=-10,adj=.3,col="dark green")}
+	{mtext(side=1,c(round(sum(NewAge[,1]))),line=-10,adj=.3,col="dark green")}
 if(SelectBySex=="Female") 
-	{mtext(side=1,c(sum(NewAge[,2])),line=-10,adj=.3,col="dark green")}
+	{mtext(side=1,c(round(sum(NewAge[,2]))),line=-10,adj=.3,col="dark green")}
 if(SelectBySex=="Male") 
-	{mtext(side=1,c(sum(NewAge[,3])),line=-10,adj=.3,col="dark green")}
+	{mtext(side=1,c(round(sum(NewAge[,3]))),line=-10,adj=.3,col="dark green")}
 
 mtext(side=1,c("iTFR 2010:"),line=-8,adj=.13,col="orange")
 mtext(side=1,c(round(ImpliedTFR2010,2)),line=-8,adj=.29,col="orange")
@@ -264,21 +269,21 @@ if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", 
 mtext(side=1,c(STABLEGROWTHRATE),line=-2,adj=.15,col="black")
 
 ##SECOND GRAPH
-agegroups2<-c("5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
-plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Applied Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.5,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
-lines(Ratios[20:36],type="l",col="gold",lwd=4)
-lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
-lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
-mtext(side=1,"Age groups",line=4,cex=.75)
-axis(side=1,at=1:(HALFSIZE-1),labels=agegroups2,las=2,cex.axis=0.9)
-axis(side=2)
-legend(8,1.75, legend=c("Female","Male", "Female, with migration adjustment","Male, with migration adjustment"),
-       col=c("dodger blue","gold","dodger blue","gold"), lty=c(1,1,2,2),lwd=c(4,4,2,2),cex=1.2)
+#agegroups2<-c("5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
+#plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Applied Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.5,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
+#lines(Ratios[20:36],type="l",col="gold",lwd=4)
+#lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
+#lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
+#mtext(side=1,"Age groups",line=4,cex=.75)
+#axis(side=1,at=1:(HALFSIZE-1),labels=agegroups2,las=2,cex.axis=0.9)
+#axis(side=2)
+#legend(8,1.75, legend=c("Female","Male", "Female, with migration adjustment","Male, with migration adjustment"),
+#       col=c("dodger blue","gold","dodger blue","gold"), lty=c(1,1,2,2),lwd=c(4,4,2,2),cex=1.2)
 
 #THIRD GRAPH
-barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(TMinusZeroAgeInit[,2])*2,0),col="dodgerblue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
+#barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(TMinusZeroAgeInit[,2])*2,0),col="dodgerblue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
 
 #FOURTH GRAPH
-barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(TMinusZeroAgeInit[,2])*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
+#barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(TMinusZeroAgeInit[,2])*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 ##########
 
