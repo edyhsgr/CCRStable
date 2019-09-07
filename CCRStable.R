@@ -66,6 +66,10 @@ TMinusZeroAge_M<-TMinusZeroAgeInit_M
 
 TMinusZeroAge<-TMinusZeroAgeInit<-c(TMinusZeroAge_F,TMinusZeroAge_M)
 
+#SOME GENERIC CA MIGRATION DATA (PLACEHOLDER)
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-c(Migration$CA_F,Migration$CA_M)
+
 #####
 ##CALCULATIONS
 Ratios<-array(0,dim=length(TMinusOneAge))
