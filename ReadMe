@@ -1,3 +1,6 @@
+R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - JUST NASCENT WORK, STILL FIGURING/LEARNING AND CHECKING
+(EDDIE HUNSINGER, AUGUST 2019 (UPDATED SEPTEMBER 2019))
+
 References, resources, and related info: 
   Software: 
     -R: https://www.r-project.org/
@@ -18,5 +21,8 @@ References, resources, and related info:
    
   Net migration by age over time comparisons from Alaska data: 
     -Hunsinger (2018): http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/
+    
+  Related Shiny for R application: 
+    -(Hunsinger 2019) http://shiny.demog.berkeley.edu/eddieh/CCRStable/
   
 -Eddie Hunsinger (California Department of Finance), August 2019 (updated September 2019)
