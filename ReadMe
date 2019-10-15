@@ -1,4 +1,6 @@
-R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - JUST NASCENT WORK, STILL FIGURING/LEARNING AND CHECKING
+R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
+
+Latest updates at: https://u.demog.berkeley.edu/~eddieh/CCRStable/app.R (will add here soon)
 
 References, resources, and related info: 
   Software: 
@@ -23,6 +25,9 @@ References, resources, and related info:
     
   Interface with net migration adjustment examples and comparisons: 
     -Hunsinger (2019): http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/ 
+    
+  Graph of the e0 and Brass' relational life table alpha by US state: 
+    -https://twitter.com/ApplDemogToolbx/status/1079451943645339648 
 	   
   Related Shiny for R application: 
     -(Hunsinger 2019) http://shiny.demog.berkeley.edu/eddieh/CCRStable/
