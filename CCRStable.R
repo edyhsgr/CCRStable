@@ -1,6 +1,6 @@
 ##########
 #
-#NOT LATEST - SEE README
+#SEE ALSO: https://u.demog.berkeley.edu/~eddieh/CCRStable/app.R 
 #
 #R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - JUST NASCENT WORK, STILL FIGURING/LEARNING AND CHECKING
 #
@@ -24,7 +24,7 @@ options(scipen=999)
 #DIMENSIONS
 SIZE<-36
 HALFSIZE<-SIZE/2
-STEPS<-1
+STEPS<-3
 STEPSSTABLE<-1000
 CURRENTSTEP<-0
 CURRENTSTEPSTABLE<-0
@@ -43,13 +43,16 @@ UseImposedTFR<-"NO"
 ##ADJUST BY MIGRATION OPTION
 NetMigrationAdjustLevel<-0*1/100
 
+##ADJUST SURVIVAL
+BAStart<-.09
+BAEnd<-.12
+
 #SELECT BY SEX
 SelectBySex<-"Total"
 
-#DATA
-#SELECTION OF US CENSUS BUREAU VINTAGE 2018 POPULATION ESTIMATES BY AGE
-#https://www2.census.gov/programs-surveys/popest/datasets/2010-2018/counties/asrh/cc-est2018-alldata-06.csv 
-#https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2018/
+#DATA (CENSUS BUREAU VINTAGE 2018 POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
+	#https://www2.census.gov/programs-surveys/popest/datasets/2010-2018/counties/asrh/cc-est2018-alldata-06.csv 
+	#https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2018/
 K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/cc-est2018-alldata-06_Extract.csv",header=TRUE,sep=","))
 
 Name<-paste("Alameda County")
@@ -98,6 +101,48 @@ TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-c(TMinusZeroAgeRatios_F,TMinusZero
 Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
 Migration<-c(Migration$CA_F,Migration$CA_M)
 
+#SOME GENERIC US SURVIVAL DATA (PLACEHOLDER)
+Survival<-read.table(file="https://github.com/AppliedDemogToolbox/Hunsinger_BasicProjection/raw/master/lx2000_US_NCHS.csv",header=TRUE,sep=",")
+lxF<-Survival$F_2000
+lxM<-Survival$M_2000
+
+##"BA" IS THE BRASS RELATIONAL LOGIT MODEL ALPHA
+BA_startF<-BAStart+.03 #CONSTANT JUST CARRIED OVER FROM PAST WORK FOR ANOTHER EXAMPLE SO I DONT FORGET TO LOOK AT - NOT RIGHT OR MEANT TO BE
+BA_startM<-BAStart+.08 #CONSTANT JUST CARRIED OVER FROM PAST WORK FOR ANOTHER EXAMPLE SO I DONT FORGET TO LOOK AT - NOT RIGHT OR MEANT TO BE
+BA_endF<-BAEnd
+BA_endM<-BAEnd
+BB<-1
+
+##CALCULATE THE Yx FOR THE lx'S
+YxM<-YxF<-NULL
+for (i in 1:length(lxF)){YxF[i]<-.5*log(lxF[i]/(1-lxF[i]))}
+for (i in 1:length(lxM)){YxM[i]<-.5*log(lxM[i]/(1-lxM[i]))}
+
+lxF2000<-lxF
+lxM2000<-lxM
+
+lxFStart<-lxFEnd<-array(0,length(lxF))
+lxMStart<-lxMEnd<-array(0,length(lxM))
+for (i in 1:length(lxFStart)){lxFStart[i]<-1/(1+exp(-2*BA_startF-2*BB*YxF[i]))}
+for (i in 1:length(lxMStart)){lxMStart[i]<-1/(1+exp(-2*BA_startF-2*BB*YxM[i]))}
+for (i in 1:length(lxFEnd)){lxFEnd[i]<-1/(1+exp(-2*BA_endF-2*BB*YxF[i]))}
+for (i in 1:length(lxMEnd)){lxMEnd[i]<-1/(1+exp(-2*BA_endM-2*BB*YxM[i]))}
+
+LxFStart<-LxFEnd<-array(0,length(lxF))
+LxMStart<-LxMEnd<-array(0,length(lxM))
+##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
+for (i in 1:length(LxFStart)){LxFStart[i]<-.5*(lxFStart[i]+lxFStart[i+1])}
+for (i in 1:length(LxMStart)){LxMStart[i]<-.5*(lxMStart[i]+lxMStart[i+1])}
+for (i in 1:length(LxFEnd)){LxFEnd[i]<-.5*(lxFEnd[i]+lxFEnd[i+1])}
+for (i in 1:length(LxMEnd)){LxMEnd[i]<-.5*(lxMEnd[i]+lxMEnd[i+1])}
+
+SxFStart<-SxFEnd<-array(0,length(lxF)-1)
+SxMStart<-SxMEnd<-array(0,length(lxF)-1)
+for (i in 1:length(SxFStart)-1){SxFStart[i]<-(LxFStart[i+1]/LxFStart[i])}
+for (i in 1:length(SxFStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}
+for (i in 1:length(SxFEnd)-1){SxFEnd[i]<-(LxFEnd[i+1]/LxFEnd[i])}
+for (i in 1:length(SxFEnd)-1){SxMEnd[i]<-(LxMEnd[i+1]/LxMEnd[i])}
+
 #####
 ##CALCULATIONS
 Ratios<-array(0,dim=length(TMinusOneAge))
@@ -111,26 +156,38 @@ B_F<-0*S_F
 B_F[1,4:10]<-Ratios[1]*ffab
 A_F<-B_F+S_F
 
+SEnd_F<-array(0,c(HALFSIZE,HALFSIZE))
+SEnd_F<-rbind(0,cbind(diag(SxFEnd[2:(HALFSIZE)]-SxFStart[2:(HALFSIZE)]),0))
+SEnd_F<-SEnd_F+S_F
+AEnd_F<-B_F+SEnd_F
+
 S_M<-array(0,c(HALFSIZE,HALFSIZE))
 S_M<-rbind(0,cbind(diag(Ratios[20:SIZE]),0))
 B_M<-0*S_M
 B_M[1,4:10]<-Ratios[1]*(1-ffab)
+SEnd_M<-array(0,c(HALFSIZE,HALFSIZE))
+SEnd_M<-rbind(0,cbind(diag(SxMEnd[2:(HALFSIZE)]-SxMStart[2:(HALFSIZE)]),0))
+SEnd_M<-SEnd_M+S_M
 
-A_Zero<-array(0,c(HALFSIZE,HALFSIZE))
+AEnd_Zero<-A_Zero<-array(0,c(HALFSIZE,HALFSIZE))
 
 Acolone<-cbind(A_F,A_Zero)
 Acoltwo<-cbind(B_M,S_M)
 A<-rbind(Acolone,Acoltwo)
+
+AEndcolone<-cbind(AEnd_F,AEnd_Zero)
+AEndcoltwo<-cbind(B_M,SEnd_M)
+AEnd<-rbind(AEndcolone,AEndcoltwo)
 
 SumFirstRows<-(sum(B_F)+sum(B_M)) #(May work with)
 
 ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 
-CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP)
+CCRProject<-function(A,AEnd,TMinusZeroAge,CURRENTSTEP)
 	{TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
 		if(CURRENTSTEP>0){
-			TMinusZeroAge<-A%*%TMinusZeroAge
+			TMinusZeroAge<-(A*(1-CURRENTSTEP/STEPS)+AEnd*(CURRENTSTEP/STEPS))%*%TMinusZeroAge
 				if(NetMigrationAdjustLevel!=0)
 				{TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
 				}
@@ -145,8 +202,8 @@ CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP)
 	TMinusZeroAge<-data.frame(TMinusZeroAge)
 	return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,CURRENTSTEP=CURRENTSTEP+1))}
 
-CCRNew<-CCRProject(A,TMinusZeroAge,CURRENTSTEP)
-while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(A,CCRNew$TMinusZeroAge,CCRNew$CURRENTSTEP)}
+CCRNew<-CCRProject(A,AEnd,TMinusZeroAge,CURRENTSTEP)
+while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(A,AEnd,CCRNew$TMinusZeroAge,CCRNew$CURRENTSTEP)}
 ImpliedTFRNew<-((CCRNew$TMinusZeroAge[1]+CCRNew$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRNew$TMinusZeroAge[4:10])*FERTWIDTH
 
 CCRatios<-array(0,length(TMinusOneAge)+1)
@@ -155,8 +212,8 @@ CCRatiosF<-CCRatios[2:18]
 CCRatiosM<-CCRatios[20:36]
 
 TMinusZeroAge<-TMinusZeroAgeInit
-CCRStable<-CCRProject(A,TMinusZeroAge,0)
-while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(A,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
+CCRStable<-CCRProject(AEnd,AEnd,TMinusZeroAge,0)
+while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(AEnd,AEnd,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
 ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
 
 #####
