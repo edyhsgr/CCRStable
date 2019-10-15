@@ -21,6 +21,9 @@ References, resources, and related info:
   Net migration by age over time comparisons from Alaska data: 
     -Hunsinger (2018): http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/
     
+  Interface with net migration adjustment examples and comparisons: 
+    -Hunsinger (2019): http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/ 
+	   
   Related Shiny for R application: 
     -(Hunsinger 2019) http://shiny.demog.berkeley.edu/eddieh/CCRStable/
   
