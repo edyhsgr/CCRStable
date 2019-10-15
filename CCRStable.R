@@ -16,6 +16,8 @@
 #####
 ##INPUTS
 
+options(scipen=999)
+
 #DIMENSIONS
 SIZE<-36
 HALFSIZE<-SIZE/2
@@ -127,7 +129,7 @@ CCRProject<-function(A,TMinusZeroAge,CURRENTSTEP)
 	{TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
 		if(CURRENTSTEP>0){
 			TMinusZeroAge<-A%*%TMinusZeroAge
-				if(NetMigrationAdjust=="YES")
+				if(NetMigrationAdjustLevel!=0)
 				{TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
 				}
 		if(CURRENTSTEP>0){
@@ -270,10 +272,10 @@ mtext(side=1,c(STABLEGROWTHRATE),line=-2,adj=.15,col="black")
 
 ##SECOND GRAPH
 #agegroups2<-c("5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
-#plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Applied Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.5,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
-#lines(Ratios[20:36],type="l",col="gold",lwd=4)
-#lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
+#plot(CCRatiosF,type="l",col="dodger blue",main=paste(text=c("Effective Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.5,1.75),axes=FALSE,xlab="",ylab="Ratio",lty=2,lwd=2)
 #lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
+#lines(Ratios[2:18],type="l",col="dodger blue",lwd=4)
+#lines(Ratios[20:36],type="l",col="gold",lwd=4)
 #mtext(side=1,"Age groups",line=4,cex=.75)
 #axis(side=1,at=1:(HALFSIZE-1),labels=agegroups2,las=2,cex.axis=0.9)
 #axis(side=2)
