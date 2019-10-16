@@ -26,6 +26,9 @@ References, resources, and related info:
     
   Graph of the e0 and Brass' relational life table alpha by US state: 
     -https://twitter.com/ApplDemogToolbx/status/1079451943645339648 
+    
+  Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the United States Mortality Database:
+    -https://usa.mortality.org/index.php
 	   
   Related Shiny for R application: 
     -(Hunsinger 2019) http://shiny.demog.berkeley.edu/eddieh/CCRStable/
