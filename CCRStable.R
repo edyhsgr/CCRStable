@@ -1,10 +1,12 @@
 ##########
-#R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
+#R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - JUST NASCENT WORK
 #
 #EDDIE HUNSINGER, AUGUST 2019 (UPDATED OCTOBER 2019)
 #https://edyhsgr.github.io/eddieh/
 #
 #IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, BE SURE TO CITE THE SOURCE
+#
+#EXAMPLE DATA IS LINKED, SO YOU SHOULD BE ABLE TO SIMPLY COPY ALL AND PASTE INTO R
 #
 #THERE IS NO WARRANTY FOR THIS CODE
 #THIS CODE HAS NOT BEEN TESTED AT ALL-- PLEASE LET ME KNOW IF YOU FIND ANY PROBLEMS (edyhsgr@gmail.com)
@@ -125,8 +127,15 @@ numericInput("NetMigrationAdjustLevel","Net migration adjustment (annual, percen
 
 hr(),
 
-numericInput("BAStart","Brass' relational logit life table alpha for First projection step (this will give an adjustable standard, or starting point) (will provide it as an e0 input soon)",.03,0,1,step=.03),
-numericInput("BAEnd","Brass' relational logit life table alpha for Last projection step (the paramater is interpolated between the first and last steps) (from recollection of past work with this placeholder life table, .03 change gives ~half-a-year change in e0)",.12,0,1,step=.03),
+selectInput("Imputee0", "Impute e0?",
+c(
+"Yes"="YES",
+"No"="NO"
+),
+),
+
+numericInput("BAStart","If yes, Brass' model alpha for First projection step...",.03,0,2,step=.03),
+numericInput("BAEnd","...and Brass' model alpha for Last projection step",.12,0,2,step=.03),
 
 hr(),
 
@@ -166,9 +175,12 @@ tags$a(href="http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/",
 tags$a(href="http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/", 
 	"Hunsinger (2019)."),
 
-"Graph of ",
 tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079451943645339648", 
-	"e0 and Brass' relational life table alpha by US state.")),
+	"Graph of e0 and Brass' relational life table alpha by US state."),
+
+"Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
+tags$a(href="https://usa.mortality.org/index.php", 
+	"United States Mortality Database.")),
 
 width=3
 ),
@@ -185,14 +197,18 @@ mainPanel(
 	#https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2018/
 K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/cc-est2018-alldata-06_Extract.csv",header=TRUE,sep=","))
 
-#SOME GENERIC CA MIGRATION DATA (PLACEHOLDER)
+#GENERIC CA MIGRATION DATA (PLACEHOLDER)
 Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
 Migration<-c(Migration$CA_F,Migration$CA_M)
 
-#SOME GENERIC US SURVIVAL DATA (PLACEHOLDER)
-Survival<-read.table(file="https://github.com/AppliedDemogToolbox/Hunsinger_BasicProjection/raw/master/lx2000_US_NCHS.csv",header=TRUE,sep=",")
-lxF<-Survival$F_2000
-lxM<-Survival$M_2000
+#USMD CA SURVIVAL DATA (PLACEHOLDER)
+lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
+lxF<-lt$lx_Female/100000
+lxM<-lt$lx_Male/100000
+lxT<-lt$lx_Both/100000
+lxF<-c(lxF[1],lxF[3:24])
+lxM<-c(lxM[1],lxM[3:24])
+lxT<-c(lxT[1],lxT[3:24])
 
 server<-function(input, output) {	
 	output$plots<-renderPlot({
@@ -272,41 +288,69 @@ TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M
 TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-c(TMinusZeroAgeRatios_F,TMinusZeroAgeRatios_M)
 
 ##"BA" IS THE BRASS RELATIONAL LOGIT MODEL ALPHA
-BA_startF<-input$BAStart+.03 #CONSTANT JUST CARRIED OVER FROM PAST WORK FOR ANOTHER EXAMPLE SO I DONT FORGET TO LOOK AT - NOT RIGHT OR MEANT TO BE
-BA_startM<-input$BAStart+.08 #CONSTANT JUST CARRIED OVER FROM PAST WORK FOR ANOTHER EXAMPLE SO I DONT FORGET TO LOOK AT - NOT RIGHT OR MEANT TO BE
+if(input$Imputee0=="YES") {
+BA_startF<-input$BAStart
+BA_startM<-input$BAStart
+BA_startT<-input$BAStart
 BA_endF<-input$BAEnd
 BA_endM<-input$BAEnd
+BA_endT<-input$BAEnd
 BB<-1
+}
+
+if(input$Imputee0=="NO") {
+BA_startF<-0
+BA_startM<-0
+BA_startT<-0
+BA_endF<-0
+BA_endM<-0
+BA_endT<-0
+BB<-1
+}
 
 ##CALCULATE THE Yx FOR THE lx'S
-YxM<-YxF<-NULL
+YxT<-YxM<-YxF<-NULL
 for (i in 1:length(lxF)){YxF[i]<-.5*log(lxF[i]/(1-lxF[i]))}
 for (i in 1:length(lxM)){YxM[i]<-.5*log(lxM[i]/(1-lxM[i]))}
-
-lxF2000<-lxF
-lxM2000<-lxM
+for (i in 1:length(lxT)){YxT[i]<-.5*log(lxT[i]/(1-lxT[i]))}
 
 lxFStart<-lxFEnd<-array(0,length(lxF))
 lxMStart<-lxMEnd<-array(0,length(lxM))
+lxTStart<-lxTEnd<-array(0,length(lxT))
 for (i in 1:length(lxFStart)){lxFStart[i]<-1/(1+exp(-2*BA_startF-2*BB*YxF[i]))}
-for (i in 1:length(lxMStart)){lxMStart[i]<-1/(1+exp(-2*BA_startF-2*BB*YxM[i]))}
+for (i in 1:length(lxMStart)){lxMStart[i]<-1/(1+exp(-2*BA_startM-2*BB*YxM[i]))}
+for (i in 1:length(lxTStart)){lxTStart[i]<-1/(1+exp(-2*BA_startT-2*BB*YxT[i]))}
 for (i in 1:length(lxFEnd)){lxFEnd[i]<-1/(1+exp(-2*BA_endF-2*BB*YxF[i]))}
 for (i in 1:length(lxMEnd)){lxMEnd[i]<-1/(1+exp(-2*BA_endM-2*BB*YxM[i]))}
+for (i in 1:length(lxTEnd)){lxTEnd[i]<-1/(1+exp(-2*BA_endT-2*BB*YxT[i]))}
 
 LxFStart<-LxFEnd<-array(0,length(lxF))
 LxMStart<-LxMEnd<-array(0,length(lxM))
+LxTStart<-LxTEnd<-array(0,length(lxT))
 ##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
 for (i in 1:length(LxFStart)){LxFStart[i]<-.5*(lxFStart[i]+lxFStart[i+1])}
 for (i in 1:length(LxMStart)){LxMStart[i]<-.5*(lxMStart[i]+lxMStart[i+1])}
+for (i in 1:length(LxTStart)){LxTStart[i]<-.5*(lxTStart[i]+lxTStart[i+1])}
 for (i in 1:length(LxFEnd)){LxFEnd[i]<-.5*(lxFEnd[i]+lxFEnd[i+1])}
 for (i in 1:length(LxMEnd)){LxMEnd[i]<-.5*(lxMEnd[i]+lxMEnd[i+1])}
+for (i in 1:length(LxTEnd)){LxTEnd[i]<-.5*(lxTEnd[i]+lxTEnd[i+1])}
 
 SxFStart<-SxFEnd<-array(0,length(lxF)-1)
-SxMStart<-SxMEnd<-array(0,length(lxF)-1)
+SxMStart<-SxMEnd<-array(0,length(lxM)-1)
+SxTStart<-SxTEnd<-array(0,length(lxT)-1)
 for (i in 1:length(SxFStart)-1){SxFStart[i]<-(LxFStart[i+1]/LxFStart[i])}
-for (i in 1:length(SxFStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}
+for (i in 1:length(SxMStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}
+for (i in 1:length(SxTStart)-1){SxTStart[i]<-(LxTStart[i+1]/LxTStart[i])}
 for (i in 1:length(SxFEnd)-1){SxFEnd[i]<-(LxFEnd[i+1]/LxFEnd[i])}
-for (i in 1:length(SxFEnd)-1){SxMEnd[i]<-(LxMEnd[i+1]/LxMEnd[i])}
+for (i in 1:length(SxMEnd)-1){SxMEnd[i]<-(LxMEnd[i+1]/LxMEnd[i])}
+for (i in 1:length(SxTEnd)-1){SxTEnd[i]<-(LxTEnd[i+1]/LxTEnd[i])}
+
+e0FStart<-sum(LxFStart[1:22]*5)
+e0MStart<-sum(LxMStart[1:22]*5)
+e0TStart<-sum(LxTStart[1:22]*5)
+e0FEnd<-sum(LxFEnd[1:22]*5)
+e0MEnd<-sum(LxMEnd[1:22]*5)
+e0TEnd<-sum(LxTEnd[1:22]*5)
 
 #####
 ##CALCULATIONS
@@ -434,49 +478,49 @@ legend(11.5, .12, legend=c("2010 (estimate)","2015 (estimate)",paste(c(PROJECTIO
        col=c("orange","blue","dark green"), lty=c(1,1,1),lwd=c(4,4,4),cex=1.2)
 }
 
-mtext(side=1,c("Sum 2010:"),line=-12,adj=.125,col="orange")
-if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusOneAgeInit[,1])),line=-12,adj=.3,col="orange")}
-if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusOneAgeInit[,2])),line=-12,adj=.3,col="orange")}
-if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusOneAgeInit[,3])),line=-12,adj=.3,col="orange")}
+mtext(side=1,c("Sum 2010:"),line=-14,adj=.125,col="orange")
+if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusOneAgeInit[,1])),line=-14,adj=.3,col="orange")}
+if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusOneAgeInit[,2])),line=-14,adj=.3,col="orange")}
+if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusOneAgeInit[,3])),line=-14,adj=.3,col="orange")}
 
-mtext(side=1,c("Sum 2015:"),line=-11,adj=.125,col="blue")
-if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusZeroAgeInit[,1])),line=-11,adj=.3,col="blue")}
-if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusZeroAgeInit[,2])),line=-11,adj=.3,col="blue")}
-if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusZeroAgeInit[,3])),line=-11,adj=.3,col="blue")}
+mtext(side=1,c("Sum 2015:"),line=-13,adj=.125,col="blue")
+if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusZeroAgeInit[,1])),line=-13,adj=.3,col="blue")}
+if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusZeroAgeInit[,2])),line=-13,adj=.3,col="blue")}
+if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusZeroAgeInit[,3])),line=-13,adj=.3,col="blue")}
 
-mtext(side=1,c("Sum "),line=-10,adj=.117,col="dark green")
-mtext(side=1,c(PROJECTIONYEAR),line=-10,adj=.18,col="dark green")
-mtext(side=1,c(":"),line=-10,adj=.225,col="dark green")
-if(SelectBySex=="Total") {mtext(side=1,c(round(sum(NewAge[,1]))),line=-10,adj=.3,col="dark green")}
-if(SelectBySex=="Female") {mtext(side=1,c(round(sum(NewAge[,2]))),line=-10,adj=.3,col="dark green")}
-if(SelectBySex=="Male") {mtext(side=1,c(round(sum(NewAge[,3]))),line=-10,adj=.3,col="dark green")}
+mtext(side=1,c("Sum "),line=-12,adj=.117,col="dark green")
+mtext(side=1,c(PROJECTIONYEAR),line=-12,adj=.18,col="dark green")
+mtext(side=1,c(":"),line=-12,adj=.225,col="dark green")
+if(SelectBySex=="Total") {mtext(side=1,c(round(sum(NewAge[,1]))),line=-12,adj=.3,col="dark green")}
+if(SelectBySex=="Female") {mtext(side=1,c(round(sum(NewAge[,2]))),line=-12,adj=.3,col="dark green")}
+if(SelectBySex=="Male") {mtext(side=1,c(round(sum(NewAge[,3]))),line=-12,adj=.3,col="dark green")}
 
-mtext(side=1,c("iTFR 2010:"),line=-4,adj=.13,col="orange")
-mtext(side=1,c(round(ImpliedTFR2010,2)),line=-4,adj=.29,col="orange")
+mtext(side=1,c("iTFR 2010:"),line=-6,adj=.13,col="orange")
+mtext(side=1,c(round(ImpliedTFR2010,2)),line=-6,adj=.29,col="orange")
 
-mtext(side=1,c("iTFR 2015:"),line=-3,adj=.13,col="blue")
-mtext(side=1,c(round(ImpliedTFR2015,2)),line=-3,adj=.29,col="blue")
+mtext(side=1,c("iTFR 2015:"),line=-5,adj=.13,col="blue")
+mtext(side=1,c(round(ImpliedTFR2015,2)),line=-5,adj=.29,col="blue")
 
-mtext(side=1,c("iTFR"),line=-2,adj=.12,col="dark green")
-mtext(side=1,c(PROJECTIONYEAR),line=-2,adj=.185,col="dark green")
-mtext(side=1,c(":"),line=-6,adj=.23,col="dark green")
-mtext(side=1,c(round(ImpliedTFRNew,2)),line=-2,adj=.29,col="dark green")
+mtext(side=1,c("iTFR"),line=-4,adj=.12,col="dark green")
+mtext(side=1,c(PROJECTIONYEAR),line=-4,adj=.185,col="dark green")
+mtext(side=1,c(":"),line=-4,adj=.23,col="dark green")
+mtext(side=1,c(round(ImpliedTFRNew,4)),line=-4,adj=.29,col="dark green")
 
 if(SelectBySex=="Total") {LASTGROWTHRATE<-paste(text=c("R (2010 to 2015):  ", round(log(sum(TMinusZeroAgeInit[,1])/sum(TMinusOneAgeInit[,1]))/5*100,2)),collapse="")}
 if(SelectBySex=="Male") {LASTGROWTHRATE<-paste(text=c("R (2010 to 2015):  ", round(log(sum(TMinusZeroAgeInit[,1])/sum(TMinusOneAgeInit[,1]))/5*100,2)),collapse="")}
 if(SelectBySex=="Female") {LASTGROWTHRATE<-paste(text=c("R (2010 to 2015):  ", round(log(sum(TMinusZeroAgeInit[,1])/sum(TMinusOneAgeInit[,1]))/5*100,2)),collapse="")}
-mtext(side=1,c(LASTGROWTHRATE),line=-8,adj=.15,col="blue")
+mtext(side=1,c(LASTGROWTHRATE),line=-10,adj=.15,col="blue")
 
 if(SelectBySex=="Total") {GROWTHRATE<-paste(text=c("R (2015 to ",PROJECTIONYEAR,"):  ", round(log(sum(NewAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPS*5)*100,2)),collapse="")}
 if(SelectBySex=="Female") {GROWTHRATE<-paste(text=c("R (2015 to ",PROJECTIONYEAR,"):  ", round(log(sum(NewAge[,2])/sum(TMinusZeroAgeInit[,2]))/(STEPS*5)*100,2)),collapse="")}
 if(SelectBySex=="Male") {GROWTHRATE<-paste(text=c("R (2015 to ",PROJECTIONYEAR,"):  ", round(log(sum(NewAge[,3])/sum(TMinusZeroAgeInit[,3]))/(STEPS*5)*100,2)),collapse="")}
-mtext(side=1,c(GROWTHRATE),line=-7,adj=.15,col="dark green")
+mtext(side=1,c(GROWTHRATE),line=-9,adj=.15,col="dark green")
 
 if (min(StableAge)>=0) {
 if(SelectBySex=="Total") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPSSTABLE*5)*100,2)),collapse="")}
 if(SelectBySex=="Female") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,2])/sum(TMinusZeroAgeInit[,2]))/(STEPSSTABLE*5)*100,2)),collapse="")}
 if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,3])/sum(TMinusZeroAgeInit[,3]))/(STEPSSTABLE*5)*100,2)),collapse="")}
-mtext(side=1,c(STABLEGROWTHRATE),line=-6,adj=.15,col="black")
+mtext(side=1,c(STABLEGROWTHRATE),line=-8,adj=.15,col="black")
 
 if(SelectBySex=="Total") {lines(StableAge[,1]/sum(StableAge[,1]),col="black",lty=3,lwd=1.5)}
 if(SelectBySex=="Female") {lines(StableAge[,2]/sum(StableAge[,2]),col="black",lty=3,lwd=1.5)}
@@ -488,6 +532,21 @@ if(SelectBySex=="Total") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..
 if(SelectBySex=="Female") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
 if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
 mtext(side=1,c(STABLEGROWTHRATE),line=-6,adj=.15,col="black")
+}
+
+if (input$Imputee0=="YES" & SelectBySex=="Total") {
+mtext(side=1,c("Imputed first-step e0 (2015 to 2020):"),line=-2,adj=.18,col="black")
+mtext(side=1,c(round(e0TStart,1)),line=-2,adj=.525,col="black")
+}
+
+if (input$Imputee0=="YES" & SelectBySex=="Female") {
+mtext(side=1,c("Imputed first-step e0 (2015 to 2020):"),line=-2,adj=.18,col="black")
+mtext(side=1,c(round(e0FStart,1)),line=-2,adj=.525,col="black")
+}
+
+if (input$Imputee0=="YES" & SelectBySex=="Male") {
+mtext(side=1,c("Imputed first-step e0 (2015 to 2020):"),line=-2,adj=.18,col="black")
+mtext(side=1,c(round(e0MStart,1)),line=-2,adj=.525,col="black")
 }
 
 ##SECOND GRAPH
@@ -502,6 +561,13 @@ axis(side=1,at=1:(HALFSIZE-1),labels=agegroups2,las=2,cex.axis=0.9)
 axis(side=2)
 legend(7,1.75, legend=c("Female","Male", "Female, with migration and mortality adjustments","Male, with migration and mortality adjustments"),
        col=c("dodger blue","gold","dodger blue","gold"), lty=c(1,1,2,2),lwd=c(4,4,2,2),cex=1.2)
+
+if (input$Imputee0=="YES") {
+mtext(side=1,c("e0, Female:"),line=-10,adj=.125,col="black")
+mtext(side=1,c(round(e0FEnd,1)),line=-10,adj=.28,col="black")
+mtext(side=1,c("e0, Male:"),line=-9,adj=.125,col="black")
+mtext(side=1,c(round(e0MEnd,1)),line=-9,adj=.28,col="black")
+}
 
 ##THIRD GRAPH
 barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(TMinusZeroAgeInit[,2])*2,0),col="dodgerblue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
