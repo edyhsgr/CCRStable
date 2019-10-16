@@ -145,7 +145,7 @@ tags$a(href="https://shiny.rstudio.com/",
 tags$a(href="https://edyhsgr.github.io/eddieh/", 
 	"Eddie Hunsinger,"), 
 
-"August 2019 (updated September 2019)."),
+"August 2019 (updated October 2019)."),
 
 p("Population estimates inputs from ",
 tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
@@ -570,10 +570,10 @@ legend(7,1.75, legend=c("Female","Male", "Female, with migration and mortality a
        col=c("dodger blue","gold","dodger blue","gold"), lty=c(1,1,2,2),lwd=c(4,4,2,2),cex=1.2)
 
 if (input$ImputeMort=="YES") {
-mtext(side=1,c("e0, Female:"),line=-10,adj=.125,col="black")
-mtext(side=1,c(round(e0FEnd,1)),line=-10,adj=.28,col="black")
-mtext(side=1,c("e0, Male:"),line=-9,adj=.125,col="black")
-mtext(side=1,c(round(e0MEnd,1)),line=-9,adj=.28,col="black")
+mtext(side=1,c("Imputed e0, female:"),line=-10,adj=.125,col="black")
+mtext(side=1,c(round(e0FEnd,1)),line=-10,adj=.35,col="black")
+mtext(side=1,c("Imputed e0, male:"),line=-9,adj=.122,col="black")
+mtext(side=1,c(round(e0MEnd,1)),line=-9,adj=.35,col="black")
 }
 
 ##THIRD GRAPH
@@ -588,3 +588,4 @@ barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(TMinusZeroAgeInit[,2])
 }
 
 shinyApp(ui = ui, server = server)
+
