@@ -174,7 +174,7 @@ tags$a(href="http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/",
 tags$a(href="http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/", 
 	"Hunsinger (2019)."),
 
-tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079451943645339648", 
+tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
 	"Graph of e0 and Brass' relational life table alpha by US state."),
 
 "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
@@ -540,20 +540,20 @@ mtext(side=1,c(STABLEGROWTHRATE),line=-9,adj=.15,col="black")
 }
 
 if (input$ImputeMort=="YES" & SelectBySex=="Total") {
-mtext(side=1,c("Imputed first-step e0 (2015 to 2020), female: "),line=-3,adj=.21,col="black")
-mtext(side=1,c(round(e0FStart,1)),line=-3,adj=.625,col="black")
-mtext(side=1,c("Imputed first-step e0 (2015 to 2020), male: "),line=-2,adj=.203,col="black")
-mtext(side=1,c(round(e0MStart,1)),line=-2,adj=.6265,col="black")
+mtext(side=1,c("Imputed starting e0, female: "),line=-3,adj=.157,col="black")
+mtext(side=1,c(round(e0FStart,1)),line=-3,adj=.455,col="black")
+mtext(side=1,c("Imputed starting e0, male: "),line=-2,adj=.155,col="black")
+mtext(side=1,c(round(e0MStart,1)),line=-2,adj=.4565,col="black")
 }
 
 if (input$ImputeMort=="YES" & SelectBySex=="Female") {
-mtext(side=1,c("Imputed first-step e0 (2015 to 2020): "),line=-3,adj=.18,col="black")
-mtext(side=1,c(round(e0FStart,1)),line=-3,adj=.525,col="black")
+mtext(side=1,c("Imputed starting e0, female: "),line=-3,adj=.157,col="black")
+mtext(side=1,c(round(e0FStart,1)),line=-3,adj=.455,col="black")
 }
 
 if (input$ImputeMort=="YES" & SelectBySex=="Male") {
-mtext(side=1,c("Imputed first-step e0 (2015 to 2020): "),line=-3,adj=.18,col="black")
-mtext(side=1,c(round(e0MStart,1)),line=-3,adj=.525,col="black")
+mtext(side=1,c("Imputed starting e0, male: "),line=-3,adj=.155,col="black")
+mtext(side=1,c(round(e0MStart,1)),line=-3,adj=.4565,col="black")
 }
 
 ##SECOND GRAPH
