@@ -149,20 +149,20 @@ tags$a(href="https://edyhsgr.github.io/eddieh/",
 
 p("Population estimates inputs from ",
 tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
-	"US Census Bureau Vintage 2018 Population Estimates."),
+	"US Census Bureau Vintage 2018 Population Estimates.")),
 
-" More information on cohort change ratios, including a chapter on stable population: ",
+p(" More information on cohort change ratios, including a chapter on stable population: ",
 tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
 	"Baker, Swanson, Tayman, and Tedrow (2017)."),
 
-"More information on iTFR: ",
+p("More information on iTFR: ",
 tags$a(href="https://osf.io/adu98/", 
 	"Hauer and Schmertmann (2019)"),
 	" and ",
 tags$a(href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0067226", 
-	"Hauer, Baker, and Brown (2013)."),
+	"Hauer, Baker, and Brown (2013).")),
 
-"Slides with background thoughts on adjusting net migration: ",
+p("Slides with background thoughts on adjusting net migration: ",
 tags$a(href="https://edyhsgr.github.io/eddieh/documents/ProjPresentation.pdf", 
 	"Hunsinger (2007)."),
 
@@ -173,6 +173,11 @@ tags$a(href="http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/",
 "Interface with net migration adjustment examples and comparisons: ",
 tags$a(href="http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/", 
 	"Hunsinger (2019)."),
+
+"Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 
+American Community Survey Public Use Microdata Sample, accessed via the ", 
+tags$a(href="https://usa.ipums.org/usa/", 
+	"IPUMS USA, University of Minnesota.")),
 
 tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
 	"Graph of e0 and Brass' relational life table alpha by US state."),
@@ -363,8 +368,6 @@ B_F<-0*S_F
 B_F[1,4:10]<-Ratios[1]*ffab
 A_F<-B_F+S_F
 
-#COMPETING RISKS RELEVANT? NOT SURE. 
-#0to4 MORTALITY USEFUL, OR iTFR DICTATED? NOT SURE, TBD THO.
 SEnd_F<-array(0,c(HALFSIZE,HALFSIZE))
 SEnd_F<-rbind(0,cbind(diag(SxFEnd[2:(HALFSIZE)]-SxFStart[2:(HALFSIZE)]),0))
 SEnd_F<-SEnd_F+S_F
@@ -393,21 +396,15 @@ SumFirstRows<-(sum(B_F)+sum(B_M)) #(May work with)
 ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 
-#NEED TO FIX INTERPOLATION SO NEATER AND MORE REALISTIC - BRASS' ALPHA CHANGE IN FUNCTION
 CCRProject<-function(A,AEnd,TMinusZeroAge,CURRENTSTEP)
 	{TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
 		if(CURRENTSTEP>0){
-			TMinusZeroAge<-(A*(1-CURRENTSTEP/STEPS)+AEnd*(CURRENTSTEP/STEPS))%*%TMinusZeroAge
-				if(NetMigrationAdjustLevel!=0)
+				TMinusZeroAge<-(A*(1-CURRENTSTEP/STEPS)+AEnd*(CURRENTSTEP/STEPS))%*%TMinusZeroAge
+		if(NetMigrationAdjustLevel!=0)
 				{TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
-				}
-		if(CURRENTSTEP>0){
-			if(UseImposedTFR=="YES") 
-				{TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab}
-				}
-		if(CURRENTSTEP>0){
-			if(UseImposedTFR=="YES") 
-				{TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}
+		if(UseImposedTFR=="YES") 
+				{TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab
+				TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}
 				}
 	TMinusZeroAge<-data.frame(TMinusZeroAge)
 	return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,CURRENTSTEP=CURRENTSTEP+1))}
