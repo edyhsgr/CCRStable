@@ -29,7 +29,10 @@ References, resources, and related info:
     
   Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the United States Mortality Database:
     -https://usa.mortality.org/index.php
-	   
+    
+  Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 American Community Survey Public Use Microdata Sample, accessed via the University of Minnesota's IPUMS: 
+    -https://usa.ipums.org/usa/
+  
   Related Shiny for R application: 
     -(Hunsinger 2019) http://shiny.demog.berkeley.edu/eddieh/CCRStable/
   
