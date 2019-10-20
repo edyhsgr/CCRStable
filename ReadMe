@@ -1,5 +1,12 @@
 R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
 
+-----
+Some to-do's for the coming week (10192019): 
+      -interpolation and timing of mortality adjustment fix/improve
+      -open-ended age group cohort-change-ratio and mortality adjustment fix/improve
+      -ages 0 to 4 mortality update decision
+-----
+
 References, resources, and related info: 
   Software: 
     -R: https://www.r-project.org/
