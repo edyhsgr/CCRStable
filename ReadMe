@@ -8,7 +8,9 @@ Some to-do's for the coming week (10192019):
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
 And for the next two to three weeks (10202019):      
       -autoregressive models for the input components, and stochastic option
+            (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
       -employment-based migration setup
+            (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
 -----
 
 References, resources, and related info: 
