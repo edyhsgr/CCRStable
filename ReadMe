@@ -5,7 +5,10 @@ Some to-do's for the coming week (10192019):
       -interpolation and timing of mortality adjustment fix/improve
       -open-ended age group cohort-change-ratio and mortality adjustment fix/improve
       -ages 0 to 4 mortality update decision
-      -possible ratios averaging and/or trending
+      -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
+And for the next two to three weeks (10202019):      
+      -autoregressive models for the input components, and stochastic option
+      -employment-based migration setup
 -----
 
 References, resources, and related info: 
