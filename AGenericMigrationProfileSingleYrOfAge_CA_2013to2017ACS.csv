@@ -1,5 +1,5 @@
-Age,n,CA_F,CA_M,CA_F_proprate,CA_M_proprate,"Beware - placeholder - just all CA movers by age and sex, using 2013 to 2017 geographic mobility (residence ONE year ago) (accessed via IPUMS - very grateful for IPUMS!) (age 0 0's replaced temporarily with age 1 data - 10212019)"
-0,1,0.008487201,0.009152291,0.008566651,0.008730133,
+Age,n,CA_F,CA_M,CA_F_proprate,CA_M_proprate,"Beware - placeholder - just all CA movers by age and sex, using 2013 to 2017 geographic mobility (residence ONE year ago) (accessed via IPUMS - very grateful for IPUMS!)"
+0,1,0,0,0,0,
 1,1,0.008487201,0.009152291,0.008566651,0.008730133,
 2,1,0.008528075,0.008927958,0.008156807,0.008288364,
 3,1,0.007539386,0.008063585,0.007155811,0.007523287,
