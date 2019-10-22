@@ -12,8 +12,8 @@ And for the next two to three weeks (10202019):
             (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
       -employment-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
------
 
+-----
 References, resources, and related info: 
   Software: 
     -R: https://www.r-project.org/
