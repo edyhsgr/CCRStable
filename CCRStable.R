@@ -547,9 +547,9 @@ mtext(side=1,c(STABLEGROWTHRATE),line=-9,adj=.15,col="black")
 
 if (input$ImputeMort=="YES" & SelectBySex=="Total") {
 mtext(side=1,c("Imputed starting e0, female: "),line=-3,adj=.157,col="black")
-#mtext(side=1,c(round(CCRNew$e0FStart,1)),line=-3,adj=.455,col="black")
+mtext(side=1,c(round(CCRNew$e0FStart,1)),line=-3,adj=.455,col="black")
 mtext(side=1,c("Imputed starting e0, male: "),line=-2,adj=.155,col="black")
-#mtext(side=1,c(round(CCRNew$e0MStart,1)),line=-2,adj=.4565,col="black")
+mtext(side=1,c(round(CCRNew$e0MStart,1)),line=-2,adj=.4565,col="black")
 }
 
 if (input$ImputeMort=="YES" & SelectBySex=="Female") {
