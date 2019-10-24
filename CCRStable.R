@@ -6,6 +6,7 @@
 #https://edyhsgr.github.io/eddieh/
 #
 #IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, BE SURE TO CITE THE SOURCE
+#This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 International License (more information: https://creativecommons.org/licenses/by-sa/3.0/igo/).
 #
 #THERE IS NO WARRANTY FOR THIS CODE
 #THIS CODE HAS NOT BEEN TESTED AT ALL-- PLEASE LET ME KNOW IF YOU FIND ANY PROBLEMS (edyhsgr@gmail.com)
@@ -228,7 +229,7 @@ options(scipen=999)
 SIZE<-36
 HALFSIZE<-SIZE/2
 STEPS<-(input$STEP-2015)/5
-STEPSSTABLE<-1000
+STEPSSTABLE<-STEPS+1000
 CURRENTSTEP<-0
 CURRENTSTEPSTABLE<-0
 PROJECTIONYEAR<-STEPS*5+2015
@@ -293,68 +294,16 @@ TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-c(TMinusZeroAgeRatios_F,TMinusZero
 
 ##"BA" IS THE BRASS RELATIONAL LOGIT MODEL ALPHA
 if(input$ImputeMort=="YES") {
-BA_startF<-input$BAStart
-BA_startM<-input$BAStart
-BA_startT<-input$BAStart
-BA_endF<-input$BAEnd
-BA_endM<-input$BAEnd
-BA_endT<-input$BAEnd
+BA_start<-input$BAStart
+BA_end<-input$BAEnd
 BB<-1
 }
 
 if(input$ImputeMort=="NO") {
-BA_startF<-0
-BA_startM<-0
-BA_startT<-0
-BA_endF<-0
-BA_endM<-0
-BA_endT<-0
+BA_start<-0
+BA_end<-0
 BB<-1
 }
-
-##CALCULATE THE Yx FOR THE lx'S
-YxT<-YxM<-YxF<-NULL
-for (i in 1:length(lxF)){YxF[i]<-.5*log(lxF[i]/(1-lxF[i]))}
-for (i in 1:length(lxM)){YxM[i]<-.5*log(lxM[i]/(1-lxM[i]))}
-for (i in 1:length(lxT)){YxT[i]<-.5*log(lxT[i]/(1-lxT[i]))}
-
-lxFStart<-lxFEnd<-array(0,length(lxF))
-lxMStart<-lxMEnd<-array(0,length(lxM))
-lxTStart<-lxTEnd<-array(0,length(lxT))
-for (i in 1:length(lxFStart)){lxFStart[i]<-1/(1+exp(-2*BA_startF-2*BB*YxF[i]))}
-for (i in 1:length(lxMStart)){lxMStart[i]<-1/(1+exp(-2*BA_startM-2*BB*YxM[i]))}
-for (i in 1:length(lxTStart)){lxTStart[i]<-1/(1+exp(-2*BA_startT-2*BB*YxT[i]))}
-for (i in 1:length(lxFEnd)){lxFEnd[i]<-1/(1+exp(-2*BA_endF-2*BB*YxF[i]))}
-for (i in 1:length(lxMEnd)){lxMEnd[i]<-1/(1+exp(-2*BA_endM-2*BB*YxM[i]))}
-for (i in 1:length(lxTEnd)){lxTEnd[i]<-1/(1+exp(-2*BA_endT-2*BB*YxT[i]))}
-
-LxFStart<-LxFEnd<-array(0,length(lxF))
-LxMStart<-LxMEnd<-array(0,length(lxM))
-LxTStart<-LxTEnd<-array(0,length(lxT))
-##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
-for (i in 1:length(LxFStart)){LxFStart[i]<-.5*(lxFStart[i]+lxFStart[i+1])}
-for (i in 1:length(LxMStart)){LxMStart[i]<-.5*(lxMStart[i]+lxMStart[i+1])}
-for (i in 1:length(LxTStart)){LxTStart[i]<-.5*(lxTStart[i]+lxTStart[i+1])}
-for (i in 1:length(LxFEnd)){LxFEnd[i]<-.5*(lxFEnd[i]+lxFEnd[i+1])}
-for (i in 1:length(LxMEnd)){LxMEnd[i]<-.5*(lxMEnd[i]+lxMEnd[i+1])}
-for (i in 1:length(LxTEnd)){LxTEnd[i]<-.5*(lxTEnd[i]+lxTEnd[i+1])}
-
-SxFStart<-SxFEnd<-array(0,length(lxF)-1)
-SxMStart<-SxMEnd<-array(0,length(lxM)-1)
-SxTStart<-SxTEnd<-array(0,length(lxT)-1)
-for (i in 1:length(SxFStart)-1){SxFStart[i]<-(LxFStart[i+1]/LxFStart[i])}
-for (i in 1:length(SxMStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}
-for (i in 1:length(SxTStart)-1){SxTStart[i]<-(LxTStart[i+1]/LxTStart[i])}
-for (i in 1:length(SxFEnd)-1){SxFEnd[i]<-(LxFEnd[i+1]/LxFEnd[i])}
-for (i in 1:length(SxMEnd)-1){SxMEnd[i]<-(LxMEnd[i+1]/LxMEnd[i])}
-for (i in 1:length(SxTEnd)-1){SxTEnd[i]<-(LxTEnd[i+1]/LxTEnd[i])}
-
-e0FStart<-sum(LxFStart[1:22]*5)
-e0MStart<-sum(LxMStart[1:22]*5)
-e0TStart<-sum(LxTStart[1:22]*5)
-e0FEnd<-sum(LxFEnd[1:22]*5)
-e0MEnd<-sum(LxMEnd[1:22]*5)
-e0TEnd<-sum(LxTEnd[1:22]*5)
 
 #####
 ##CALCULATIONS
@@ -368,18 +317,10 @@ B_F<-0*S_F
 B_F[1,4:10]<-Ratios[1]*ffab
 A_F<-B_F+S_F
 
-SEnd_F<-array(0,c(HALFSIZE,HALFSIZE))
-SEnd_F<-rbind(0,cbind(diag(SxFEnd[2:(HALFSIZE)]-SxFStart[2:(HALFSIZE)]),0))
-SEnd_F<-SEnd_F+S_F
-AEnd_F<-B_F+SEnd_F
-
 S_M<-array(0,c(HALFSIZE,HALFSIZE))
 S_M<-rbind(0,cbind(diag(Ratios[20:SIZE]),0))
 B_M<-0*S_M
 B_M[1,4:10]<-Ratios[1]*(1-ffab)
-SEnd_M<-array(0,c(HALFSIZE,HALFSIZE))
-SEnd_M<-rbind(0,cbind(diag(SxMEnd[2:(HALFSIZE)]-SxMStart[2:(HALFSIZE)]),0))
-SEnd_M<-SEnd_M+S_M
 
 AEnd_Zero<-A_Zero<-array(0,c(HALFSIZE,HALFSIZE))
 
@@ -387,19 +328,88 @@ Acolone<-cbind(A_F,A_Zero)
 Acoltwo<-cbind(B_M,S_M)
 A<-rbind(Acolone,Acoltwo)
 
-AEndcolone<-cbind(AEnd_F,AEnd_Zero)
-AEndcoltwo<-cbind(B_M,SEnd_M)
-AEnd<-rbind(AEndcolone,AEndcoltwo)
-
 SumFirstRows<-(sum(B_F)+sum(B_M)) #(May work with)
 
 ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 
-CCRProject<-function(A,AEnd,TMinusZeroAge,CURRENTSTEP)
-	{TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
+if(STEPS<198){
+##PROJECTION FUNCTION
+CCRProject<-function(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
+	{
+	##CALCULATE THE Yx FOR THE lx'S
+	YxF<-YxM<-NULL
+	for (i in 1:length(lxF)){YxF[i]<-.5*log(lxF[i]/(1-lxF[i]))}
+	for (i in 1:length(lxM)){YxM[i]<-.5*log(lxM[i]/(1-lxM[i]))}
+	
+	lxFStart<-lxFEnd<-array(0,length(lxF))
+	lxMStart<-lxMEnd<-array(0,length(lxM))
+	for (i in 1:length(lxFStart)){lxFStart[i]<-1/(1+exp(-2*BA_start-2*BB*YxF[i]))}
+	for (i in 1:length(lxMStart)){lxMStart[i]<-1/(1+exp(-2*BA_start-2*BB*YxM[i]))}
+	
+	LxFStart<-LxFEnd<-array(0,length(lxF))
+	LxMStart<-LxMEnd<-array(0,length(lxM))
+	##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
+	for (i in 1:length(LxFStart)){LxFStart[i]<-.5*(lxFStart[i]+lxFStart[i+1])}
+	for (i in 1:length(LxMStart)){LxMStart[i]<-.5*(lxMStart[i]+lxMStart[i+1])}
+	
+	SxFStart<-SxFEnd<-array(0,length(lxF)-1)
+	SxMStart<-SxMEnd<-array(0,length(lxM)-1)
+	for (i in 1:length(SxFStart)-1){SxFStart[i]<-(LxFStart[i+1]/LxFStart[i])}
+	for (i in 1:length(SxMStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}	
+
+	e0FStart<-sum(LxFStart[1:22]*5)
+	e0MStart<-sum(LxMStart[1:22]*5)
+
+	lxFAdj<-array(0,length(lxF))
+	lxMAdj<-array(0,length(lxM))
+
+	if(CURRENTSTEP<=STEPS){
+	for (i in 1:length(lxFAdj)){lxFAdj[i]<-1/(1+exp(-2*(BA_start*(1-CURRENTSTEP/STEPS)+BA_end*(CURRENTSTEP/STEPS))-2*BB*YxF[i]))}
+	for (i in 1:length(lxMAdj)){lxMAdj[i]<-1/(1+exp(-2*(BA_start*(1-CURRENTSTEP/STEPS)+BA_end*(CURRENTSTEP/STEPS))-2*BB*YxM[i]))}
+	}
+
+	if(CURRENTSTEP>=STEPS){
+	for (i in 1:length(lxFAdj)){lxFAdj[i]<-1/(1+exp(-2*BA_end-2*BB*YxF[i]))}
+	for (i in 1:length(lxMAdj)){lxMAdj[i]<-1/(1+exp(-2*BA_end-2*BB*YxM[i]))}
+	}
+
+	LxFAdj<-array(0,length(lxF))
+	LxMAdj<-array(0,length(lxM))
+	##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
+	for (i in 1:length(LxFAdj)){LxFAdj[i]<-.5*(lxFAdj[i]+lxFAdj[i+1])}
+	for (i in 1:length(LxMAdj)){LxMAdj[i]<-.5*(lxMAdj[i]+lxMAdj[i+1])}
+
+	SxFAdj<-array(0,length(lxF)-1)
+	SxMAdj<-array(0,length(lxM)-1)
+	for (i in 1:length(SxFAdj)-1){SxFAdj[i]<-(LxFAdj[i+1]/LxFAdj[i])}
+	for (i in 1:length(SxMAdj)-1){SxMAdj[i]<-(LxMAdj[i+1]/LxMAdj[i])}
+
+	e0FAdj<-sum(LxFAdj[1:22]*5)
+	e0MAdj<-sum(LxMAdj[1:22]*5)
+
+	SAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
+	SAdj_F<-rbind(0,cbind(diag(SxFAdj[2:(HALFSIZE)]-SxFStart[2:(HALFSIZE)]),0))
+	SAdj_F<-SAdj_F+S_F
+	AAdj_F<-B_F+SAdj_F
+
+	SAdj_M<-array(0,c(HALFSIZE,HALFSIZE))
+	SAdj_M<-rbind(0,cbind(diag(SxMAdj[2:(HALFSIZE)]-SxMStart[2:(HALFSIZE)]),0))
+	SAdj_M<-SAdj_M+S_M
+
+	AAdj_Zero<-A_Zero<-array(0,c(HALFSIZE,HALFSIZE))
+
+	Acolone<-cbind(A_F,A_Zero)
+	Acoltwo<-cbind(B_M,S_M)
+	A<-rbind(Acolone,Acoltwo)
+
+	AAdjcolone<-cbind(AAdj_F,AAdj_Zero)
+	AAdjcoltwo<-cbind(B_M,SAdj_M)
+	AAdj<-rbind(AAdjcolone,AAdjcoltwo)
+
+	TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
 		if(CURRENTSTEP>0){
-				TMinusZeroAge<-(A*(1-CURRENTSTEP/STEPS)+AEnd*(CURRENTSTEP/STEPS))%*%TMinusZeroAge
+				TMinusZeroAge<-AAdj%*%TMinusZeroAge
 		if(NetMigrationAdjustLevel!=0)
 				{TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
 		if(UseImposedTFR=="YES") 
@@ -407,10 +417,12 @@ CCRProject<-function(A,AEnd,TMinusZeroAge,CURRENTSTEP)
 				TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}
 				}
 	TMinusZeroAge<-data.frame(TMinusZeroAge)
-	return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,CURRENTSTEP=CURRENTSTEP+1))}
+	return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,e0FStart=e0FStart,e0MStart=e0MStart,e0FAdj=e0FAdj,e0MAdj=e0MAdj,CURRENTSTEP=CURRENTSTEP+1))
+	}
+}
 
-CCRNew<-CCRProject(A,AEnd,TMinusZeroAge,CURRENTSTEP)
-while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(A,AEnd,CCRNew$TMinusZeroAge,CCRNew$CURRENTSTEP)}
+CCRNew<-CCRProject(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
+while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(CCRNew$TMinusZeroAge,BA_start,BA_end,CCRNew$CURRENTSTEP)}
 ImpliedTFRNew<-((CCRNew$TMinusZeroAge[1]+CCRNew$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRNew$TMinusZeroAge[4:10])*FERTWIDTH
 
 CCRatios<-array(0,length(TMinusOneAge)+1)
@@ -419,8 +431,8 @@ CCRatiosF<-CCRatios[2:18]
 CCRatiosM<-CCRatios[20:36]
 
 TMinusZeroAge<-TMinusZeroAgeInit
-CCRStable<-CCRProject(AEnd,AEnd,TMinusZeroAge,0)
-while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(AEnd,AEnd,CCRStable$TMinusZeroAge,CCRStable$CURRENTSTEP)}
+CCRStable<-CCRProject(TMinusZeroAge,BA_start,BA_end,0)
+while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,BA_start,BA_end,CCRStable$CURRENTSTEP)}
 ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
 
 #####
@@ -535,19 +547,19 @@ mtext(side=1,c(STABLEGROWTHRATE),line=-9,adj=.15,col="black")
 
 if (input$ImputeMort=="YES" & SelectBySex=="Total") {
 mtext(side=1,c("Imputed starting e0, female: "),line=-3,adj=.157,col="black")
-mtext(side=1,c(round(e0FStart,1)),line=-3,adj=.455,col="black")
+#mtext(side=1,c(round(CCRNew$e0FStart,1)),line=-3,adj=.455,col="black")
 mtext(side=1,c("Imputed starting e0, male: "),line=-2,adj=.155,col="black")
-mtext(side=1,c(round(e0MStart,1)),line=-2,adj=.4565,col="black")
+#mtext(side=1,c(round(CCRNew$e0MStart,1)),line=-2,adj=.4565,col="black")
 }
 
 if (input$ImputeMort=="YES" & SelectBySex=="Female") {
 mtext(side=1,c("Imputed starting e0, female: "),line=-3,adj=.157,col="black")
-mtext(side=1,c(round(e0FStart,1)),line=-3,adj=.455,col="black")
+mtext(side=1,c(round(CCRNew$e0FStart,1)),line=-3,adj=.455,col="black")
 }
 
 if (input$ImputeMort=="YES" & SelectBySex=="Male") {
 mtext(side=1,c("Imputed starting e0, male: "),line=-3,adj=.155,col="black")
-mtext(side=1,c(round(e0MStart,1)),line=-3,adj=.4565,col="black")
+mtext(side=1,c(round(CCRNew$e0MStart,1)),line=-3,adj=.4565,col="black")
 }
 
 ##SECOND GRAPH
@@ -565,16 +577,16 @@ legend(7,1.75, legend=c("Female","Male", "Female, with migration and mortality a
 
 if (input$ImputeMort=="YES") {
 mtext(side=1,c("Imputed e0, female:"),line=-10,adj=.125,col="black")
-mtext(side=1,c(round(e0FEnd,1)),line=-10,adj=.35,col="black")
+mtext(side=1,c(round(CCRNew$e0FAdj,1)),line=-10,adj=.35,col="black")
 mtext(side=1,c("Imputed e0, male:"),line=-9,adj=.122,col="black")
-mtext(side=1,c(round(e0MEnd,1)),line=-9,adj=.35,col="black")
+mtext(side=1,c(round(CCRNew$e0MAdj,1)),line=-9,adj=.35,col="black")
 }
 
 ##THIRD GRAPH
-barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(TMinusZeroAgeInit[,2])*2,0),col="dodgerblue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
+barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
 
 ##FOURTH GRAPH
-barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(TMinusZeroAgeInit[,2])*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
+barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 ##########
 
 },height=1200,width=1200)
