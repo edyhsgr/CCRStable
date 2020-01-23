@@ -2,17 +2,17 @@
 R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
 
 -----
-Some to-do's for the coming week (10192019): 
+Some to-do's (10192019, updated 01232020): 
       -interpolation and timing of mortality adjustment fix/improve
       -open-ended age group cohort-change-ratio and mortality adjustment fix/improve
       -ages 0 to 4 mortality update decision
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
-And for the next two to three weeks (10202019):      
       -autoregressive models for the input components, and stochastic option
             (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
       -employment-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
-
+      -use of uncertain starting data (along with stochastic option) as a potential way to manage uncertain from Differential Privacy on inputs
+      
 -----
 References, resources, and related info: 
   Software: 
