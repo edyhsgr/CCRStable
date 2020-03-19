@@ -1,8 +1,7 @@
 ##########
 #R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP
-#PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
 #
-#EDDIE HUNSINGER, AUGUST 2019 (UPDATED OCTOBER 2019)
+#EDDIE HUNSINGER, AUGUST 2019 (UPDATED MARCH 2020)
 #https://edyhsgr.github.io/eddieh/
 #
 #IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, BE SURE TO CITE THE SOURCE
@@ -15,7 +14,7 @@
 library(shiny)
 ui<-fluidPage(
 
-	tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App - Preliminary Work, Still Figuring/Learning and Checking"),
+	tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App"),
 	p("Related information and ",
 	tags$a(href="https://www.r-project.org/", "R"),
 	"code available at: ",
