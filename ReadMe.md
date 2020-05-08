@@ -48,7 +48,7 @@ References, resources, and related info:
     -https://usa.ipums.org/usa/
   
   Related Shiny for R application: 
-    -(Hunsinger 2019) http://shiny.demog.berkeley.edu/eddieh/CCRStable/
+    -(Hunsinger 2019) https://edyhsgr.shinyapps.io/CCRStable/
   
 -Eddie Hunsinger (California Department of Finance), August 2019 (updated October 2019)
 
