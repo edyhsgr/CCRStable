@@ -2,10 +2,7 @@
 R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
 
 -----
-Some to-do's (10192019, updated 01232020): 
-      -interpolation and timing of mortality adjustment fix/improve
-      -open-ended age group cohort-change-ratio and mortality adjustment fix/improve
-      -ages 0 to 4 mortality update decision
+Some to-do's (as of May 20120): 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
       -autoregressive models for the input components, and stochastic option
             (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
@@ -50,7 +47,7 @@ References, resources, and related info:
   Related Shiny for R application: 
     -(Hunsinger 2019) https://edyhsgr.shinyapps.io/CCRStable/
   
--Eddie Hunsinger (California Department of Finance), August 2019 (updated October 2019)
+-Eddie Hunsinger (California Department of Finance), August 2019 (updated May 2020)
 
 -----
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/igo/">Creative Commons Attribution-ShareAlike 3.0 International License</a>.
