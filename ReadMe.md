@@ -2,7 +2,7 @@
 R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
 
 -----
-Some to-do's (as of May 20120): 
+Some to-do's (as of May 2020): 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
       -autoregressive models for the input components, and stochastic option
             (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
