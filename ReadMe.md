@@ -1,5 +1,5 @@
 <pre>
-R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP - PRELIMINARY WORK, STILL FIGURING/LEARNING AND CHECKING
+R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP
 
 -----
 Some to-do's (as of May 2020): 
@@ -45,9 +45,9 @@ References, resources, and related info:
     -https://usa.ipums.org/usa/
   
   Related Shiny for R application: 
-    -(Hunsinger 2019) https://edyhsgr.shinyapps.io/CCRStable/
+    -(Hunsinger 2019) https://shiny.demog.berkeley.edu/eddieh/CCRStable/
   
--Eddie Hunsinger (California Department of Finance), August 2019 (updated May 2020)
+-Eddie Hunsinger, August 2019 (updated May 2020)
 
 -----
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/igo/">Creative Commons Attribution-ShareAlike 3.0 International License</a>.
