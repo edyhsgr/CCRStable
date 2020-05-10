@@ -1,7 +1,7 @@
 ##########
 #R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP
 #
-#EDDIE HUNSINGER, AUGUST 2019 (UPDATED MARCH 2020)
+#EDDIE HUNSINGER, AUGUST 2019 (UPDATED MAY 2020)
 #https://edyhsgr.github.io/eddieh/
 #
 #IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, BE SURE TO CITE THE SOURCE
@@ -306,18 +306,24 @@ BB<-1
 
 #####
 ##CALCULATIONS
-Ratios<-array(0,dim=length(TMinusOneAgeRatios))
+Ratios<-array(0,length(TMinusOneAgeRatios))
 for (i in 2:length(TMinusOneAgeRatios)) {Ratios[i]<-TMinusZeroAgeRatios[i]/TMinusOneAgeRatios[i-1]}
 Ratios[1]<-(TMinusZeroAgeRatios[1]+TMinusZeroAgeRatios[HALFSIZE+1])/sum(TMinusOneAgeRatios[4:10])
 
 S_F<-array(0,c(HALFSIZE,HALFSIZE))
 S_F<-rbind(0,cbind(diag(Ratios[2:(HALFSIZE)]),0))
+	S_F[HALFSIZE,HALFSIZE-1]<-TMinusZeroAgeRatios[HALFSIZE]/(TMinusOneAgeRatios[HALFSIZE-1]+TMinusOneAgeRatios[HALFSIZE])
+	Ratios[HALFSIZE]<-S_F[HALFSIZE,HALFSIZE]<-S_F[HALFSIZE,HALFSIZE-1]
+	Ratios[HALFSIZE]<-Ratios[HALFSIZE]
 B_F<-0*S_F
 B_F[1,4:10]<-Ratios[1]*ffab
 A_F<-B_F+S_F
 
 S_M<-array(0,c(HALFSIZE,HALFSIZE))
 S_M<-rbind(0,cbind(diag(Ratios[20:SIZE]),0))
+	S_M[HALFSIZE,HALFSIZE-1]<-TMinusZeroAgeRatios[SIZE]/(TMinusOneAgeRatios[SIZE-1]+TMinusOneAgeRatios[SIZE])
+	Ratios[SIZE]<-S_M[HALFSIZE,HALFSIZE]<-S_M[HALFSIZE,HALFSIZE-1]
+	Ratios[SIZE]<-Ratios[SIZE]
 B_M<-0*S_M
 B_M[1,4:10]<-Ratios[1]*(1-ffab)
 
@@ -357,6 +363,12 @@ CCRProject<-function(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
 	for (i in 1:length(SxFStart)-1){SxFStart[i]<-(LxFStart[i+1]/LxFStart[i])}
 	for (i in 1:length(SxMStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}	
 
+SxFStart[length(SxFStart)-1]<-LxFStart[length(SxFStart)]/(LxFStart[length(SxFStart)-1]+LxFStart[length(SxFStart)])
+SxFStart[length(SxFStart)]<-SxFStart[length(SxFStart)-1]
+
+SxMStart[length(SxMStart)-1]<-LxMStart[length(SxMStart)]/(LxMStart[length(SxMStart)-1]+LxMStart[length(SxMStart)])
+SxMStart[length(SxMStart)]<-SxMStart[length(SxMStart)-1]
+
 	e0FStart<-sum(LxFStart[1:22]*5)
 	e0MStart<-sum(LxMStart[1:22]*5)
 
@@ -383,6 +395,12 @@ CCRProject<-function(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
 	SxMAdj<-array(0,length(lxM)-1)
 	for (i in 1:length(SxFAdj)-1){SxFAdj[i]<-(LxFAdj[i+1]/LxFAdj[i])}
 	for (i in 1:length(SxMAdj)-1){SxMAdj[i]<-(LxMAdj[i+1]/LxMAdj[i])}
+
+SxFAdj[length(SxFAdj)-1]<-LxFAdj[length(SxFAdj)]/(LxFAdj[length(SxFAdj)-1]+LxFAdj[length(SxFAdj)])
+SxFAdj[length(SxFAdj)]<-SxFAdj[length(SxFAdj)-1]
+
+SxMAdj[length(SxMAdj)-1]<-LxMAdj[length(SxMAdj)]/(LxMAdj[length(SxMAdj)-1]+LxMAdj[length(SxMAdj)])
+SxMAdj[length(SxMAdj)]<-SxMAdj[length(SxMAdj)-1]
 
 	e0FAdj<-sum(LxFAdj[1:22]*5)
 	e0MAdj<-sum(LxMAdj[1:22]*5)
@@ -426,8 +444,10 @@ ImpliedTFRNew<-((CCRNew$TMinusZeroAge[1]+CCRNew$TMinusZeroAge[HALFSIZE+1])/5)/su
 
 CCRatios<-array(0,length(TMinusOneAge)+1)
 for (i in 2:length(CCRatios)) {CCRatios[i]<-CCRNew$TMinusZeroAge[i]/CCRNew$TMinusOneAge[i-1]}
-CCRatiosF<-CCRatios[2:18]
-CCRatiosM<-CCRatios[20:36]
+CCRatiosF<-CCRatios[2:HALFSIZE]
+	CCRatiosF[length(CCRatiosF)]<-CCRNew$TMinusZeroAge[HALFSIZE]/(CCRNew$TMinusOneAge[HALFSIZE-1]+CCRNew$TMinusOneAge[HALFSIZE])
+CCRatiosM<-CCRatios[2+HALFSIZE:SIZE]
+	CCRatiosM[length(CCRatiosM)-2]<-CCRNew$TMinusZeroAge[SIZE]/(CCRNew$TMinusOneAge[SIZE-1]+CCRNew$TMinusOneAge[SIZE])
 
 TMinusZeroAge<-TMinusZeroAgeInit
 CCRStable<-CCRProject(TMinusZeroAge,BA_start,BA_end,0)
@@ -565,6 +585,7 @@ mtext(side=1,c(round(CCRNew$e0MStart,1)),line=-3,adj=.4565,col="black")
 agegroups2<-c("5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
 
 plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Effective Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.5,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
+mtext(side=1,c("(Note: 85+ ratio is applied to full 80+ age group)"),line=-42,adj=.50,col="black")
 lines(Ratios[20:36],type="l",col="gold",lwd=4)
 lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
 lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
@@ -593,4 +614,3 @@ barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold
 }
 
 shinyApp(ui = ui, server = server)
-
