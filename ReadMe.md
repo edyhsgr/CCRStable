@@ -1,9 +1,10 @@
 <pre>
-R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP
+R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH ADDED COMPONENTS STABLE POPULATION REVIEW SHINY APP
 
 -----
 Some to-do's (as of May 2020): 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
+      -add option of overall gross migration (intensity) adjustment for net migration (additional to current weighted shifting of net migration)
       -autoregressive models for the input components, and stochastic option
             (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
       -employment-based migration setup
@@ -46,6 +47,9 @@ References, resources, and related info:
   
   Related Shiny for R application: 
     -(Hunsinger 2019) https://shiny.demog.berkeley.edu/eddieh/CCRStable/
+    
+  Applied Demography Toolbox listing: 
+    -https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
   
 -Eddie Hunsinger, August 2019 (updated May 2020)
 
