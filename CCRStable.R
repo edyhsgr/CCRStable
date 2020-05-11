@@ -4,11 +4,13 @@
 #EDDIE HUNSINGER, AUGUST 2019 (UPDATED MAY 2020)
 #https://edyhsgr.github.io/eddieh/
 #
-#IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, BE SURE TO CITE THE SOURCE
+#IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
 #This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 International License (more information: https://creativecommons.org/licenses/by-sa/3.0/igo/).
 #
+#EXAMPLE DATA IS LINKED, SO YOU SHOULD BE ABLE TO SIMPLY COPY ALL AND PASTE INTO R
+#
 #THERE IS NO WARRANTY FOR THIS CODE
-#THIS CODE HAS NOT BEEN TESTED AT ALL-- PLEASE LET ME KNOW IF YOU FIND ANY PROBLEMS (edyhsgr@gmail.com)
+#THIS CODE HAS NOT BEEN PEER-REVIEWED OR CAREFULLY TESTED - QUESTIONS AND COMMENTS ARE WELCOME, OF COURSE (edyhsgr@gmail.com)
 ##########
 
 library(shiny)
@@ -585,7 +587,7 @@ mtext(side=1,c(round(CCRNew$e0MStart,1)),line=-3,adj=.4565,col="black")
 agegroups2<-c("5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
 
 plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Effective Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.5,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
-mtext(side=1,c("(Note: 85+ ratio is applied to full 80+ age group)"),line=-42,adj=.50,col="black")
+mtext(side=1,c("(Note: 85+ ratios are applied to full 80+ age groups)"),line=-42,adj=.50,col="black")
 lines(Ratios[20:36],type="l",col="gold",lwd=4)
 lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
 lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
