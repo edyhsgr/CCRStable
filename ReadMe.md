@@ -45,12 +45,12 @@ References, resources, and related info:
   Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 American Community Survey Public Use Microdata Sample, accessed via IPUMS USA, University of Minnesota: 
     -https://usa.ipums.org/usa/
   
+  Applied Demography Toolbox listing: 
+    -https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
+
   Related Shiny for R application: 
     -(Hunsinger 2019) https://shiny.demog.berkeley.edu/eddieh/CCRStable/
     
-  Applied Demography Toolbox listing: 
-    -https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
-  
 -Eddie Hunsinger, August 2019 (updated May 2020)
 
 -----
