@@ -1,13 +1,11 @@
 ##########
-#R CODE FOR COHORT CHANGE RATIO-BASED STABLE POPULATION REVIEW SHINY APP
+#R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH ADDED COMPONENTS AND STABLE POPULATION REVIEW SHINY APP 
 #
 #EDDIE HUNSINGER, AUGUST 2019 (UPDATED MAY 2020)
 #https://edyhsgr.github.io/eddieh/
 #
 #IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
 #This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 International License (more information: https://creativecommons.org/licenses/by-sa/3.0/igo/).
-#
-#EXAMPLE DATA IS LINKED, SO YOU SHOULD BE ABLE TO SIMPLY COPY ALL AND PASTE INTO R
 #
 #THERE IS NO WARRANTY FOR THIS CODE
 #THIS CODE HAS NOT BEEN PEER-REVIEWED OR CAREFULLY TESTED - QUESTIONS AND COMMENTS ARE WELCOME, OF COURSE (edyhsgr@gmail.com)
@@ -187,6 +185,9 @@ tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832",
 "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
 tags$a(href="https://usa.mortality.org/index.php", 
 	"United States Mortality Database.")),
+
+tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+	"Applied Demography Toolbox listing."),
 
 width=3
 ),
