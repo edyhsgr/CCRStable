@@ -104,10 +104,10 @@ numericInput("STEP","Project to (year)",2030,2020,3000,step=5),
 
 selectInput("RatiosFrom", "Using ratios from",
 c(
-"2010 to 2015"="3",
-"2011 to 2016"="4",
+"2013 to 2018"="6",
 "2012 to 2017"="5",
-"2013 to 2018"="6"
+"2011 to 2016"="4",
+"2010 to 2015"="3"
 ),
 ),
 
