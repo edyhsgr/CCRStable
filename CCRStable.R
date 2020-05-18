@@ -384,19 +384,19 @@ CCRProject<-function(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
 	for (i in 1:length(lxF)){YxF[i]<-.5*log(lxF[i]/(1-lxF[i]))}
 	for (i in 1:length(lxM)){YxM[i]<-.5*log(lxM[i]/(1-lxM[i]))}
 	
-	lxFStart<-lxFEnd<-array(0,length(lxF))
-	lxMStart<-lxMEnd<-array(0,length(lxM))
+	lxFStart<-array(0,length(lxF))
+	lxMStart<-array(0,length(lxM))
 	for (i in 1:length(lxFStart)){lxFStart[i]<-1/(1+exp(-2*BA_start-2*BB*YxF[i]))}
 	for (i in 1:length(lxMStart)){lxMStart[i]<-1/(1+exp(-2*BA_start-2*BB*YxM[i]))}
 	
-	LxFStart<-LxFEnd<-array(0,length(lxF))
-	LxMStart<-LxMEnd<-array(0,length(lxM))
+	LxFStart<-array(0,length(lxF))
+	LxMStart<-array(0,length(lxM))
 	##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
 	for (i in 1:length(LxFStart)){LxFStart[i]<-.5*(lxFStart[i]+lxFStart[i+1])}
 	for (i in 1:length(LxMStart)){LxMStart[i]<-.5*(lxMStart[i]+lxMStart[i+1])}
 	
-	SxFStart<-SxFEnd<-array(0,length(lxF)-1)
-	SxMStart<-SxMEnd<-array(0,length(lxM)-1)
+	SxFStart<-array(0,length(lxF)-1)
+	SxMStart<-array(0,length(lxM)-1)
 	for (i in 1:length(SxFStart)-1){SxFStart[i]<-(LxFStart[i+1]/LxFStart[i])}
 	for (i in 1:length(SxMStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}	
 
@@ -671,3 +671,4 @@ barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold
 }
 
 shinyApp(ui = ui, server = server)
+
