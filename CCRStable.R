@@ -124,9 +124,9 @@ ui<-fluidPage(
       
       hr(),
       
-      numericInput("GrossMigrationAdjustLevel","Gross migration adjustment (annual, percent of population)",100,0,200,step=10),
-      
       numericInput("NetMigrationAdjustLevel","Net migration adjustment (annual, percent of population)",0,-25,25,step=.1),
+
+      numericInput("GrossMigrationAdjustLevel","Gross migration adjustment (percent of net migration ratios)",100,0,200,step=10),
       
       hr(),
       
@@ -669,7 +669,7 @@ server<-function(input, output) {
     ##SECOND GRAPH - COHORT CHANGE RATIOS WITH AND WITHOUT ADJUSTMENTS
     agegroups2<-c("5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
     
-    plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Effective Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(0,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
+    plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Effective Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.25,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
     ##OPEN-ENDED AGE GROUP OPTION
     mtext(side=1,c("(Note: 85+ ratios are applied to full 80+ age groups)"),line=-42,adj=.50,col="black")
     lines(Ratios[20:36],type="l",col="gold",lwd=4)
@@ -699,3 +699,4 @@ server<-function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
+
