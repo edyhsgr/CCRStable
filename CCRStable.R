@@ -1,7 +1,7 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP 
 ##
-##EDDIE HUNSINGER, AUGUST 2019 (UPDATED JUNE 2020)
+##EDDIE HUNSINGER, AUGUST 2019 (UPDATED JULY 2020)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
@@ -367,7 +367,7 @@ server<-function(input, output) {
     Acoltwo<-cbind(B_M,S_M)
     A<-rbind(Acolone,Acoltwo)
     
-    ##IMPLIED TFR CALCUATION
+    ##IMPLIED TFR CALCULATION
     ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
     ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
     
@@ -458,20 +458,20 @@ server<-function(input, output) {
         if(GrossMigrationAdjustLevel!=0)
         {
             RatiosGrossMigAdj<-Ratios
-            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFAdj[i])*GrossMigrationAdjustLevel}
+            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i])*GrossMigrationAdjustLevel}
             SGrossMigAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
             SGrossMigAdj_F<-rbind(0,cbind(diag(RatiosGrossMigAdj[2:HALFSIZE]),0))
             ##OPEN-ENDED AGE GROUP (FEMALE)
-            RatiosGrossMigAdj[HALFSIZE]<-(Ratios[HALFSIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFAdj[HALFSIZE])*GrossMigrationAdjustLevel
+            RatiosGrossMigAdj[HALFSIZE]<-(Ratios[HALFSIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[HALFSIZE])*GrossMigrationAdjustLevel
             SGrossMigAdj_F[HALFSIZE,HALFSIZE]<-SGrossMigAdj_F[HALFSIZE,HALFSIZE-1]<-RatiosGrossMigAdj[HALFSIZE]
             S_F<-SGrossMigAdj_F
             A_F<-B_F+S_F
             
-            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMAdj[i-HALFSIZE])*GrossMigrationAdjustLevel}
+            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMStart[i-HALFSIZE])*GrossMigrationAdjustLevel}
             SGrossMigAdj_M<-array(0,c(HALFSIZE,HALFSIZE))
             SGrossMigAdj_M<-rbind(0,cbind(diag(RatiosGrossMigAdj[(HALFSIZE+2):SIZE]),0))
             ##OPEN-ENDED AGE GROUP (MALE)
-            RatiosGrossMigAdj[SIZE]<-(Ratios[SIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMAdj[HALFSIZE])*GrossMigrationAdjustLevel
+            RatiosGrossMigAdj[SIZE]<-(Ratios[SIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMStart[HALFSIZE])*GrossMigrationAdjustLevel
             SGrossMigAdj_M[HALFSIZE,HALFSIZE]<-SGrossMigAdj_M[HALFSIZE,HALFSIZE-1]<-RatiosGrossMigAdj[SIZE]
             S_M<-SGrossMigAdj_M
         }
