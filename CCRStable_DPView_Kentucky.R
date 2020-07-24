@@ -207,8 +207,8 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
               ),selected="NO",
   ),
   
-  numericInput("BAStart","If yes, Brass' model alpha (mortality index) for First projection step...",-.3,-2,2,step=.03),
-  numericInput("BAEnd","...and Brass' model alpha for Last projection step",-.21,-2,2,step=.03),
+  numericInput("BAStart","If yes, Brass' model alpha (mortality index) for First projection step...",.03,-2,2,step=.03),
+  numericInput("BAEnd","...and Brass' model alpha for Last projection step",.12,-2,2,step=.03),
   
   hr(),
   
@@ -220,13 +220,25 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
            "Eddie Hunsinger,"), 
     
     "July 2020."),
+
+  p("2010 Census data, including differential privacy demonstration data, downloaded from ",
+    tags$a(href="https://www.nhgis.org/privacy-protected-demonstration-data", 
+          "IPUMS NHGIS, University of Minnesota.")),
   
   p("2015 population estimates inputs from ",
     tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
           "US Census Bureau Vintage 2019 Population Estimates.")),
 
+  p("Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for Kentucky from the ",
+    tags$a(href="https://usa.mortality.org/index.php", 
+          "United States Mortality Database.")),
+
+  p("Generic gross migration profile from ",
+    tags$a(href="https://www.census.gov/programs-surveys/acs", 
+         "US Census Bureau's 2013 to 2017 American Community Survey data.")),
+
   tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
-         "Applied Demography Toolbox listing for projection code."),
+          "Applied Demography Toolbox listing for projection code."),
   
   width=3
 ),
@@ -251,8 +263,8 @@ K_DP<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/DP20
 Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
 Migration<-c(Migration$CA_F,Migration$CA_M)
 
-##USMD CA SURVIVAL DATA (GENERIC) - SHOULD GET UPDATE, BUT ALSO SHOULD BE OK FOR GENERAL INFO
-lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
+##USMD KY SURVIVAL DATA (GENERIC)
+lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/lt_KY_USMD2010to2014.csv",header=TRUE,sep=",")
 lxF<-lt$lx_Female/100000
 lxM<-lt$lx_Male/100000
 lxT<-lt$lx_Both/100000
@@ -769,4 +781,3 @@ if(input$County!="") {
 }
 
 shinyApp(ui = ui, server = server) 
-
