@@ -1,4 +1,4 @@
-PopName,Sex,Year,Age,ax_Female,lx_Female,ex_Female,ax_Male,lx_Male,ex_Male,ax_Both,lx_Both,ex_Both,"United States Mortality Database, May 2019"
+PopName,Sex,Year,Age,ax_Female,lx_Female,ex_Female,ax_Male,lx_Male,ex_Male,ax_Both,lx_Both,ex_Both,"United States Mortality Database, May 2020"
 KY,m,2010-2014,0,0.07,100000,78.53,0.07,100000,73.34,0.07,100000,75.94,
 KY,m,2010-2014,1,1.47,99415,77.99,1.88,99241,72.9,1.7,99326,75.45,
 KY,m,2010-2014,5,2.4,99304,74.07,2.41,99109,68.99,2.41,99204,71.54,
