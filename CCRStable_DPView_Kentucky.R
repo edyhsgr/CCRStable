@@ -183,7 +183,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
       
   hr(),
   
-  selectInput("ImposeTFR", "Impose iTFR?",
+  selectInput("ImposeTFR", "Impose iTFR? (fertility index)",
               c(
                 "No"="NO",
                 "Yes"="YES"
@@ -207,7 +207,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
               ),selected="NO",
   ),
   
-  numericInput("BAStart","If yes, Brass' model alpha for First projection step...",-.3,-2,2,step=.03),
+  numericInput("BAStart","If yes, Brass' model alpha (mortality index) for First projection step...",-.3,-2,2,step=.03),
   numericInput("BAEnd","...and Brass' model alpha for Last projection step",-.21,-2,2,step=.03),
   
   hr(),
