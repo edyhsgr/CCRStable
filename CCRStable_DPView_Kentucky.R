@@ -233,10 +233,6 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
     tags$a(href="https://usa.mortality.org/index.php", 
           "United States Mortality Database.")),
 
-  p("Generic gross migration profile from ",
-    tags$a(href="https://www.census.gov/programs-surveys/acs", 
-         "US Census Bureau's 2013 to 2017 American Community Survey data.")),
-
   tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
           "Applied Demography Toolbox listing for projection code."),
   
