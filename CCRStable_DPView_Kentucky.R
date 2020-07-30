@@ -379,7 +379,7 @@ if(input$County!="") {
       AgeMale$H76018_sf<-sum(AgeMale$H76018_sf,AgeMale$H76019_sf)
       AgeMale$H76020_sf<-sum(AgeMale$H76020_sf,AgeMale$H76021_sf)
       AgeMale$H76006_dp<-sum(AgeMale$H76006_dp,AgeMale$H76007_dp)
-      AgeMale$H76008_dp<-sum(AgeMale$H76008_dp,AgeMale$H76009_dp,AgeMale$H76010_sf)
+      AgeMale$H76008_dp<-sum(AgeMale$H76008_dp,AgeMale$H76009_dp,AgeMale$H76010_dp)
       AgeMale$H76018_dp<-sum(AgeMale$H76018_dp,AgeMale$H76019_dp)
       AgeMale$H76020_dp<-sum(AgeMale$H76020_dp,AgeMale$H76021_dp)
       AgeMale<-AgeMale[,-c(1:322,327,329,330,339,341,346:698,703,705,706,715,717,722:755)]
@@ -392,7 +392,7 @@ if(input$County!="") {
       AgeFemale$H76042_sf<-sum(AgeFemale$H76042_sf,AgeFemale$H76043_sf)
       AgeFemale$H76044_sf<-sum(AgeFemale$H76044_sf,AgeFemale$H76045_sf)
       AgeFemale$H76030_dp<-sum(AgeFemale$H76030_dp,AgeFemale$H76031_dp)
-      AgeFemale$H76032_dp<-sum(AgeFemale$H76032_dp,AgeFemale$H76033_dp,AgeFemale$H76034_sf)
+      AgeFemale$H76032_dp<-sum(AgeFemale$H76032_dp,AgeFemale$H76033_dp,AgeFemale$H76034_dp)
       AgeFemale$H76042_dp<-sum(AgeFemale$H76042_dp,AgeFemale$H76043_dp)
       AgeFemale$H76044_dp<-sum(AgeFemale$H76044_dp,AgeFemale$H76045_dp)
       AgeFemale<-AgeFemale[,-c(1:346,351,353,354,363,365,370:722,727,729,730,739,741,746:755)]
