@@ -194,7 +194,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
   
   hr(),
 
-  numericInput("SRB","Sex ratio at birth",round((1-.4886)/.4886,3),0,2,step=.005),
+  numericInput("SRB","Projected sex ratio at birth",round((1-.4886)/.4886,3),0,2,step=.005),
   
   hr(),
   
