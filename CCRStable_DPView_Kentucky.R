@@ -1,7 +1,7 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP - DIFFERENTIAL PRIVACY DEMONSTRATION DATA REVIEW
 ##
-##EDDIE HUNSINGER, JULY 2020
+##EDDIE HUNSINGER, JULY 2020 (UPDATED SEPTEMBER 2020)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING FOR POPULATION PROJECTION MODEL AND CODE: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
@@ -193,6 +193,10 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
   numericInput("ImposedTFR","If Yes, iTFR level",2.1,0,10,step=.1),
   
   hr(),
+
+  numericInput("SRB","Sex ratio at birth",round((1-.4886)/.4886,3),0,2,step=.005),
+  
+  hr(),
   
   numericInput("NetMigrationAdjustLevel","Net migration adjustment (annual, percent of population)",0,-25,25,step=.1),
   
@@ -305,7 +309,7 @@ if(input$County!="") {
     
     ##IMPOSED TFR OPTION
     ImposedTFR<-input$ImposedTFR
-    ffab<-.4886
+    ffab<-1/(input$SRB+1)
     UseImposedTFR<-input$ImposeTFR
     
     ##ADJUST BY MIGRATION OPTION
