@@ -123,6 +123,10 @@ ui<-fluidPage(
       numericInput("ImposedTFR","If Yes, iTFR level",2.1,0,10,step=.1),
       
       hr(),
+
+      numericInput("SRB","Sex ratio at birth",round((1-.4886)/.4886,3),0,2,step=.005),
+      
+      hr(),
       
       numericInput("NetMigrationAdjustLevel","Net migration adjustment (annual, percent of population)",0,-25,25,step=.1),
 
@@ -257,7 +261,7 @@ server<-function(input, output) {
     
     ##IMPOSED TFR OPTION
     ImposedTFR<-input$ImposedTFR
-    ffab<-.4886
+    ffab<-1/(input$SRB+1)
     UseImposedTFR<-input$ImposeTFR
     
     ##ADJUST BY MIGRATION OPTION
@@ -699,4 +703,3 @@ server<-function(input, output) {
 }
 
 shinyApp(ui = ui, server = server) 
-
