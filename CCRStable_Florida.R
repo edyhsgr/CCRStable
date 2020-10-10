@@ -28,9 +28,9 @@ ui<-fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      
-      selectInput("County", "County",
-                  c(
+
+selectizeInput(inputId = "County", label = "County", 
+choices = c(
 "Alachua"="Alachua County",
 "Baker"="Baker County",
 "Bay"="Bay County",
@@ -99,7 +99,8 @@ ui<-fluidPage(
 "Walton"="Walton County",
 "Washington"="Washington County"
                   ),
-      ),
+options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
+),
       
       selectInput("Sex", "Sex",
                   c(
@@ -242,14 +243,15 @@ server<-function(input, output) {
   output$plots<-renderPlot({
     par(mfrow=c(2,2))
     
-    ##RUN ONLY IF COUNTY INPUTS ARE PROVIDED
-    if(input$County=="") {
-      plot.new()
-      legend("topleft",legend=c("Select a county with the panel to the left"),cex=2,bty="n")
-    }
-    
     ##NUMBER FORMATTING
     options(scipen=999)
+
+if(input$County=="") {
+plot.new()
+legend("topleft",legend=c("Select a county with the panel to the left"),cex=1.5,bty="n")
+}
+
+if(input$County!="") {
     
     ##########
     ##SCRIPT INPUTS
@@ -707,6 +709,7 @@ server<-function(input, output) {
     
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
+}
     
   },height=1200,width=1200)
   
