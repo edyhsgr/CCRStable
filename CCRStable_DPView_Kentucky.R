@@ -223,7 +223,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
     tags$a(href="https://edyhsgr.github.io/eddieh/", 
            "Eddie Hunsinger,"), 
     
-    "July 2020."),
+    "July 2020 (updated September 2020)."),
 
   p("2010 Census data, including differential privacy demonstration data, downloaded from ",
     tags$a(href="https://www.nhgis.org/privacy-protected-demonstration-data", 
