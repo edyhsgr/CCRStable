@@ -2,7 +2,7 @@
 R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP 
 
 -----
-Some to-do's (as of June 2020): 
+Some to-do's (as of October 2020): 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
       -autoregressive models for the input components, and stochastic option
             (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
@@ -17,7 +17,7 @@ References, resources, and related info:
     -Shiny for R: https://shiny.rstudio.com/
 
   Population estimates inputs: 
-    -US Census Bureau Vintage 2018 Population Estimates: https://www.census.gov/programs-surveys/popest.html
+    -US Census Bureau Vintage 2019 Population Estimates: https://www.census.gov/programs-surveys/popest.html
 
   More information on iTFR: 
     -Hauer and Schmertmann (2019): https://osf.io/adu98/
