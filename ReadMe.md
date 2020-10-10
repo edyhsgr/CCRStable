@@ -38,7 +38,7 @@ References, resources, and related info:
   Graph of e0 and Brass' relational life table alpha by US state: 
     -https://twitter.com/ApplDemogToolbx/status/1079286699941752832 
     
-  Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the United States Mortality Database:
+  Model life table (0.0 alpha) is the 5x5 2010 to 2014 life tables for selected states from the United States Mortality Database:
     -https://usa.mortality.org/index.php
     
   Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 American Community Survey Public Use Microdata Sample, accessed via IPUMS USA, University of Minnesota: 
