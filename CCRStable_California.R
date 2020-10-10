@@ -1,7 +1,7 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP 
 ##
-##EDDIE HUNSINGER, AUGUST 2019 (UPDATED SEPTEMBER 2020)
+##EDDIE HUNSINGER, AUGUST 2019 (UPDATED OCTOBER 2020)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
@@ -153,7 +153,7 @@ ui<-fluidPage(
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "August 2019 (updated September 2020)."),
+        "August 2019 (updated October 2020)."),
       
       p("Population estimates inputs from ",
         tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
@@ -213,14 +213,14 @@ ui<-fluidPage(
 ##DATA (CENSUS BUREAU VINTAGE 2018 POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
 ##https://www2.census.gov/programs-surveys/popest/datasets/2010-2018/counties/asrh/cc-est2018-alldata-06.csv 
 ##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2018/
-K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/cc-est2018-alldata-06_Extract.csv",header=TRUE,sep=","))
+K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/InputData/PopEstimates/master/cc-est2018-alldata-06_Extract.csv",header=TRUE,sep=","))
 
 ##CENSUS ACS (via IPUMS) CA MIGRATION DATA (GENERIC)
-Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/InputData/Migration/master/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
 Migration<-c(Migration$CA_F,Migration$CA_M)
 
 ##USMD CA SURVIVAL DATA (GENERIC)
-lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
+lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/InputData/Mortality/master/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
 lxF<-lt$lx_Female/100000
 lxM<-lt$lx_Male/100000
 lxT<-lt$lx_Both/100000
