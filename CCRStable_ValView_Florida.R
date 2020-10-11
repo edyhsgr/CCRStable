@@ -864,7 +864,7 @@ if(input$STEP==2010) {
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 	barplot(Age2010Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
-	legend("topright",inset=.2,legend="2010 estimate", col=1, angle=45, density=5, cex=1.65, bty="n")
+	legend("topright",inset=.2,legend="2010 estimates", col=1, angle=45, density=5, cex=1.65, bty="n")
 }
 
 if(input$STEP==2015) {
@@ -874,7 +874,7 @@ if(input$STEP==2015) {
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 	barplot(Age2015Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
-	legend("topright",inset=.2,legend="2015 estimate", col=1, angle=45, density=5, cex=1.65, bty="n")
+	legend("topright",inset=.2,legend="2015 estimates", col=1, angle=45, density=5, cex=1.65, bty="n")
 }
 
 if(input$STEP>2015) {
