@@ -163,6 +163,14 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
       
       numericInput("BAStart","If yes, Brass' model alpha for First projection step...",.03,-2,2,step=.03),
       numericInput("BAEnd","...and Brass' model alpha for Last projection step",.12,-2,2,step=.03),
+
+      selectInput("LifeTable", "Life table to use", selected="Florida",
+                  c(
+                    "California"="California",
+                    "Florida"="Florida",
+                    "Kentucky"="Kentucky"
+                  ),
+      ),
       
       hr(),
       
@@ -210,7 +218,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
                "Graph of e0 and Brass' relational life table alpha by US state."),
         
-        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
+        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
         tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
@@ -235,21 +243,26 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
 ##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2019/
 K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2019-alldata-12_Extract.csv",header=TRUE,sep=","))
 
-##USMD CA SURVIVAL DATA (GENERIC)
-lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
-lxF<-lt$lx_Female/100000
-lxM<-lt$lx_Male/100000
-lxT<-lt$lx_Both/100000
-lxF<-c(lxF[1],lxF[3:24])
-lxM<-c(lxM[1],lxM[3:24])
-lxT<-c(lxT[1],lxT[3:24])
-
 server<-function(input, output) {	
   output$plots<-renderPlot({
     par(mfrow=c(2,2))
     
     ##NUMBER FORMATTING
     options(scipen=999)
+
+##USMD CA SURVIVAL DATA (GENERIC)
+if(input$LifeTable=="Calfornia") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
+}
+if(input$LifeTable=="Florida") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_FL_USMD2010to2014.csv",header=TRUE,sep=",")
+}
+if(input$LifeTable=="Kentucky") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_KY_USMD2010to2014.csv",header=TRUE,sep=",")
+}
+lxF<-lt$lx_Female/100000
+lxM<-lt$lx_Male/100000
+lxT<-lt$lx_Both/100000
+lxF<-c(lxF[1],lxF[3:24])
+lxM<-c(lxM[1],lxM[3:24])
+lxT<-c(lxT[1],lxT[3:24])
 
 ##SELECT CENSUS ACS (via IPUMS) MIGRATION DATA
 if(input$GrossMigrationProfile=="Calfornia") {
@@ -739,3 +752,4 @@ if(input$County!="") {
 }
 
 shinyApp(ui = ui, server = server) 
+
