@@ -9,6 +9,7 @@ Some to-do's (as of October 2020):
       -employment-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
       -use of uncertain starting data (along with stochastic option) as a potential way to manage uncertain from Differential Privacy on inputs
+      -optimize the input indices for fit to historical data (to better see/understand best-possible)
       
 -----
 References, resources, and related info: 
