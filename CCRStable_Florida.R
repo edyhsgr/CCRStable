@@ -142,7 +142,16 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
       numericInput("NetMigrationAdjustLevel","Net migration adjustment (annual, percent of population)",0,-25,25,step=.1),
 
       numericInput("GrossMigrationAdjustLevel","Gross migration adjustment (percent of net migration ratios)",100,0,200,step=10),
-      
+
+      selectInput("GrossMigrationProfile", "Gross migration age profile to use", selected="Florida",
+                  c(
+                    "California"="California",
+                    "Florida"="Florida",
+                    "Sarasota County, Florida"="SarasotaFlorida",
+                    "Kentucky"="Kentucky"
+                  ),
+      ),
+
       hr(),
       
       selectInput("ImputeMort", "Impute mortality?",
@@ -226,10 +235,6 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
 ##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2019/
 K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2019-alldata-12_Extract.csv",header=TRUE,sep=","))
 
-##CENSUS ACS (via IPUMS) CA MIGRATION DATA (GENERIC)
-Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
-Migration<-c(Migration$CA_F,Migration$CA_M)
-
 ##USMD CA SURVIVAL DATA (GENERIC)
 lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
 lxF<-lt$lx_Female/100000
@@ -245,6 +250,24 @@ server<-function(input, output) {
     
     ##NUMBER FORMATTING
     options(scipen=999)
+
+##SELECT CENSUS ACS (via IPUMS) MIGRATION DATA
+if(input$GrossMigrationProfile=="Calfornia") {
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-c(Migration$CA_F,Migration$CA_M)
+}
+if(input$GrossMigrationProfile=="Florida") {
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_FL_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-c(Migration$FL_F,Migration$FL_M)
+}
+if(input$GrossMigrationProfile=="SarasotaFlorida") {
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_SarasotaFL_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-c(Migration$SarasotaFL_F,Migration$SarasotaFL_M)
+}
+if(input$GrossMigrationProfile=="Kentucky") {
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_KY_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-c(Migration$KY_F,Migration$KY_M)
+}
 
 if(input$County=="") {
 plot.new()
@@ -716,4 +739,3 @@ if(input$County!="") {
 }
 
 shinyApp(ui = ui, server = server) 
-
