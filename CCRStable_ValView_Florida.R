@@ -131,7 +131,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
       
-      numericInput("ImposedTFR","If Yes, iTFR level",2.1,0,10,step=.1),
+      numericInput("ImposedTFR","If Yes, iTFR level",2.1,0,10,step=.05),
       
       hr(),
 
