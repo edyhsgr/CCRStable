@@ -165,8 +165,8 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
       
-      numericInput("BAStart","If yes, Brass' model alpha for First projection step...",.03,-2,2,step=.03),
-      numericInput("BAEnd","...and Brass' model alpha for Last projection step",.12,-2,2,step=.03),
+      numericInput("BAStart","If yes, Brass' model alpha for First projection step...",-.03,-2,2,step=.03),
+      numericInput("BAEnd","...and Brass' model alpha for Last projection step",.06,-2,2,step=.03),
 
       selectInput("LifeTable", "Life table standard to use", selected="Florida",
                   c(
