@@ -16,7 +16,7 @@
 library(shiny)
 ui<-fluidPage(
   
-  tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App"),
+  tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App - 2000s Baseline, Florida Counties"),
   p("Related information and ",
     tags$a(href="https://www.r-project.org/", "R"),
     "code available at: ",
