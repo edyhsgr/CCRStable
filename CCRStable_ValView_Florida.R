@@ -29,6 +29,10 @@ ui<-fluidPage(
   sidebarLayout(
     sidebarPanel(
 
+   radioButtons("radio","",c("Use postcensal inputs" = 1, "Use intercensal inputs" = 2),selected = 1),
+
+  hr(),
+
 selectizeInput(inputId = "County", label = "County", 
 choices = c(
 "Alachua"="Alachua County",
@@ -242,10 +246,12 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
 ##https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/asrh/cc-est2019-alldata-12.csv 
 ##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2019/
 KVal<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2019-alldata-12_Extract.csv",header=TRUE,sep=","))
-##DATA (CENSUS BUREAU VINTAGE 2009 POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
+##DATA (CENSUS BUREAU VINTAGE 2009 OR INTERCENSAL 2000s POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
 ##https://www2.census.gov/programs-surveys/popest/datasets/2000-2009/counties/asrh/cc-est2009-alldata-12.csv 
 ##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2000-2009/
-K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2009-alldata-12_Extract.csv",header=TRUE,sep=","))
+##https://www.census.gov/data/datasets/time-series/demo/popest/intercensal-2000-2010-counties.html
+K_Int<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/co-est00int-alldata-12_Extract.csv",header=TRUE,sep=","))
+K_Post<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2009-alldata-12_Extract.csv",header=TRUE,sep=","))
 
 server<-function(input, output) {	
   output$plots<-renderPlot({
@@ -253,6 +259,10 @@ server<-function(input, output) {
     
     ##NUMBER FORMATTING
     options(scipen=999)
+
+##SELECT POSTCENSAL INTERCENSAL ESTIMATES AS BASIS
+if(input$radio==1){K<-K_Post}
+if(input$radio==2){K<-K_Int}
 
 ##USMD CA SURVIVAL DATA (GENERIC)
 if(input$LifeTable=="Calfornia") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
@@ -341,60 +351,60 @@ if(input$County!="") {
     Name<-paste(input$County)
     
     ##SELECTING FROM THE INPUT POPULATION TABLE (K) BASED ON INPUTS
-    TMinusOneAgeInit_F<-subset(K,CTYNAME==input$County & YEAR==3 & AGEGRP>0)
+    TMinusOneAgeInit_F<-subset(K,CTYNAME==input$County & YEAR==3 & AGEGRP>0 & AGEGRP!=99)
     TMinusOneAgeInit_F<-TMinusOneAgeInit_F$TOT_FEMALE
     TMinusOneAge_F<-TMinusOneAgeInit_F
     
-    TMinusOneAgeInit_M<-subset(K,CTYNAME==input$County & YEAR==3 & AGEGRP>0)
+    TMinusOneAgeInit_M<-subset(K,CTYNAME==input$County & YEAR==3 & AGEGRP>0 & AGEGRP!=99)
     TMinusOneAgeInit_M<-TMinusOneAgeInit_M$TOT_MALE
     TMinusOneAge_M<-TMinusOneAgeInit_M
     
     TMinusOneAge<-TMinusOneAgeInit<-c(TMinusOneAge_F,TMinusOneAge_M)
     
-    TMinusOneAgeInitRatios_F<-subset(K,CTYNAME==input$County & YEAR==FirstYear & AGEGRP>0)
+    TMinusOneAgeInitRatios_F<-subset(K,CTYNAME==input$County & YEAR==FirstYear & AGEGRP>0 & AGEGRP!=99)
     TMinusOneAgeInitRatios_F<-TMinusOneAgeInitRatios_F$TOT_FEMALE
     TMinusOneAgeRatios_F<-TMinusOneAgeInitRatios_F
     
-    TMinusOneAgeInitRatios_M<-subset(K,CTYNAME==input$County & YEAR==FirstYear & AGEGRP>0)
+    TMinusOneAgeInitRatios_M<-subset(K,CTYNAME==input$County & YEAR==FirstYear & AGEGRP>0 & AGEGRP!=99)
     TMinusOneAgeInitRatios_M<-TMinusOneAgeInitRatios_M$TOT_MALE
     TMinusOneAgeRatios_M<-TMinusOneAgeInitRatios_M
     
     TMinusOneAgeRatios<-TMinusOneAgeInitRatios<-c(TMinusOneAgeRatios_F,TMinusOneAgeRatios_M)
     
-    TMinusZeroAgeInit_F<-subset(K,CTYNAME==input$County & YEAR==8 & AGEGRP>0)
+    TMinusZeroAgeInit_F<-subset(K,CTYNAME==input$County & YEAR==8 & AGEGRP>0 & AGEGRP!=99)
     TMinusZeroAgeInit_F<-TMinusZeroAgeInit_F$TOT_FEMALE
     TMinusZeroAge_F<-TMinusZeroAgeInit_F
     
-    TMinusZeroAgeInit_M<-subset(K,CTYNAME==input$County & YEAR==8 & AGEGRP>0)
+    TMinusZeroAgeInit_M<-subset(K,CTYNAME==input$County & YEAR==8 & AGEGRP>0 & AGEGRP!=99)
     TMinusZeroAgeInit_M<-TMinusZeroAgeInit_M$TOT_MALE
     TMinusZeroAge_M<-TMinusZeroAgeInit_M
     
     TMinusZeroAge<-TMinusZeroAgeInit<-c(TMinusZeroAge_F,TMinusZeroAge_M)
     
-    TMinusZeroAgeInitRatios_F<-subset(K,CTYNAME==input$County & YEAR==SecondYear & AGEGRP>0)
+    TMinusZeroAgeInitRatios_F<-subset(K,CTYNAME==input$County & YEAR==SecondYear & AGEGRP>0 & AGEGRP!=99)
     TMinusZeroAgeInitRatios_F<-TMinusZeroAgeInitRatios_F$TOT_FEMALE
     TMinusZeroAgeRatios_F<-TMinusZeroAgeInitRatios_F
     
-    TMinusZeroAgeInitRatios_M<-subset(K,CTYNAME==input$County & YEAR==SecondYear & AGEGRP>0)
+    TMinusZeroAgeInitRatios_M<-subset(K,CTYNAME==input$County & YEAR==SecondYear & AGEGRP>0 & AGEGRP!=99)
     TMinusZeroAgeInitRatios_M<-TMinusZeroAgeInitRatios_M$TOT_MALE
     TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M
     
     TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-c(TMinusZeroAgeRatios_F,TMinusZeroAgeRatios_M)
 
     ##SELECTING FROM THE INPUT POPULATION VALIDATION TABLE (KVal) BASED ON INPUTS
-    Age2010Val_F<-subset(KVal,CTYNAME==input$County & YEAR==3 & AGEGRP>0)
+    Age2010Val_F<-subset(KVal,CTYNAME==input$County & YEAR==3 & AGEGRP>0 & AGEGRP!=99)
     Age2010Val_F<-Age2010Val_F$TOT_FEMALE
     Age2010Val_F<-Age2010Val_F
     
-    Age2010Val_M<-subset(KVal,CTYNAME==input$County & YEAR==3 & AGEGRP>0)
+    Age2010Val_M<-subset(KVal,CTYNAME==input$County & YEAR==3 & AGEGRP>0 & AGEGRP!=99)
     Age2010Val_M<-Age2010Val_M$TOT_MALE
     Age2010Val_M<-Age2010Val_M
 
-    Age2015Val_F<-subset(KVal,CTYNAME==input$County & YEAR==8 & AGEGRP>0)
+    Age2015Val_F<-subset(KVal,CTYNAME==input$County & YEAR==8 & AGEGRP>0 & AGEGRP!=99)
     Age2015Val_F<-Age2015Val_F$TOT_FEMALE
     Age2015Val_F<-Age2015Val_F
     
-    Age2015Val_M<-subset(KVal,CTYNAME==input$County & YEAR==8 & AGEGRP>0)
+    Age2015Val_M<-subset(KVal,CTYNAME==input$County & YEAR==8 & AGEGRP>0 & AGEGRP!=99)
     Age2015Val_M<-Age2015Val_M$TOT_MALE
     Age2015Val_M<-Age2015Val_M
     
@@ -864,7 +874,7 @@ if(input$STEP==2010) {
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 	barplot(Age2010Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
-	legend("topright",inset=.2,legend="2010 estimates", col=1, angle=45, density=5, cex=1.65, bty="n")
+	legend("topright",inset=.2,legend="2010 estimates", col=1, angle=45, density=5, cex=1.75, bty="n")
 }
 
 if(input$STEP==2015) {
@@ -874,7 +884,7 @@ if(input$STEP==2015) {
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 	barplot(Age2015Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
-	legend("topright",inset=.2,legend="2015 estimates", col=1, angle=45, density=5, cex=1.65, bty="n")
+	legend("topright",inset=.2,legend="2015 estimates", col=1, angle=45, density=5, cex=1.75, bty="n")
 }
 
 if(input$STEP>2015) {
