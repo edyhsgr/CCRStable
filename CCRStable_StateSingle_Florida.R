@@ -626,12 +626,12 @@ if (input$radio==1) {StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(H
       if(SelectBySex=="Male") {lines(StableAge[,3]/sum(StableAge[,3]),col="black",lty=3,lwd=1.5)}
     }
     
-    if (input$radio==2) {
-      if(SelectBySex=="Total") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
-      if(SelectBySex=="Female") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
-      if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
-      mtext(side=1,c(STABLEGROWTHRATE),line=-9,adj=.15,col="black")
-    }
+#    if (input$radio==2) {
+#      if(SelectBySex=="Total") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
+#      if(SelectBySex=="Female") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
+#      if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
+#      mtext(side=1,c(STABLEGROWTHRATE),line=-9,adj=.15,col="black")
+#    }
     
     if (input$ImputeMort=="YES" & SelectBySex=="Total") {
       mtext(side=1,c("Imputed starting e0, female: "),line=-3,adj=.157,col="black")
