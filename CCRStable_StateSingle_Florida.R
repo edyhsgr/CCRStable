@@ -28,7 +28,11 @@ ui<-fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      
+
+  radioButtons("radio","",c("Include stable population information" = 1, "Don't include stable population information" = 2),selected = 2),
+
+  hr(),
+     
       selectInput("Sex", "Sex",
                   c(
                     "Total"="Total",
@@ -37,7 +41,7 @@ ui<-fluidPage(
                   ),
       ),
       
-      numericInput("STEP","Project to (year)",2030,2016,3000,step=5),
+      numericInput("STEP","Project to (year)",2030,2016,3000,step=1),
       
       selectInput("RatiosFrom", "Using ratios from",
                   c(
@@ -349,7 +353,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
     ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1]))/sum(TMinusZeroAgeInit[16:50])*FERTWIDTH
     
     ##MAX STEPS IN CASE USER (ESP ME) GETS CARRIED AWAY
-    if(STEPS<198*5){
+    if(STEPS<500){
       
       ##########
       ##PROJECTION FUNCTION
@@ -504,35 +508,37 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
     CCRatiosM<-CCRatios[2+HALFSIZE:SIZE]
       ##OPEN-ENDED AGE GROUP (FEMALE)
       CCRatiosM[length(CCRatiosM)-2]<-CCRNew$TMinusZeroAge[SIZE]/(CCRNew$TMinusOneAge[SIZE-1]+CCRNew$TMinusOneAge[SIZE])
-    
+
+if (input$radio==1) {    
     ##ESTIMATE STABLE POPULATION BY SIMULATION
     TMinusZeroAge<-TMinusZeroAgeInit
     CCRStable<-CCRProject(TMinusZeroAge,BA_start,BA_end,0)
     while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,BA_start,BA_end,CCRStable$CURRENTSTEP)}
     ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[16:50])*FERTWIDTH
-    
+}
+
     ##########
     ##TABLING DATA
     ##########
     
     #JUST ALL POPULATIONS USED IN GRAPHS
     NewAge_F<-CCRNew$TMinusZeroAge[1:HALFSIZE]
-    StableAge_F<-CCRStable$TMinusZeroAge[1:HALFSIZE]
+if (input$radio==1) {StableAge_F<-CCRStable$TMinusZeroAge[1:HALFSIZE]}
     TMinusOneAgeInit_F<-TMinusOneAgeInit[1:HALFSIZE]
     TMinusZeroAgeInit_F<-TMinusZeroAgeInit[1:HALFSIZE]
     
     NewAge_M<-CCRNew$TMinusZeroAge[(HALFSIZE+1):SIZE]
-    StableAge_M<-CCRStable$TMinusZeroAge[(HALFSIZE+1):SIZE]
+if (input$radio==1) {StableAge_M<-CCRStable$TMinusZeroAge[(HALFSIZE+1):SIZE]}
     TMinusOneAgeInit_M<-TMinusOneAgeInit[(HALFSIZE+1):SIZE]
     TMinusZeroAgeInit_M<-TMinusZeroAgeInit[(HALFSIZE+1):SIZE]
     
     NewAge_T<-NewAge_F+NewAge_M
-    StableAge_T<-StableAge_F+StableAge_M
+if (input$radio==1) {StableAge_T<-StableAge_F+StableAge_M}
     TMinusOneAgeInit_T<-TMinusOneAgeInit_F+TMinusOneAgeInit_M
     TMinusZeroAgeInit_T<-TMinusZeroAgeInit_F+TMinusZeroAgeInit_M
     
     NewAge<-array(c(NewAge_T,NewAge_F,NewAge_M),c(HALFSIZE,3))
-    StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(HALFSIZE,3))
+if (input$radio==1) {StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(HALFSIZE,3))}
     TMinusOneAgeInit<-array(c(TMinusOneAgeInit_T,TMinusOneAgeInit_F,TMinusOneAgeInit_M),c(HALFSIZE,3))
     TMinusZeroAgeInit<-array(c(TMinusZeroAgeInit_T,TMinusZeroAgeInit_F,TMinusZeroAgeInit_M),c(HALFSIZE,3))
     
@@ -555,7 +561,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
     if(SelectBySex=="Female") {lines(NewAge[,2]/sum(NewAge[,2]),col="dark green",lty=1,lwd=4)}
     if(SelectBySex=="Male") {lines(NewAge[,3]/sum(NewAge[,3]),col="dark green",lty=1,lwd=4)}
     
-    if (min(StableAge)>=0) {
+    if (input$radio==1) {
       mtext(side=1,"Age groups",line=4,cex=.75)
       axis(side=1,at=1:HALFSIZE,las=2,labels=agegroups,cex.axis=0.9)
       axis(side=2)
@@ -563,7 +569,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
              col=c("orange","blue","dark green","black"), lty=c(1,1,1,3),lwd=c(4,4,4,1.5),cex=1.2)
     }
     
-    if (min(StableAge)<0) {
+    if (input$radio==2) {
       mtext(side=1,"Age groups",line=4,cex=.75)
       axis(side=1,at=1:HALFSIZE,las=2,labels=agegroups,cex.axis=0.9)
       axis(side=2)
@@ -609,7 +615,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
     if(SelectBySex=="Male") {GROWTHRATE<-paste(text=c("R (2015 to ",PROJECTIONYEAR,"):  ", round(log(sum(NewAge[,3])/sum(TMinusZeroAgeInit[,3]))/(STEPS)*100,2)),collapse="")}
     mtext(side=1,c(GROWTHRATE),line=-10,adj=.15,col="dark green")
     
-    if (min(StableAge)>=0) {
+    if (input$radio==1) {
       if(SelectBySex=="Total") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,1])/sum(TMinusZeroAgeInit[,1]))/(STEPSSTABLE)*100,2)),collapse="")}
       if(SelectBySex=="Female") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,2])/sum(TMinusZeroAgeInit[,2]))/(STEPSSTABLE)*100,2)),collapse="")}
       if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ", round(log(sum(StableAge[,3])/sum(TMinusZeroAgeInit[,3]))/(STEPSSTABLE)*100,2)),collapse="")}
@@ -620,7 +626,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
       if(SelectBySex=="Male") {lines(StableAge[,3]/sum(StableAge[,3]),col="black",lty=3,lwd=1.5)}
     }
     
-    if (min(StableAge)<0) {
+    if (input$radio==1) {
       if(SelectBySex=="Total") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
       if(SelectBySex=="Female") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
       if(SelectBySex=="Male") {STABLEGROWTHRATE<-paste(text=c("~r (2015 forward):  ..."),collapse="")}
