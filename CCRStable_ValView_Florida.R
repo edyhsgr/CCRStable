@@ -260,7 +260,24 @@ server<-function(input, output) {
     ##NUMBER FORMATTING
     options(scipen=999)
 
-##SELECT POSTCENSAL INTERCENSAL ESTIMATES AS BASIS
+##UPDATE 1-TO-4 YEAR OLD POPULATION ROWS IN K_INT WITH 0-TO-4 YEAR OLD POPULATION ROWS
+K_Int0to4Subset<-subset(K_Int,K_Int$AGEGRP<2)
+K_Int0to4_TOT<-aggregate(K_Int0to4Subset$TOT_POP,by=list(K_Int0to4Subset$CTYNAME,K_Int0to4Subset$YEAR),FUN=sum)
+K_Int0to4_MALE<-aggregate(K_Int0to4Subset$TOT_MALE,by=list(K_Int0to4Subset$CTYNAME,K_Int0to4Subset$YEAR),FUN=sum)
+K_Int0to4_FEMALE<-aggregate(K_Int0to4Subset$TOT_FEMALE,by=list(K_Int0to4Subset$CTYNAME,K_Int0to4Subset$YEAR),FUN=sum)
+AGEGRP<-data.frame(array(1,dim=nrow(K_Int0to4_TOT)))
+names(AGEGRP)<-"AGEGRP"
+K_Int0to4<-data.frame(cbind(K_Int0to4_TOT$Group.1,K_Int0to4_TOT$Group.2,AGEGRP$AGEGRP,K_Int0to4_TOT$x,K_Int0to4_MALE$x,K_Int0to4_FEMALE$x))
+names(K_Int0to4)<-c("CTYNAME","YEAR","AGEGRP","TOT_POP","TOT_MALE","TOT_FEMALE")
+K_Int0to4$TOT_POP<-as.numeric(K_Int0to4$TOT_POP)
+K_Int0to4$TOT_MALE<-as.numeric(K_Int0to4$TOT_MALE)
+K_Int0to4$TOT_FEMALE<-as.numeric(K_Int0to4$TOT_FEMALE)
+K_Int0to4$AGEGRP<-as.numeric(K_Int0to4$AGEGRP)
+K_IntSubset<-subset(K_Int,K_Int$AGEGRP!=1)
+K_Int<-merge(K_Int0to4,K_IntSubset[5:10],all=TRUE)
+K_Int<-K_Int[order(K_Int$CTYNAME,K_Int$YEAR,K_Int$AGEGRP),]
+
+##SELECT POSTCENSAL OR INTERCENSAL ESTIMATES AS BASIS
 if(input$radio==1){K<-K_Post}
 if(input$radio==2){K<-K_Int}
 
@@ -462,7 +479,7 @@ if(input$County!="") {
       ##########
       
       ##FUNCTION INPUTTING
-      CCRProject<-function(TMinusZeroAge,ImposedTFR,NetMigrationAdjustLevel,GrossMigrationAdjustLevel,BA_start,BA_end,CURRENTSTEP)
+      CCRProject<-function(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
       {
         
         ##CALCULATE SURVIVAL ADJUSTMENT (Yx, lx, Lx, Sx)
@@ -590,14 +607,13 @@ if(input$County!="") {
           TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}
         }
         TMinusZeroAge<-data.frame(TMinusZeroAge)
-        return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,ImposedTFR=ImposedTFR,NetMigrationAdjustLevel=NetMigrationAdjustLevel,GrossMigrationAdjustLevel=GrossMigrationAdjustLevel,
-		BA_start=BA_start,BA_end=BA_end,e0FStart=e0FStart,e0MStart=e0MStart,e0FAdj=e0FAdj,e0MAdj=e0MAdj,CURRENTSTEP=CURRENTSTEP+1))
+        return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,e0FStart=e0FStart,e0MStart=e0MStart,e0FAdj=e0FAdj,e0MAdj=e0MAdj,CURRENTSTEP=CURRENTSTEP+1))
       }
     }
     
     ##APPLY PROJECTIONS
-    CCRNew<-CCRProject(TMinusZeroAge,ImposedTFR,NetMigrationAdjustLevel,GrossMigrationAdjustLevel,BA_start,BA_end,CURRENTSTEP)
-    while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(CCRNew$TMinusZeroAge,ImposedTFR,NetMigrationAdjustLevel,GrossMigrationAdjustLevel,BA_start,BA_end,CCRNew$CURRENTSTEP)}
+    CCRNew<-CCRProject(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
+    while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(CCRNew$TMinusZeroAge,BA_start,BA_end,CCRNew$CURRENTSTEP)}
     
     ##CALCULATE iTFR
     ImpliedTFRNew<-((CCRNew$TMinusZeroAge[1]+CCRNew$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRNew$TMinusZeroAge[4:10])*FERTWIDTH
@@ -614,8 +630,8 @@ if(input$County!="") {
     
     ##ESTIMATE STABLE POPULATION BY SIMULATION
     TMinusZeroAge<-TMinusZeroAgeInit
-    CCRStable<-CCRProject(TMinusZeroAge,ImposedTFR,NetMigrationAdjustLevel,GrossMigrationAdjustLevel,BA_start,BA_end,0)
-    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,ImposedTFR,NetMigrationAdjustLevel,GrossMigrationAdjustLevel,BA_start,BA_end,CCRStable$CURRENTSTEP)}
+    CCRStable<-CCRProject(TMinusZeroAge,BA_start,BA_end,0)
+    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,BA_start,BA_end,CCRStable$CURRENTSTEP)}
     ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[4:10])*FERTWIDTH
 
 #THINKING ABOUT OPTIMIZING TO A BEST FIT
@@ -870,21 +886,25 @@ if(input$STEP==2015) {
 if(input$STEP==2010) {
     ##THIRD GRAPH - PYRAMID (FEMALE PORTION)
     barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
-	barplot(Age2010Val_F,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
+barplot(Age2010Val_F,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
-	barplot(Age2010Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
-	legend("topright",inset=.2,legend="2010 estimates", col=1, angle=45, density=5, cex=1.75, bty="n")
+barplot(Age2010Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
+legend("topright",inset=.2,legend="2010 estimates", col=1, angle=45, density=5, cex=1.75, bty="n")
+      mtext(side=1,c("MAPE: "),line=-30,adj=.65,cex=1.35,col="black")
+      mtext(side=1,c(round(Age2010PctDiff,2)),line=-30,adj=.75,cex=1.35,col="black")
 }
 
 if(input$STEP==2015) {
     ##THIRD GRAPH - PYRAMID (FEMALE PORTION)
     barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
-	barplot(Age2015Val_F,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
+barplot(Age2015Val_F,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
-	barplot(Age2015Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
-	legend("topright",inset=.2,legend="2015 estimates", col=1, angle=45, density=5, cex=1.75, bty="n")
+barplot(Age2015Val_M,horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)
+legend("topright",inset=.2,legend="2015 estimates", col=1, angle=45, density=5, cex=1.75, bty="n")
+      mtext(side=1,c("MAPE: "),line=-30,adj=.65,cex=1.35,col="black")
+      mtext(side=1,c(round(Age2015PctDiff,2)),line=-30,adj=.75,cex=1.35,col="black")
 }
 
 if(input$STEP>2015) {
@@ -901,5 +921,4 @@ if(input$STEP>2015) {
 }
 
 shinyApp(ui = ui, server = server) 
-
 
