@@ -282,7 +282,7 @@ if(input$radio==1){K<-K_Post}
 if(input$radio==2){K<-K_Int}
 
 ##USMD CA SURVIVAL DATA (GENERIC)
-if(input$LifeTable=="Calfornia") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
+if(input$LifeTable=="California") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
 }
 if(input$LifeTable=="Florida") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_FL_USMD2010to2014.csv",header=TRUE,sep=",")
 }
