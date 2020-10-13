@@ -296,7 +296,7 @@ lxM<-c(lxM[1],lxM[3:24])
 lxT<-c(lxT[1],lxT[3:24])
 
 ##SELECT CENSUS ACS (via IPUMS) MIGRATION DATA
-if(input$GrossMigrationProfile=="Calfornia") {
+if(input$GrossMigrationProfile=="California") {
 Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
 Migration<-c(Migration$CA_F,Migration$CA_M)
 }
