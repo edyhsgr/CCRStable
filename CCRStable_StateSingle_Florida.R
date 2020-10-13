@@ -393,8 +393,8 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
         SxMStart[length(SxMStart)]<-SxMStart[length(SxMStart)-1]
         
         ##INITIAL e0
-        e0FStart<-sum(LxFStart[1:86])
-        e0MStart<-sum(LxMStart[1:86])
+        e0FStart<-sum(LxFStart[1:length(LxFStart)-1])
+        e0MStart<-sum(LxMStart[1:length(LxMStart)-1])
         
         lxFAdj<-array(0,length(lxF))
         lxMAdj<-array(0,length(lxM))
@@ -432,8 +432,8 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
         SxMAdj[length(SxMAdj)]<-SxMAdj[length(SxMAdj)-1]
         
         ##ADJUSTED e0
-        e0FAdj<-sum(LxFAdj[1:86])
-        e0MAdj<-sum(LxMAdj[1:86])
+        e0FAdj<-sum(LxFAdj[1:length(LxFAdj)-1])
+        e0MAdj<-sum(LxMAdj[1:length(LxFAdj)-1])
         
         ##ADJUST GROSS MIGRATION OPTION
         if(GrossMigrationAdjustLevel!=0)
@@ -684,3 +684,4 @@ if (input$radio==1) {StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(H
 }
 
 shinyApp(ui = ui, server = server) 
+
