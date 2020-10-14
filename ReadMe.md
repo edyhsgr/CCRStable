@@ -10,7 +10,7 @@ Some to-do's (as of October 2020):
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
       -use of uncertain starting data (along with stochastic option) as a potential way to manage uncertain from Differential Privacy on inputs
       -optimize input indices (selected, etc) for fit to historical data (to better see/understand best-possible) (may not be helpful, but may be interesting)
-      -consider a 0-based benchmark for gross migration adjustment
+      -consider a 0-net-migration-level-based benchmark for gross migration adjustment
       
 -----
 References, resources, and related info: 
