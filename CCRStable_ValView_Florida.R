@@ -13,6 +13,7 @@
 ##THIS CODE HAS NOT BEEN PEER-REVIEWED OR CAREFULLY TESTED - QUESTIONS AND COMMENTS ARE WELCOME, OF COURSE (edyhsgr@gmail.com)
 ##########
 
+#install.packages("shiny")
 library(shiny)
 ui<-fluidPage(
   
