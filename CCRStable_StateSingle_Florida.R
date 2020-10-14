@@ -483,7 +483,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
         if(CURRENTSTEP>0){
           TMinusZeroAge<-AAdj%*%TMinusZeroAge
           if(NetMigrationAdjustLevel!=0)
-          {TMinusZeroAge<-NetMigrationAdjustLevel*5*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
+          {TMinusZeroAge<-NetMigrationAdjustLevel*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
           if(UseImposedTFR=="YES") 
           {TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[16:50])/FERTWIDTH)*ffab
           TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[16:50])/FERTWIDTH)*(1-ffab)}
