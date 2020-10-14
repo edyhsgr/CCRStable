@@ -154,7 +154,7 @@ ui<-fluidPage(
         tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
                "Graph of e0 and Brass' relational life table alpha by US state."),
         
-        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
+        "Model life table (0.0 alpha) is the 1x5 2010 to 2014 life table from the ",
         tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
