@@ -28,7 +28,7 @@ References, resources, and related info:
     -Baker, Swanson, Tayman, and Tedrow (2017): https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033
     
   Slides with background thoughts on adjusting net migration: 
-    -Hunsinger (2007): https://edyhsgr.github.io/eddieh/documents/ProjPresentation.pdf
+    -Hunsinger (2007): https://edyhsgr.github.io/documents/ProjPresentation.pdf
    
   Net migration by age over time comparisons from Alaska data: 
     -Hunsinger (2018): http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/
