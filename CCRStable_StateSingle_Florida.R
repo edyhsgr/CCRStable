@@ -663,7 +663,7 @@ if (input$radio==1) {StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(H
     mtext(side=1,"Age groups",line=4,cex=.75)
     axis(side=1,at=1:(HALFSIZE-1),labels=agegroups2,las=2,cex.axis=0.9)
     axis(side=2)
-    legend(7,1.75, legend=c("Female","Male", "Female, with migration and mortality adjustments","Male, with migration and mortality adjustments"),
+    legend(7,1.125, legend=c("Female","Male", "Female, with migration and mortality adjustments","Male, with migration and mortality adjustments"),
            col=c("dodger blue","gold","dodger blue","gold"), lty=c(1,1,2,2),lwd=c(4,4,2,2),cex=1.2)
     
     if (input$ImputeMort=="YES") {
