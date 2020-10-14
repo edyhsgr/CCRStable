@@ -172,7 +172,7 @@ ui<-fluidPage(
                  "Hauer, Baker, and Brown (2013).")),
         
         p("Slides with background thoughts on adjusting net migration: ",
-          tags$a(href="https://edyhsgr.github.io/eddieh/documents/ProjPresentation.pdf", 
+          tags$a(href="https://edyhsgr.github.io/documents/ProjPresentation.pdf", 
                  "Hunsinger (2007)."),
           
           "Migration by age over time comparisons from Alaska data: ",
