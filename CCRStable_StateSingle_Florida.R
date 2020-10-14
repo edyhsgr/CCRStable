@@ -674,10 +674,10 @@ if (input$radio==1) {StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(H
     }
     
     ##THIRD GRAPH - PYRAMID (FEMALE PORTION)
-    barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
+    barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_F)*1.1,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
     
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
-    barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
+    barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_F)*1.1),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 #}
     
   },height=1200,width=1200)
