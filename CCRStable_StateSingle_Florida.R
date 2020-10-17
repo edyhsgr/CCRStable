@@ -68,7 +68,8 @@ ui<-fluidPage(
       ),
       
       numericInput("ImposedTFR","If Yes, iTFR level",2.1,0,10,step=.1),
-      
+      numericInput("ImposedTFR_ar","If Yes, iTFR AR(1)",.95,0,.99,step=.01),
+     
       hr(),
 
       numericInput("SRB","Projected sex ratio at birth",round((1-.4886)/.4886,3),0,2,step=.005),
@@ -361,7 +362,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
       ##########
       
       ##FUNCTION INPUTTING
-      CCRProject<-function(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
+      CCRProject<-function(TMinusZeroAge,ImpliedTFR,BA_start,BA_end,CURRENTSTEP)
       {
         
         ##CALCULATE SURVIVAL ADJUSTMENT (Yx, lx, Lx, Sx)
@@ -477,7 +478,7 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
         AAdjcolone<-cbind(AAdj_F,AAdj_Zero)
         AAdjcoltwo<-cbind(B_M,SAdj_M)
         AAdj<-rbind(AAdjcolone,AAdjcoltwo)
-        
+       
         ##PROJECTION IMPLEMENTATION (WITH FERTILITY AND MIGRATION ADJUSTMENTS)
         TMinusOneAgeNew<-data.frame(TMinusZeroAge) 
         if(CURRENTSTEP>0){
@@ -485,21 +486,23 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
           if(NetMigrationAdjustLevel!=0)
           {TMinusZeroAge<-NetMigrationAdjustLevel*sum(TMinusOneAgeNew)*Migration+TMinusZeroAge}
           if(UseImposedTFR=="YES") 
-          {TMinusZeroAge[1]<-ImposedTFR*(sum(TMinusZeroAge[16:50])/FERTWIDTH)*ffab
-          TMinusZeroAge[HALFSIZE+1]<-ImposedTFR*(sum(TMinusZeroAge[16:50])/FERTWIDTH)*(1-ffab)}
+          {TMinusZeroAge[1]<-(ImpliedTFR*input$ImposedTFR_ar+ImposedTFR*(1-input$ImposedTFR_ar))*(sum(TMinusZeroAge[16:50])/FERTWIDTH)*ffab
+          TMinusZeroAge[HALFSIZE+1]<-(ImpliedTFR*input$ImposedTFR_ar+ImposedTFR*(1-input$ImposedTFR_ar))*(sum(TMinusZeroAge[16:50])/FERTWIDTH)*(1-ffab)}
         }
-        TMinusZeroAge<-data.frame(TMinusZeroAge)
-        return(c(TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,e0FStart=e0FStart,e0MStart=e0MStart,e0FAdj=e0FAdj,e0MAdj=e0MAdj,CURRENTSTEP=CURRENTSTEP+1))
+        TMinusZeroAge_NDF<-TMinusZeroAge
+	TMinusZeroAge<-data.frame(TMinusZeroAge)
+
+	##CALCULATE iTFR
+	ImpliedTFRNew<-((TMinusZeroAge_NDF[1]+TMinusZeroAge_NDF[HALFSIZE+1]))/sum(TMinusZeroAge_NDF[16:50])*FERTWIDTH
+
+        return(c(TMinusZeroAge=TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,ImpliedTFRNew=ImpliedTFRNew,e0FStart=e0FStart,e0MStart=e0MStart,e0FAdj=e0FAdj,e0MAdj=e0MAdj,CURRENTSTEP=CURRENTSTEP+1))
       }
     }
     
     ##APPLY PROJECTIONS
-    CCRNew<-CCRProject(TMinusZeroAge,BA_start,BA_end,CURRENTSTEP)
-    while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(CCRNew$TMinusZeroAge,BA_start,BA_end,CCRNew$CURRENTSTEP)}
-    
-    ##CALCULATE iTFR
-    ImpliedTFRNew<-((CCRNew$TMinusZeroAge[1]+CCRNew$TMinusZeroAge[HALFSIZE+1]))/sum(CCRNew$TMinusZeroAge[16:50])*FERTWIDTH
-    
+    CCRNew<-CCRProject(TMinusZeroAge,ImpliedTFR2015,BA_start,BA_end,CURRENTSTEP)
+    while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(CCRNew$TMinusZeroAge,CCRNew$ImpliedTFRNew,BA_start,BA_end,CCRNew$CURRENTSTEP)}
+        
     ##CALCULATE EFFECTIVE COHORT CHANGE RATIOS
     CCRatios<-array(0,length(TMinusOneAge)+1)
     for (i in 2:length(CCRatios)) {CCRatios[i]<-CCRNew$TMinusZeroAge[i]/CCRNew$TMinusOneAge[i-1]}
@@ -513,10 +516,13 @@ Migration<-c(Migration$KY_F[1:86],Migration$KY_M[1:86])
 if (input$radio==1) {    
     ##ESTIMATE STABLE POPULATION BY SIMULATION
     TMinusZeroAge<-TMinusZeroAgeInit
-    CCRStable<-CCRProject(TMinusZeroAge,BA_start,BA_end,0)
-    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,BA_start,BA_end,CCRStable$CURRENTSTEP)}
-    ImpliedTFRStable<-((CCRStable$TMinusZeroAge[1]+CCRStable$TMinusZeroAge[HALFSIZE+1])/5)/sum(CCRStable$TMinusZeroAge[16:50])*FERTWIDTH
+    CCRStable<-CCRProject(TMinusZeroAge,ImpliedTFR2015,BA_start,BA_end,0)
+    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,input$ImposedTFR,BA_start,BA_end,CCRStable$CURRENTSTEP)}
+    ImpliedTFRStable<-CCRNew$ImpliedTFRNew
 }
+
+    ##iTFR
+    ImpliedTFRNew<-CCRNew$ImpliedTFRNew
 
     ##########
     ##TABLING DATA
@@ -685,4 +691,3 @@ if (input$radio==1) {StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(H
 }
 
 shinyApp(ui = ui, server = server) 
-
