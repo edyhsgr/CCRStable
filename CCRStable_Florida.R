@@ -587,7 +587,7 @@ if(input$County!="") {
     ##ESTIMATE STABLE POPULATION BY SIMULATION
     TMinusZeroAge<-TMinusZeroAgeInit
     CCRStable<-CCRProject(TMinusZeroAge,ImpliedTFR2015,BA_start,BA_end,0)
-    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,CCRNew$ImpliedTFRNew,BA_start,BA_end,CCRStable$CURRENTSTEP)}
+    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,input$ImposedTFR,BA_start,BA_end,CCRStable$CURRENTSTEP)}
     ImpliedTFRStable<-CCRNew$ImpliedTFRNew
 
     ##CALCULATE iTFR
@@ -759,4 +759,3 @@ if(input$County!="") {
 }
 
 shinyApp(ui = ui, server = server) 
-
