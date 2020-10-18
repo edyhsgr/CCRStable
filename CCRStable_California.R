@@ -124,6 +124,7 @@ ui<-fluidPage(
       
       numericInput("ImposedTFR","If Yes, iTFR level",2.1,0,10,step=.1),
       numericInput("ImposedTFR_ar","If Yes, iTFR AR(1)",.00,0,.99,step=.01),
+
       
       hr(),
 
@@ -540,7 +541,7 @@ server<-function(input, output) {
     ##ESTIMATE STABLE POPULATION BY SIMULATION
     TMinusZeroAge<-TMinusZeroAgeInit
     CCRStable<-CCRProject(TMinusZeroAge,ImpliedTFR2015,BA_start,BA_end,0)
-    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,CCRNew$ImpliedTFRNew,BA_start,BA_end,CCRStable$CURRENTSTEP)}
+    while(CCRStable$CURRENTSTEP<STEPSSTABLE+1) {CCRStable<-CCRProject(CCRStable$TMinusZeroAge,input$ImposedTFR,BA_start,BA_end,CCRStable$CURRENTSTEP)}
     ImpliedTFRStable<-CCRNew$ImpliedTFRNew
 
     ##CALCULATE iTFR
