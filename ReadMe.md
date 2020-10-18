@@ -4,7 +4,7 @@ R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE
 -----
 Some to-do's (as of October 2020): 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
-      -autoregressive models for the input components, and stochastic option
+      -stochastic option
             (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
       -employment-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
