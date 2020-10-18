@@ -124,7 +124,6 @@ ui<-fluidPage(
       
       numericInput("ImposedTFR","If Yes, iTFR level",2.1,0,10,step=.1),
       numericInput("ImposedTFR_ar","If Yes, iTFR AR(1)",.00,0,.99,step=.01),
-
       
       hr(),
 
