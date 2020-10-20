@@ -662,7 +662,7 @@ if (input$radio==1) {StableAge<-array(c(StableAge_T,StableAge_F,StableAge_M),c(H
     agegroups2[85]<-"85+"
     plot(Ratios[2:86],type="l",col="dodger blue",main=paste(text=c("Effective Cohort Change Ratios, ",PROJECTIONYEAR-1," to ",PROJECTIONYEAR),collapse=""),ylim=c(.8,1.15),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
     ##OPEN-ENDED AGE GROUP OPTION
-    mtext(side=1,c("(Note: 85+ ratios are applied to full 80+ age groups)"),line=-42,adj=.50,col="black")
+    mtext(side=1,c("(Note: 85+ ratios are applied to full 84+ age groups)"),line=-42,adj=.50,col="black")
     lines(Ratios[88:172],type="l",col="gold",lwd=4)
     lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
     lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
