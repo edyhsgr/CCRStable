@@ -874,6 +874,7 @@ if(input$STEP==2015) {
     plot(Ratios[2:18],type="l",col="dodger blue",main=paste(text=c("Effective Cohort Change Ratios, ",PROJECTIONYEAR-5," to ",PROJECTIONYEAR),collapse=""),ylim=c(.25,1.75),axes=FALSE,xlab="",ylab="Ratio",lwd=4)
     ##OPEN-ENDED AGE GROUP OPTION
     mtext(side=1,c("(Note: 85+ ratios are applied to full 80+ age groups)"),line=-42,adj=.50,col="black")
+    abline(a=NULL, b=NULL, h=1, v=NULL)
     lines(Ratios[20:36],type="l",col="gold",lwd=4)
     lines(CCRatiosF,type="l",col="dodger blue",lty=2,lwd=2)
     lines(CCRatiosM,type="l",col="gold",lty=2,lwd=2)
