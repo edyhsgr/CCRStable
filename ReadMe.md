@@ -2,10 +2,8 @@
 R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP 
 
 -----
-Some to-do's (as of October 2020): 
+Some to-do's (as of November 2020): 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
-      -stochastic option
-            (following https://applieddemogtoolbox.github.io/Toolbox/#StochasticForecast)
       -employment-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
       -use of uncertain starting data (along with stochastic option) as a potential way to manage uncertain from Differential Privacy on inputs
@@ -53,7 +51,7 @@ References, resources, and related info:
   Related Shiny for R application: 
     -(Hunsinger 2019) https://shiny.demog.berkeley.edu/eddieh/CCRStable/
     
--Eddie Hunsinger, August 2019 (updated October 2020)
+-Eddie Hunsinger, August 2019 (updated November 2020)
 
 -----
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/igo/">Creative Commons Attribution-ShareAlike 3.0 International License</a>.
