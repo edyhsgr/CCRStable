@@ -144,14 +144,15 @@
 	for(i in 1:ITER) {TMinusZeroAge[,,i]<-AAdj[,,i]%*%TMinusZeroAge[,,i]}
 
 		NetMigrAdjust<-array(0,ITER)
+
+if(CURRENTSTEP==1) {NetMigrAdjust<-array(0,ITER)}
 		
 		if(input$AdjustMigr=="YES")
 			for (i in 1:ITER){	
-			NetMigrAdjust[i]<-NetMigrationAdjustLevel[i]*NetMigration_ar[i]+NetMigrationAdjustLevel[i]*(1-NetMigration_ar[i])+rnorm(1,0,NetMigration_se[i])}
+			NetMigrAdjust[i]<-NetMigrAdjust[i]*NetMigration_ar[i]+NetMigrationAdjustLevel[i]*(1-NetMigration_ar[i])+rnorm(1,0,NetMigration_se[i])}
 
 		for (i in 1:ITER){			
-			TMinusZeroAge[,,i]<-(NetMigrAdjust[i])*5*sum(TMinusOneAgeNew[,,i])*Migration+TMinusZeroAge[,,i]
-			NetMigrationAdjustLevel[i]<-NetMigrAdjust[i]}
+			TMinusZeroAge[,,i]<-(NetMigrAdjust[i])*5*sum(TMinusOneAgeNew[,,i])*Migration+TMinusZeroAge[,,i]}
 
 		if(UseImposedTFR=="YES") 
 			for (i in 1:ITER){
@@ -163,4 +164,4 @@
 	for (i in 1:ITER){ImpliedTFR[i]<-((TMinusZeroAge[1,,i]+TMinusZeroAge[HALFSIZE+1,,i])/5)/sum(TMinusZeroAge[4:10,,i])*FERTWIDTH}
 	ImpliedTFRNew<-ImpliedTFR
 
-
+#for (i in 1:ITER){NetMigrationAdjustLevel[i]<-NetMigrAdjust[i]}
