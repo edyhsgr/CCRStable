@@ -220,9 +220,9 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
 ##READING EXTERNAL DATA IN
 ##########
 
-##DATA (CENSUS BUREAU VINTAGE 2018 POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
-##https://www2.census.gov/programs-surveys/popest/datasets/2010-2018/counties/asrh/cc-est2018-alldata-06.csv 
-##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2018/
+##DATA (CENSUS BUREAU VINTAGE 2019 POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
+##https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/asrh/cc-est2019-alldata-06.csv 
+##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2019/
 K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2019-alldata-06_Extract.csv",header=TRUE,sep=","))
 
 ##CENSUS ACS (via IPUMS) CA MIGRATION DATA (GENERIC)
