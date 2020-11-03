@@ -1,6 +1,6 @@
 ##########
 ##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE
-##THIS FILE IS SUPPORTING FOR https://shiny.demog.berkeley.edu/eddieh/CCRUnc/app.R
+##THIS FILE IS SUPPORTING FOR https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA.R
 ##
 ##EDDIE HUNSINGER, NOVEMBER 2020
 ##https://edyhsgr.github.io/eddieh/
