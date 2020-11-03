@@ -145,7 +145,7 @@
 
 		NetMigrAdjust<-array(0,ITER)
 
-if(CURRENTSTEP==1) {NetMigrAdjust<-array(0,ITER)}
+if(CURRENTSTEP==2) {NetMigrAdjust<-array(0,ITER)}
 		
 		if(input$AdjustMigr=="YES")
 			for (i in 1:ITER){	
