@@ -44,7 +44,10 @@ References, resources, and related info:
     
   Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 American Community Survey Public Use Microdata Sample, accessed via IPUMS USA, University of Minnesota: 
     -https://usa.ipums.org/usa/
-  
+
+  Supporting work and thinking on stochastic population projection: 
+    -https://applieddemogtoolbox.github.io/#StochasticForecast
+
   Applied Demography Toolbox listing: 
     -https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
 
