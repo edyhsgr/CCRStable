@@ -19,6 +19,7 @@ References, resources, and related info:
 
   Population estimates inputs: 
     -US Census Bureau Population Estimates: https://www.census.gov/programs-surveys/popest.html
+    -Carl Schmertmann's R code to tabulate and (re-)aggregate US Census Bureau's American Community Survey estimates by demographic characteristics: https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R 
     
   More information on iTFR: 
     -Hauer and Schmertmann (2019): https://osf.io/adu98/
