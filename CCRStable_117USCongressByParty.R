@@ -18,7 +18,8 @@
 library(shiny)
 ui<-fluidPage(
   
-  tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App - 117th US Congressional Districts by Party Representation"),
+  tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App"),
+  tags$h3("117th US Congressional Districts by Party Representation, based on US Census Bureau 2014 and 2019 American Community Survey 5-Year Data"),
   p("Related information and ",
     tags$a(href="https://www.r-project.org/", "R"),
     "code available at: ",
@@ -47,7 +48,7 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
                   ),
       ),
       
-      numericInput("STEP","Project to (year)",2034,2019,2999,step=5),
+      numericInput("STEP","Project to (year)",2039,2019,2999,step=5),
       
       hr(),
       
@@ -111,9 +112,9 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
         
         "January 2021."),
       
-      p("Population estimates inputs from ",
+      p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
         tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
-               "Population Pyramids for 117th US Congressional Districts, using R code by Carl Schmertmann.")),
+               "using R code by Carl Schmertmann.")),
       
       p(" More information on cohort change ratios, including a chapter on stable population: ",
         tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
@@ -237,11 +238,11 @@ if(input$Party!="") {
     ##DIMENSIONS
     SIZE<-36
     HALFSIZE<-SIZE/2
-    STEPS<-(input$STEP-2015)/5
+    STEPS<-(input$STEP-2019)/5
     STEPSSTABLE<-STEPS+1000
     CURRENTSTEP<-0
     CURRENTSTEPSTABLE<-0
-    PROJECTIONYEAR<-STEPS*5+2015
+    PROJECTIONYEAR<-STEPS*5+2019
     FERTWIDTH<-35
     
     ##SELECTING RATIOS BASIS
