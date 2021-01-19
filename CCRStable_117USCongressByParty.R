@@ -48,7 +48,7 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
                   ),
       ),
       
-      numericInput("STEP","Project to (year)",2039,2019,2999,step=5),
+      numericInput("STEP","Project to (year)",2024,2019,2999,step=5),
       
       hr(),
       
