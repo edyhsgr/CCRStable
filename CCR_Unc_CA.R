@@ -120,9 +120,9 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
       
-      sliderInput("ImposedTFR_ar","If Yes, iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.5,1),step=0.01),
+      sliderInput("ImposedTFR_ar","If Yes, iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.5,1),step=0.05),
       sliderInput("ImposedTFR","...and iTFR level term",min=0,max=10,value=c(1.8,1.8),step=0.1),
-      sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.25,.25),step=0.01),
+      sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.25,.25),step=0.05),
       
       hr(),
       
@@ -133,9 +133,9 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
 
-      sliderInput("NetMigrationAdjustLevel_ar","If yes, net migration adjustment AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=-1,max=1,value=c(-.5,1),step=0.01),
+      sliderInput("NetMigrationAdjustLevel_ar","If yes, net migration adjustment AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=-1,max=1,value=c(-.5,1),step=0.05),
       sliderInput("NetMigrationAdjustLevel","...and net migration adjustment level term",min=-2,max=2,value=c(0,0),step=0.1),
-      sliderInput("NetMigrationAdjustLevel_se","...and net migration adjustment standard error term",min=0,max=.5,value=c(.25,.25),step=0.01),
+      sliderInput("NetMigrationAdjustLevel_se","...and net migration adjustment standard error term",min=0,max=.5,value=c(.25,.25),step=0.05),
       
       hr(),
       
@@ -199,12 +199,12 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         
         tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
                "Graph of e0 and Brass' relational life table alpha by US state."),
+               "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
         
-        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
-        tags$a(href="https://usa.mortality.org/index.php", 
+	tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-      tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+        tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
              "Applied Demography Toolbox listing for the Cohort Change Ratio-Based Stable Population work."),
       
       width=3
