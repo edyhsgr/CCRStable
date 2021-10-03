@@ -2,7 +2,7 @@
 ##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE
 ##THIS FILE IS SUPPORTING FOR https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA.R
 ##
-##EDDIE HUNSINGER, NOVEMBER 2020
+##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED OCTOBER 2021)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
@@ -143,9 +143,9 @@
 	TMinusOneAgeNew<-TMinusZeroAge
 	for(i in 1:ITER) {TMinusZeroAge[,,i]<-AAdj[,,i]%*%TMinusZeroAge[,,i]}
 
-		NetMigrAdjust<-array(0,ITER)
+#		NetMigrAdjust<-array(0,ITER)
 
-if(CURRENTSTEP==2) {NetMigrAdjust<-array(0,ITER)}
+if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
 		
 		if(input$AdjustMigr=="YES")
 			for (i in 1:ITER){	
