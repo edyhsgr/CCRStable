@@ -1,7 +1,7 @@
 ##########
 ##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE
 ##
-##EDDIE HUNSINGER, NOVEMBER 2020
+##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED OCTOBER 2021)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
@@ -97,7 +97,7 @@ ui<-fluidPage(
 options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
 	          ),
             
-      numericInput("STEP","Project to (year)",2030,2020,2050,step=5),
+      numericInput("STEP","Project to (year)",2030,2020,2100,step=5),
       
       selectInput("RatiosFrom", "Using ratios from",
                   c(
@@ -109,7 +109,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
 
-      numericInput("ITER","Number of projection iterations (sample size)",100,1,1000,step=1),
+      numericInput("ITER","Number of projection iterations (sample size)",100,100,1000,step=1),
       
       hr(),
       
