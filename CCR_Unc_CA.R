@@ -20,8 +20,7 @@ library(gplots)
 
 ui<-fluidPage(
   
-  tags$h3("Draft Cohort Change Ratio-Based Stochastic Population Projection Review Shiny App - Based on Cohort Change Ratio-Based Stable Population Review Shiny App - 
-	still figuring, learning, checking, etc., etc."),
+  tags$h3("Draft Cohort Change Ratio-Based Stochastic Population Projection Review Shiny App - Based on Cohort Change Ratio-Based Stable Population Review Shiny App"),
   p("Related information and ",
     tags$a(href="https://www.r-project.org/", "R"),
     "code available at: ",
@@ -159,7 +158,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "November 2020."),
+        "November 2020 (updated October 2021)."),
       
       p("Population estimates inputs from ",
         tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
