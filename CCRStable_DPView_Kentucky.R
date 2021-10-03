@@ -239,7 +239,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
     tags$a(href="https://usa.mortality.org/index.php", 
           "United States Mortality Database.")),
 
-  tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+  tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
           "Applied Demography Toolbox listing for projection code."),
   
   width=3
