@@ -2,7 +2,7 @@
 R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP 
 
 -----
-Some to-do's (as of November 2020): 
+Some to-do's (as of October 2021): 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
       -employment-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
