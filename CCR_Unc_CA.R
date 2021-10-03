@@ -109,7 +109,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
 
-      numericInput("ITER","Number of projection iterations (sample size)",100,100,1000,step=1),
+      numericInput("ITER","Number of projection iterations (sample size)",100,1,1000,step=100),
       
       hr(),
       
