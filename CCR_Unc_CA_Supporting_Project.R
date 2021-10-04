@@ -58,14 +58,12 @@
 	SurvChange<-array(0,ITER)
 	for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+rnorm(1,0,BA_se)}
 
-BA_start[i]<-SurvChange
+	for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
 
 	if(CURRENTSTEP<=STEPS){
 	for (j in 1:ITER){for (i in 1:length(lxF)) {lxFAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxF[i]))}}
 	for (j in 1:ITER){for (i in 1:length(lxF)) {lxMAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxM[i]))}}
 	}
-
-	for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
 
 	##SURVIVAL ADJUSTMENTS (Lx, SX)
 	LxFAdj<-array(0,c(length(lxF),ITER))
