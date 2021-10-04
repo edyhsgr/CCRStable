@@ -58,7 +58,7 @@
 	SurvChange<-array(0,ITER)
 	for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+rnorm(1,0,BA_se)}
 
-	for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
+
 
 	if(CURRENTSTEP<=STEPS){
 	for (j in 1:ITER){for (i in 1:length(lxF)) {lxFAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxF[i]))}}
@@ -143,8 +143,6 @@
 	TMinusOneAgeNew<-TMinusZeroAge
 	for(i in 1:ITER) {TMinusZeroAge[,,i]<-AAdj[,,i]%*%TMinusZeroAge[,,i]}
 
-#		NetMigrAdjust<-array(0,ITER)
-
 if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
 		
 		if(input$AdjustMigr=="YES")
@@ -164,4 +162,7 @@ if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
 	for (i in 1:ITER){ImpliedTFR[i]<-((TMinusZeroAge[1,,i]+TMinusZeroAge[HALFSIZE+1,,i])/5)/sum(TMinusZeroAge[4:10,,i])*FERTWIDTH}
 	ImpliedTFRNew<-ImpliedTFR
 
-#for (i in 1:ITER){NetMigrationAdjustLevel[i]<-NetMigrAdjust[i]}
+for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
+
+
+
