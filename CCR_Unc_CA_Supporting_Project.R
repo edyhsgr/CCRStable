@@ -25,8 +25,8 @@
 	
 	lxFStart<-array(0,c(length(lxF),ITER))
 	lxMStart<-array(0,c(length(lxM),ITER))
-	for (i in 1:length(lxF)){lxFStart[i,]<-1/(1+exp(-2*BA_start[1]-2*BB*YxF[i]))}
-	for (i in 1:length(lxM)){lxMStart[i,]<-1/(1+exp(-2*BA_start[1]-2*BB*YxM[i]))}
+	for (i in 1:length(lxF)){lxFStart[i,]<-1/(1+exp(-2*BA_start_init[1]-2*BB*YxF[i]))}
+	for (i in 1:length(lxM)){lxMStart[i,]<-1/(1+exp(-2*BA_start_init[1]-2*BB*YxM[i]))}
 	
 	LxFStart<-array(0,c(length(lxF),ITER))
 	LxMStart<-array(0,c(length(lxM),ITER))
@@ -54,18 +54,12 @@
 	lxFAdj<-array(0,c(length(lxF),ITER))
 	lxMAdj<-array(0,c(length(lxM),ITER))
 
-	##INTERPOLATING BRASS ALPHA BETWEEN FIRST AND LAST STEP
-	SurvChange<-array(0,ITER)
-	for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+rnorm(1,0,BA_se)}
-
-for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
-
+	##ADJUST SURVIVORSHIP FOR THE STEP
 	if(CURRENTSTEP<=STEPS){
 	for (j in 1:ITER){for (i in 1:length(lxF)) {lxFAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxF[i]))}}
-	for (j in 1:ITER){for (i in 1:length(lxF)) {lxMAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxM[i]))}}
-	}
+	for (j in 1:ITER){for (i in 1:length(lxF)) {lxMAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxM[i]))}}}
 
-	##SURVIVAL ADJUSTMENTS (Lx, SX)
+	##SURVIVAL ADJUSTMENTS (Lx, Sx)
 	LxFAdj<-array(0,c(length(lxF),ITER))
 	LxMAdj<-array(0,c(length(lxM),ITER))
 	##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
@@ -161,6 +155,4 @@ if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
 	ImpliedTFR<-array(0,ITER)
 	for (i in 1:ITER){ImpliedTFR[i]<-((TMinusZeroAge[1,,i]+TMinusZeroAge[HALFSIZE+1,,i])/5)/sum(TMinusZeroAge[4:10,,i])*FERTWIDTH}
 	ImpliedTFRNew<-ImpliedTFR
-
-
 
