@@ -108,7 +108,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
 
-      numericInput("ITER","Number of projection iterations (sample size)",100,1,1000,step=100),
+      numericInput("ITER","Number of projection iterations (sample size)",100,100,1000,step=100),
       
       hr(),
       
@@ -145,9 +145,9 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
                   ),
       ),
       
-      sliderInput("BAStart","If yes, Brass' model alpha for First projection step (range inputs give uniform range option, for uncertain drift, etc.)",min=-1,max=1,value=c(.03,.03),step=0.01),
-      sliderInput("BAEnd","...and Brass' model alpha drift term (increase per step)",min=-1,max=1,value=c(.03,.03),step=0.01),
-      sliderInput("BA_se","...and Brass' model alpha standard error term",min=0,max=.5,value=c(.019,.019),step=0.005),
+      sliderInput("BAStart","If yes, Brass' model alpha for First projection step (range inputs give uniform range option, for uncertain drift, etc.)",min=-.5,max=.5,value=c(.03,.03),step=0.01),
+      sliderInput("BAEnd","...and Brass' model alpha drift term (increase per step)",min=-.5,max=.5,value=c(.03,.03),step=0.01),
+      sliderInput("BA_se","...and Brass' model alpha standard error term",min=0,max=.25,value=c(.02,.02),step=0.01),
       
       hr(),
       
@@ -283,6 +283,7 @@ NetMigration_se<-array(runif(ITER,input$NetMigrationAdjustLevel_se[1]/100,input$
 ##IMPUTE MORTALITY OPTION
 ##"BA" IS THE BRASS RELATIONAL LOGIT MODEL ALPHA
 BA_start<-array(runif(ITER,input$BAStart[1],input$BAStart[2]))
+BA_start_init<-BA_start
 BA_end<-array(runif(ITER,input$BAEnd[1],input$BAEnd[2]))
 BA_se<-array(runif(ITER,input$BA_se[1],input$BA_se[2]))
 BB<-1
@@ -394,11 +395,17 @@ ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinu
 ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 ImpliedTFR<-array(ImpliedTFR2015,ITER)
 
-##RUN THE PROJECTION (BY SOURCE() OF PROJECTION FILE)
+##RUN THE PROJECTION WITH SURV ADJUSTMENT (BY SOURCE() OF PROJECTION FILE)
 repeat{
-   source("https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA_Supporting_Project.R",local=TRUE)
-   CURRENTSTEP <- CURRENTSTEP+1
-   if(CURRENTSTEP > STEPS) {break}}
+SurvChange<-array(0,ITER)
+SurvChange_se<-array(0,ITER)
+		##ADDING TO BRASS ALPHA WITH EACH STEP
+		for (i in 1:ITER) {SurvChange_se[i]<-rnorm(1,0,BA_se[i])}
+		for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_se[i]}
+		for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
+	source("C:/Users/ehunsing/Desktop/UncSupport.R",local=TRUE)
+	CURRENTSTEP <- CURRENTSTEP+1
+	if(CURRENTSTEP > STEPS) {break}}
 
     ##########
     ##TABLING DATA
@@ -444,12 +451,13 @@ agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
        
     ##THIRD GRAPH - PYRAMID (FEMALE PORTION)
     barplot2(NewAge_F,plot.ci=TRUE,ci.l=NewAge_F_Low,ci.u=NewAge_F_High,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
+#mtext(side=1,c((e0FAdj[1])),line=0,adj=.29,col="dark green")
 
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
     }   
     },height=1200,width=1200)
-  
+
 }
 
 shinyApp(ui = ui, server = server) 
