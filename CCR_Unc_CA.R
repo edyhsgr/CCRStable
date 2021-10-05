@@ -403,7 +403,7 @@ SurvChange_se<-array(0,ITER)
 		for (i in 1:ITER) {SurvChange_se[i]<-rnorm(1,0,BA_se[i])}
 		for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_se[i]}
 		for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
-	source("C:/Users/ehunsing/Desktop/UncSupport.R",local=TRUE)
+	source("https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA_Supporting_Project.R",local=TRUE)
 	CURRENTSTEP <- CURRENTSTEP+1
 	if(CURRENTSTEP > STEPS) {break}}
 
