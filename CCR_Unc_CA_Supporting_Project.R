@@ -80,8 +80,9 @@
 	for (i in 1:ITER) {SxMAdj[HALFSIZE,i]<-SxMAdj[HALFSIZE-1,i]}
 
 	##ADJUSTED e0
-	e0FAdj<-sum(LxFAdj[1:22]*5)
-	e0MAdj<-sum(LxMAdj[1:22]*5)
+	e0FAdj<-e0MAdj<-array(0,ITER)
+	for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:22,i]*5)}
+	for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:22,i]*5)}
 
 	##ADJUST GROSS MIGRATION OPTION - STILL NEED TO UPDATE TO INCLUDE IN THIS STOCHASTIC IMPLEMENTATION
 #        if(GrossMigrationAdjustLevel!=0)
