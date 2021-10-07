@@ -289,10 +289,8 @@ BA_se<-array(runif(ITER,input$BA_se[1],input$BA_se[2]))
 BB<-1
 ImputeMort<-input$ImputeMort
 
-if(ImputeMort=="NO")
-for (i in 1:ITER) {BA_start[i]<-BA_end[i]<-1}
-if(ImputeMort=="NO")
-for (i in 1:ITER) {BA_se[i]<-0}
+if(ImputeMort=="NO") {for (i in 1:ITER) {BA_start[i]<-BA_end[i]<-1}}
+if(ImputeMort=="NO") {for (i in 1:ITER) {BA_se[i]<-0}}
 
 ##SELECT BY SEX
 SelectBySex<-"Total"
@@ -398,10 +396,10 @@ ImpliedTFR<-array(ImpliedTFR2015,ITER)
 ##RUN THE PROJECTION WITH SURV ADJUSTMENT (BY SOURCE() OF PROJECTION FILE)
 repeat{
 SurvChange<-array(0,ITER)
-SurvChange_se<-array(0,ITER)
+SurvChange_e<-array(0,ITER)
 		##ADDING TO BRASS ALPHA WITH EACH STEP
-		for (i in 1:ITER) {SurvChange_se[i]<-rnorm(1,0,BA_se[i])}
-		for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_se[i]}
+		for (i in 1:ITER) {SurvChange_e[i]<-rnorm(1,0,BA_se[i])}
+		if(ImputeMort=="YES") {for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_e[i]}}
 		for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
 	source("https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA_Supporting_Project.R",local=TRUE)
 	CURRENTSTEP <- CURRENTSTEP+1
