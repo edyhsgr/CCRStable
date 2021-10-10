@@ -415,7 +415,7 @@ SurvChange_e<-array(0,ITER)
 		assign(paste(text=c("e0F_",CURRENTSTEP),collapse=""),e0FAdj[])
 		assign(paste(text=c("e0M_",CURRENTSTEP),collapse=""),e0MAdj[])
 
-		K_0<-sum(TMinusOneAge[,,1])
+		K_0<-sum(TMinusZeroAgeInit[,,1])
 		ImpliedTFR_0<-ImpliedTFR2015
 		NetMigrAdj_0<-0
 		e0F_0<-e0FStart
@@ -515,5 +515,4 @@ plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step End Year",ylab="",m
 }
 
 shinyApp(ui = ui, server = server) 
-
 
