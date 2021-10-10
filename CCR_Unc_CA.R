@@ -93,7 +93,7 @@ ui<-fluidPage(
                     "Yolo"="Yolo County",
                     "Yuba"="Yuba County"
                   ),
-options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
+#options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
 	          ),
             
       numericInput("STEP","Project to (year)",2030,2020,2100,step=5),
@@ -242,10 +242,10 @@ server<-function(input, output) {
     par(mfrow=c(3,2))
     
     ##RUN ONLY IF COUNTY INPUTS ARE PROVIDED
-    if(input$County=="") {
-      plot.new()
-      legend("topleft",legend=c("Select a county with the panel to the left"),cex=2,bty="n")
-    }
+    #if(input$County=="") {
+    #  plot.new()
+    #  legend("topleft",legend=c("Select a county with the panel to the left"),cex=2,bty="n")
+    #}
     
     ##NUMBER FORMATTING
     options(scipen=999)
@@ -471,19 +471,27 @@ NewAge_M<-NewAge_M_Median
 agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
        
     ##THIRD GRAPH - PYRAMID (FEMALE PORTION)
-    barplot2(NewAge_F,plot.ci=TRUE,ci.l=NewAge_F_Low,ci.u=NewAge_F_High,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
+    barplot2(NewAge_F,plot.ci=TRUE,ci.l=NewAge_F_Low,ci.u=NewAge_F_High,horiz=T,names=agegroups,cex.main=2,cex.names=1.2,cex.axis=1.5,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
 #mtext(side=1,c((e0FAdj[1])),line=0,adj=.29,col="dark green")
 
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
-    barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
+    barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,cex.main=2,cex.names=1.25,cex.axis=1.5,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 
-plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step",ylab="",main="Implied TFR by Time Step",cex.lab=2,cex.axis=2,cex.main=2)
+plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(ImpliedTFR_Project[i,],col=sample(6))}
-plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step",ylab="",main="Net Migration Adjustment by Time Step",cex.lab=2,cex.axis=2,cex.main=2)
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
+
+plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(NetMigrAdj_Project[i,],col=sample(6))}
-plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step",ylab="",main="e0 (Female and Male) by Time Step",cex.lab=2,cex.axis=2,cex.main=2)
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
+
+plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step",ylab="",main="e0 (Female and Male) by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(e0F_Project[i,],col=sample(6))}
 	for (i in 1:ITER) {lines(e0M_Project[i,],col=sample(6))}
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
 
     }   
     },height=1800,width=1200)
