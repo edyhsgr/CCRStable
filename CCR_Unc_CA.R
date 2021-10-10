@@ -239,7 +239,7 @@ lxT<-c(lxT[1],lxT[3:24])
 
 server<-function(input, output) {	
   output$plots<-renderPlot({
-    par(mfrow=c(2,2))
+    par(mfrow=c(3,2))
     
     ##RUN ONLY IF COUNTY INPUTS ARE PROVIDED
     if(input$County=="") {
@@ -402,7 +402,30 @@ SurvChange_e<-array(0,ITER)
 		if(ImputeMort=="YES") {for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_e[i]}}
 		for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
 	source("https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA_Supporting_Project.R",local=TRUE)
+		
+		##MAKING TIME SERIES OBJECTS
+		assign(paste(text=c("ImpliedTFR_",CURRENTSTEP),collapse=""),ImpliedTFRNew[])
+		assign(paste(text=c("NetMigrAdj_",CURRENTSTEP),collapse=""),NetMigrAdjust[])
+		assign(paste(text=c("e0F_",CURRENTSTEP),collapse=""),e0FAdj[])
+		assign(paste(text=c("e0M_",CURRENTSTEP),collapse=""),e0MAdj[])
+
+		ImpliedTFR_0<-ImpliedTFR2015
+		NetMigrAdj_0<-0
+		e0F_0<-e0FStart
+		e0M_0<-e0MStart
+
+		ImpliedTFR_Project<-paste0('ImpliedTFR_',0:CURRENTSTEP)
+		NetMigrAdj_Project<-paste0('NetMigrAdj_',0:CURRENTSTEP)
+		e0F_Project<-paste0('e0F_',0:CURRENTSTEP)
+		e0M_Project<-paste0('e0M_',0:CURRENTSTEP)
+		
+		ImpliedTFR_Project<-do.call(cbind,mget(ImpliedTFR_Project))
+		NetMigrAdj_Project<-do.call(cbind,mget(NetMigrAdj_Project))
+		e0F_Project<-do.call(cbind,mget(e0F_Project))
+		e0M_Project<-do.call(cbind,mget(e0M_Project))
+
 	CURRENTSTEP <- CURRENTSTEP+1
+
 	if(CURRENTSTEP > STEPS) {break}}
 
     ##########
@@ -453,10 +476,20 @@ agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
 
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
+
+plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step",ylab="",main="Implied TFR by Time Step",cex.lab=2,cex.axis=2,cex.main=2)
+	for (i in 1:ITER) {lines(ImpliedTFR_Project[i,],col=sample(6))}
+plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step",ylab="",main="Net Migration Adjustment by Time Step",cex.lab=2,cex.axis=2,cex.main=2)
+	for (i in 1:ITER) {lines(NetMigrAdj_Project[i,],col=sample(6))}
+plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step",ylab="",main="e0 (Female and Male) by Time Step",cex.lab=2,cex.axis=2,cex.main=2)
+	for (i in 1:ITER) {lines(e0F_Project[i,],col=sample(6))}
+	for (i in 1:ITER) {lines(e0M_Project[i,],col=sample(6))}
+
     }   
-    },height=1200,width=1200)
+    },height=1800,width=1200)
 
 }
 
 shinyApp(ui = ui, server = server) 
+
 
