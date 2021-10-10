@@ -393,6 +393,8 @@ ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinu
 ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
 ImpliedTFR<-array(ImpliedTFR2015,ITER)
 
+if(STEPS<=37 & ITER<=2000){		##MAX STEPS AND ITER IN CASE USER (ESP ME) GETS CARRIED AWAY
+
 ##RUN THE PROJECTION WITH SURV ADJUSTMENT (BY SOURCE() OF PROJECTION FILE)
 repeat{
 SurvChange<-array(0,ITER)
@@ -427,6 +429,8 @@ SurvChange_e<-array(0,ITER)
 	CURRENTSTEP <- CURRENTSTEP+1
 
 	if(CURRENTSTEP > STEPS) {break}}
+
+	}
 
     ##########
     ##TABLING DATA
@@ -477,17 +481,17 @@ agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,cex.main=2,cex.names=1.25,cex.axis=1.5,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 
-plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
+plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step End Year",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(ImpliedTFR_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
 		axis(side=2,cex.axis=1.5)
 
-plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
+plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step End Year",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(NetMigrAdj_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
 		axis(side=2,cex.axis=1.5)
 
-plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step",ylab="",main="e0 (Female and Male) by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
+plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step End Year",ylab="",main="e0 (Female and Male) by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(e0F_Project[i,],col=sample(6))}
 	for (i in 1:ITER) {lines(e0M_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
