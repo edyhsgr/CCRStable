@@ -120,7 +120,7 @@ ui<-fluidPage(
       ),
       
       sliderInput("ImposedTFR_ar","If Yes, iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.5,1),step=0.05),
-      sliderInput("ImposedTFR","...and iTFR level term",min=0,max=10,value=c(1.8,1.8),step=0.1),
+      sliderInput("ImposedTFR","...and iTFR level term",min=0,max=5,value=c(1.8,1.8),step=0.1),
       sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.25,.25),step=0.05),
       
       hr(),
@@ -406,21 +406,28 @@ SurvChange_e<-array(0,ITER)
 	source("https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA_Supporting_Project.R",local=TRUE)
 		
 		##MAKING TIME SERIES OBJECTS
+		KProj<-array(,dim=ITER)
+		for (i in 1:ITER) {KProj[i]<-sum(TMinusZeroAge[,,i])}
+	
+		assign(paste(text=c("K_",CURRENTSTEP),collapse=""),KProj[])
 		assign(paste(text=c("ImpliedTFR_",CURRENTSTEP),collapse=""),ImpliedTFRNew[])
 		assign(paste(text=c("NetMigrAdj_",CURRENTSTEP),collapse=""),NetMigrAdjust[])
 		assign(paste(text=c("e0F_",CURRENTSTEP),collapse=""),e0FAdj[])
 		assign(paste(text=c("e0M_",CURRENTSTEP),collapse=""),e0MAdj[])
 
+		K_0<-sum(TMinusOneAge[,,1])
 		ImpliedTFR_0<-ImpliedTFR2015
 		NetMigrAdj_0<-0
 		e0F_0<-e0FStart
 		e0M_0<-e0MStart
 
+		K_Project<-paste0('K_',0:CURRENTSTEP)
 		ImpliedTFR_Project<-paste0('ImpliedTFR_',0:CURRENTSTEP)
 		NetMigrAdj_Project<-paste0('NetMigrAdj_',0:CURRENTSTEP)
 		e0F_Project<-paste0('e0F_',0:CURRENTSTEP)
 		e0M_Project<-paste0('e0M_',0:CURRENTSTEP)
 		
+		K_Project<-do.call(cbind,mget(K_Project))
 		ImpliedTFR_Project<-do.call(cbind,mget(ImpliedTFR_Project))
 		NetMigrAdj_Project<-do.call(cbind,mget(NetMigrAdj_Project))
 		e0F_Project<-do.call(cbind,mget(e0F_Project))
@@ -481,6 +488,11 @@ agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,cex.main=2,cex.names=1.25,cex.axis=1.5,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 
+plot(K_Project[1,],type="l",ylim=c(min(K_Project)*.9,max(K_Project)*1.1),xlab="Year",ylab="",main="Total Population by Year",cex.lab=2,cex.main=2,axes=F)
+	for (i in 1:ITER) {lines(K_Project[i,],col=sample(6))}
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
+	
 plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step End Year",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(ImpliedTFR_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
