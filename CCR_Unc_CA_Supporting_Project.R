@@ -56,8 +56,8 @@
 
 	##ADJUST SURVIVORSHIP FOR THE STEP
 	if(CURRENTSTEP<=STEPS){
-	for (j in 1:ITER){for (i in 1:length(lxF)) {lxFAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxF[i+1]))}}
-	for (j in 1:ITER){for (i in 1:length(lxF)) {lxMAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxM[i+1]))}}}
+	for (j in 1:ITER){for (i in 1:length(lxF)) {lxFAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxF[i]))}}
+	for (j in 1:ITER){for (i in 1:length(lxF)) {lxMAdj[i,j]<-1/(1+exp(-2*(SurvChange[j])-2*BB*YxM[i]))}}}
 
 	##SURVIVAL ADJUSTMENTS (Lx, Sx)
 	LxFAdj<-array(,c(length(lxF),ITER))
