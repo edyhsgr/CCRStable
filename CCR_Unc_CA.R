@@ -481,28 +481,32 @@ NewAge_M<-NewAge_M_Median
 
 agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
        
-    ##THIRD GRAPH - PYRAMID (FEMALE PORTION)
+##FIRST GRAPH - PYRAMID (FEMALE PORTION)
     barplot2(NewAge_F,plot.ci=TRUE,ci.l=NewAge_F_Low,ci.u=NewAge_F_High,horiz=T,names=agegroups,cex.main=2,cex.names=1.2,cex.axis=1.5,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
 #mtext(side=1,c((e0FAdj[1])),line=0,adj=.29,col="dark green")
 
-    ##FOURTH GRAPH - PYRAMID (MALE PORTION)
+##SECOND GRAPH - PYRAMID (MALE PORTION)
     barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,cex.main=2,cex.names=1.25,cex.axis=1.5,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
 
+##THIRD GRAPH - TOTAL POPULATION
 plot(K_Project[1,],type="l",ylim=c(min(K_Project)*.9,max(K_Project)*1.1),xlab="Year",ylab="",main="Total Population by Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(K_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
 		axis(side=2,cex.axis=1.5)
-	
+
+##FOURTH GRAPH - iTFR
 plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step End Year",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(ImpliedTFR_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
 		axis(side=2,cex.axis=1.5)
 
+##FIFTH GRAPH - NET MIGRATION
 plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step End Year",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(NetMigrAdj_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
 		axis(side=2,cex.axis=1.5)
 
+##SIXTH GRAPH - LIFE EXPECTANCY AT BIRTH (FEMALE AND MALE)
 plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step End Year",ylab="",main="e0 (Female and Male) by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(e0F_Project[i,],col=sample(6))}
 	for (i in 1:ITER) {lines(e0M_Project[i,],col=sample(6))}
