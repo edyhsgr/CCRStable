@@ -31,8 +31,8 @@
 	LxFStart<-array(,c(length(lxF),ITER))
 	LxMStart<-array(,c(length(lxM),ITER))
 	##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
-	for (i in 1:length(LxFStart[,1])-1){LxFStart[i,]<-.5*(lxFStart[i,]+lxFStart[i+1,])}
-	for (i in 1:length(LxMStart[,1])-1){LxMStart[i,]<-.5*(lxMStart[i,]+lxMStart[i+1,])}
+	for (i in 1:length(LxFStart[,1])){LxFStart[i,]<-.5*(lxFStart[i,]+lxFStart[i+1,])}
+	for (i in 1:length(LxMStart[,1])){LxMStart[i,]<-.5*(lxMStart[i,]+lxMStart[i+1,])}
 	
 	SxFStart<-array(0,c(length(lxF)-1,ITER))
 	SxMStart<-array(0,c(length(lxM)-1,ITER))
@@ -63,8 +63,8 @@
 	LxFAdj<-array(,c(length(lxF),ITER))
 	LxMAdj<-array(,c(length(lxM),ITER))
 	##**THIS IS A LITTLE OFF FOR THE FIRST AGE GROUP**
-	for (i in 1:length(LxFAdj[,1])-1){LxFAdj[i,]<-.5*(lxFAdj[i,]+lxFAdj[i+1,])}
-	for (i in 1:length(LxMAdj[,1])-1){LxMAdj[i,]<-.5*(lxMAdj[i,]+lxMAdj[i+1,])}
+	for (i in 1:length(LxFAdj[,1])){LxFAdj[i,]<-.5*(lxFAdj[i,]+lxFAdj[i+1,])}
+	for (i in 1:length(LxMAdj[,1])){LxMAdj[i,]<-.5*(lxMAdj[i,]+lxMAdj[i+1,])}
 
 	SxFAdj<-array(0,c(length(lxF)-1,ITER))
 	SxMAdj<-array(0,c(length(lxM)-1,ITER))
@@ -108,12 +108,12 @@
 
 	##CONSTRUCT PROJECTION MATRICES WITH SURVIVAL ADJUSTMENT
 	SAdj_F<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[2:(HALFSIZE),i]-SxFStart[2:(HALFSIZE),i]),0))}
+	for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[2:(HALFSIZE)-1,i]-SxFStart[2:(HALFSIZE)-1,i]),0))}
 	SAdj_F<-SAdj_F+S_F
 	AAdj_F<-B_F+SAdj_F
 
 	SAdj_M<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[2:(HALFSIZE),i]-SxMStart[2:(HALFSIZE),i]),0))}
+	for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[2:(HALFSIZE)-1,i]-SxMStart[2:(HALFSIZE)-1,i]),0))}
 	SAdj_M<-SAdj_M+S_M
 
 	AAdj_Zero<-A_Zero<-array(0,c(HALFSIZE,HALFSIZE,ITER))
