@@ -1,7 +1,7 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP - APPLIED TO CALIFORNIA COUNTIES
 ##
-##EDDIE HUNSINGER, AUGUST 2019 (UPDATED OCTOBER 2020)
+##EDDIE HUNSINGER, AUGUST 2019 (UPDATED OCTOBER 2021)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
@@ -198,7 +198,7 @@ ui<-fluidPage(
         tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-      tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
+      tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
              "Applied Demography Toolbox listing."),
       
       width=3
@@ -523,7 +523,7 @@ server<-function(input, output) {
         return(c(TMinusZeroAge=TMinusZeroAge,TMinusOneAge=TMinusOneAgeNew,ImpliedTFRNew=ImpliedTFRNew,e0FStart=e0FStart,e0MStart=e0MStart,e0FAdj=e0FAdj,e0MAdj=e0MAdj,CURRENTSTEP=CURRENTSTEP+1))
       }
     }
-    
+   
     ##APPLY PROJECTIONS
     CCRNew<-CCRProject(TMinusZeroAge,ImpliedTFR2015,BA_start,BA_end,CURRENTSTEP)
     while(CCRNew$CURRENTSTEP<STEPS+1) {CCRNew<-CCRProject(CCRNew$TMinusZeroAge,CCRNew$ImpliedTFRNew,BA_start,BA_end,CCRNew$CURRENTSTEP)}
@@ -713,4 +713,3 @@ server<-function(input, output) {
 }
 
 shinyApp(ui = ui, server = server) 
-
