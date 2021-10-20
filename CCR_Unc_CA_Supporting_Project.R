@@ -25,8 +25,8 @@
 	
 	lxFStart<-array(0,c(length(lxF),ITER))
 	lxMStart<-array(0,c(length(lxM),ITER))
-	for (i in 1:length(lxF)){lxFStart[i,]<-1/(1+exp(-2*BA_start_init[1]-2*BB*YxF[i]))}
-	for (i in 1:length(lxM)){lxMStart[i,]<-1/(1+exp(-2*BA_start_init[1]-2*BB*YxM[i]))}
+	for (i in 1:length(lxF)){for(j in 1:ITER) {lxFStart[i,j]<-1/(1+exp(-2*BA_start_init[j]-2*BB*YxF[i]))}}
+	for (i in 1:length(lxM)){for(j in 1:ITER) {lxMStart[i,j]<-1/(1+exp(-2*BA_start_init[j]-2*BB*YxM[i]))}}
 	
 	LxFStart<-array(,c(length(lxF),ITER))
 	LxMStart<-array(,c(length(lxM),ITER))
@@ -49,8 +49,8 @@
 
 	##INITIAL e0
 	e0FStart<-e0MStart<-array(,ITER)
-	for (i in 1:ITER) {e0FStart[i]<-sum(LxFStart[1:length(lxF)-1,i]*5)}
-	for (i in 1:ITER) {e0MStart[i]<-sum(LxMStart[1:length(lxM)-1,i]*5)}
+	for (i in 1:ITER) {e0FStart[i]<-sum(LxFStart[1:length(lxF),i]*5)}
+	for (i in 1:ITER) {e0MStart[i]<-sum(LxMStart[1:length(lxM),i]*5)}
 
 	lxFAdj<-array(0,c(length(lxF),ITER))
 	lxMAdj<-array(0,c(length(lxM),ITER))
@@ -82,8 +82,8 @@
 
 	##ADJUSTED e0
 	e0FAdj<-e0MAdj<-array(,ITER)
-	for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:22,i]*5)}
-	for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:22,i]*5)}
+	for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:length(lxF),i]*5)}
+	for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:length(lxF),i]*5)}
 
 	##ADJUST GROSS MIGRATION OPTION - STILL NEED TO UPDATE TO INCLUDE IN THIS STOCHASTIC IMPLEMENTATION
 #        if(GrossMigrationAdjustLevel!=0)
