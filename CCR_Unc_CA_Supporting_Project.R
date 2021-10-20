@@ -48,8 +48,9 @@
 	for (i in 1:ITER) {SxMStart[length(SxMStart[,1]),i]<-SxMStart[length(SxMStart[,1])-1,i]}
 
 	##INITIAL e0
-	e0FStart<-sum(LxFStart[1:22]*5)
-	e0MStart<-sum(LxMStart[1:22]*5)
+	e0FStart<-e0MStart<-array(,ITER)
+	for (i in 1:ITER) {e0FStart[i]<-sum(LxFStart[1:22,i]*5)}
+	for (i in 1:ITER) {e0MStart[i]<-sum(LxMStart[1:22,i]*5)}
 
 	lxFAdj<-array(0,c(length(lxF),ITER))
 	lxMAdj<-array(0,c(length(lxM),ITER))
@@ -80,7 +81,7 @@
 	for (i in 1:ITER) {SxMAdj[length(SxMAdj[,1]),i]<-SxMAdj[length(SxMAdj[,1])-1,i]}
 
 	##ADJUSTED e0
-	e0FAdj<-e0MAdj<-array(0,ITER)
+	e0FAdj<-e0MAdj<-array(,ITER)
 	for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:22,i]*5)}
 	for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:22,i]*5)}
 
