@@ -109,12 +109,12 @@
 
 	##CONSTRUCT PROJECTION MATRICES WITH SURVIVAL ADJUSTMENT
 	SAdj_F<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[2:(HALFSIZE),i]-SxFStart[2:(HALFSIZE),i]),0))}
+	for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[1:(HALFSIZE)-1,i]-SxFStart[1:(HALFSIZE)-1,i]),0))}
 	SAdj_F<-SAdj_F+S_F
 	AAdj_F<-B_F+SAdj_F
 
 	SAdj_M<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[2:(HALFSIZE),i]-SxMStart[2:(HALFSIZE),i]),0))}
+	for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[1:(HALFSIZE)-1,i]-SxMStart[1:(HALFSIZE)-1,i]),0))}
 	SAdj_M<-SAdj_M+S_M
 
 	AAdj_Zero<-A_Zero<-array(0,c(HALFSIZE,HALFSIZE,ITER))
