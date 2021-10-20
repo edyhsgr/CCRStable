@@ -49,8 +49,8 @@
 
 	##INITIAL e0
 	e0FStart<-e0MStart<-array(,ITER)
-	for (i in 1:ITER) {e0FStart[i]<-sum(LxFStart[1:length(lxF),i]*5)}
-	for (i in 1:ITER) {e0MStart[i]<-sum(LxMStart[1:length(lxM),i]*5)}
+	for (i in 1:ITER) {e0FStart[i]<-sum(LxFStart[1:length(lxF)-1,i]*5)}
+	for (i in 1:ITER) {e0MStart[i]<-sum(LxMStart[1:length(lxM)-1,i]*5)}
 
 	lxFAdj<-array(0,c(length(lxF),ITER))
 	lxMAdj<-array(0,c(length(lxM),ITER))
