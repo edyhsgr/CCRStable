@@ -466,9 +466,9 @@ server<-function(input, output) {
         if(GrossMigrationAdjustLevel!=0)
         {
             RatiosGrossMigAdj<-Ratios
-            for (i in 1:HALFSIZE-1) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i])*GrossMigrationAdjustLevel}
+            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i])*GrossMigrationAdjustLevel}
             SGrossMigAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
-            SGrossMigAdj_F<-rbind(0,cbind(diag(RatiosGrossMigAdj[1:HALFSIZE-1]),0))
+            SGrossMigAdj_F<-rbind(0,cbind(diag(RatiosGrossMigAdj[2:HALFSIZE]),0))
             ##OPEN-ENDED AGE GROUP (FEMALE)
             RatiosGrossMigAdj[HALFSIZE]<-(Ratios[HALFSIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[HALFSIZE-1])*GrossMigrationAdjustLevel
             SGrossMigAdj_F[HALFSIZE,HALFSIZE]<-SGrossMigAdj_F[HALFSIZE,HALFSIZE-1]<-RatiosGrossMigAdj[HALFSIZE]
