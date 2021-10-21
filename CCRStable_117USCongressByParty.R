@@ -444,7 +444,7 @@ if(input$Party=="Republican") {TMinusZeroAgeRatios_M<-MaleRepublican2019}
         if(GrossMigrationAdjustLevel!=0)
         {
             RatiosGrossMigAdj<-Ratios
-            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i])*GrossMigrationAdjustLevel}
+            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i-1])*GrossMigrationAdjustLevel}
             SGrossMigAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
             SGrossMigAdj_F<-rbind(0,cbind(diag(RatiosGrossMigAdj[2:HALFSIZE]),0))
             ##OPEN-ENDED AGE GROUP (FEMALE)
