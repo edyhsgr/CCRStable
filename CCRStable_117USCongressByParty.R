@@ -18,8 +18,7 @@
 library(shiny)
 ui<-fluidPage(
   
-  tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App"),
-  tags$h3("117th US Congressional Districts by Party Representation, based on US Census Bureau 2014 and 2019 American Community Survey 5-Year Data"),
+  tags$h3("Cohort Change Ratio-Based Stable Population Review Shiny App - 117th US Congressional Districts by Party Representation, based on US Census Bureau 2014 and 2019 American Community Survey 5-Year Data"),
   p("Related information and ",
     tags$a(href="https://www.r-project.org/", "R"),
     "code available at: ",
@@ -716,3 +715,4 @@ if(input$Party=="Republican") {TMinusZeroAgeRatios_M<-MaleRepublican2019}
 }
 
 shinyApp(ui = ui, server = server) 
+
