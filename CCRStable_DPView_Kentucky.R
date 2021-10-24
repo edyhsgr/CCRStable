@@ -225,23 +225,74 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
     tags$a(href="https://edyhsgr.github.io/eddieh/", 
            "Eddie Hunsinger,"), 
     
-    "July 2020 (updated September 2020)."),
+    "July 2020 (updated October 2021)."),
 
-  p("2010 Census data, including differential privacy demonstration data, downloaded from ",
-    tags$a(href="https://www.nhgis.org/privacy-protected-demonstration-data", 
-          "IPUMS NHGIS, University of Minnesota.")),
-  
-  p("2015 population estimates inputs from ",
-    tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
-          "US Census Bureau Vintage 2019 Population Estimates.")),
+      p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
+        tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
+               "using R code by Carl Schmertmann.")),
+      
+      p(" More information on cohort change ratios, including a chapter on stable population: ",
+        tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
+               "Baker, Swanson, Tayman, and Tedrow (2017)."),
+        
+        p("More information on iTFR: ",
+          tags$a(href="https://osf.io/adu98/", 
+                 "Hauer and Schmertmann (2019)"),
+          " and ",
+          tags$a(href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0067226", 
+                 "Hauer, Baker, and Brown (2013).")),
+        
+        p("Slides with background thoughts on adjusting net migration: ",
+          tags$a(href="https://edyhsgr.github.io/documents/ProjPresentation.pdf", 
+                 "Hunsinger (2007)."),
+          
+          "Migration by age over time comparisons from Alaska data: ",
+          tags$a(href="http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/", 
+                 "Hunsinger (2018)."),
+          
+          "Interface with net migration adjustment examples and comparisons: ",
+          tags$a(href="http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/", 
+                 "Hunsinger (2019)."),
+          
+          "Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 
+          American Community Survey Public Use Microdata Sample, accessed via the ", 
+          tags$a(href="https://usa.ipums.org/usa/", 
+                 "IPUMS USA, University of Minnesota.")),
+        
+        tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
+               "Graph of e0 and Brass' relational life table alpha by US state."),
+        
+        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
+        tags$a(href="https://usa.mortality.org/index.php", 
+               "United States Mortality Database.")),
+      
+      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+             "Applied Demography Toolbox listing.")),
 
-  p("Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for Kentucky from the ",
-    tags$a(href="https://usa.mortality.org/index.php", 
-          "United States Mortality Database.")),
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"slides"),
 
-  tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
-          "Applied Demography Toolbox listing for projection code."),
-  
+	"for a related talk, and ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+
+	"code with input files for several examples, including an ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+		"errors review version, "), 
+
+	"a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/", 
+		"stochastic version, "), 
+
+	"is available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository."),
+),
   width=3
 ),
 
@@ -789,3 +840,4 @@ if(input$County!="") {
 }
 
 shinyApp(ui = ui, server = server) 
+
