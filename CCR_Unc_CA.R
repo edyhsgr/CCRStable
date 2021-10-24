@@ -160,17 +160,13 @@ ui<-fluidPage(
         
         "November 2020 (updated October 2021)."),
       
-      p("Population estimates inputs from ",
-        tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
-               "US Census Bureau Vintage 2019 Population Estimates.")),
-
-      p("Related Cohort Change Ratio-Based Stable Population Projection interface with more information on the Cohort Change Ratio Projection: ",
-        tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable/", 
-               "Hunsinger (2019).")),
+      p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
+        tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
+               "using R code by Carl Schmertmann.")),
       
-      p("Supporting work and thinking on stochastic population projection: ",
-        tags$a(href="https://applieddemogtoolbox.github.io/#StochasticForecast", 
-               "Hunsinger (2011)."),
+      p(" More information on cohort change ratios, including a chapter on stable population: ",
+        tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
+               "Baker, Swanson, Tayman, and Tedrow (2017)."),
         
         p("More information on iTFR: ",
           tags$a(href="https://osf.io/adu98/", 
@@ -198,14 +194,34 @@ ui<-fluidPage(
         
         tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
                "Graph of e0 and Brass' relational life table alpha by US state."),
-               "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
         
-	tags$a(href="https://usa.mortality.org/index.php", 
+        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
+        tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-        tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
-             "Applied Demography Toolbox listing for the Cohort Change Ratio-Based Stable Population work."),
-      
+      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+             "Applied Demography Toolbox listing.")),
+
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"slides"),
+
+	"for a related talk, and ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+
+	"code with input files for several examples, including an ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+		"errors review version"), 
+
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+
+	"is available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository."),
+    ),
       width=3
     ),
     
