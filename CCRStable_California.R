@@ -191,17 +191,42 @@ ui<-fluidPage(
           tags$a(href="https://usa.ipums.org/usa/", 
                  "IPUMS USA, University of Minnesota.")),
         
-        tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
+          tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
                "Graph of e0 and Brass' relational life table alpha by US state."),
         
-        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
-        tags$a(href="https://usa.mortality.org/index.php", 
+          "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
+          tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-      tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
-             "Applied Demography Toolbox listing."),
-      
-      width=3
+      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+             "Applied Demography Toolbox listing.")),
+
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"slides"),
+	"for a related talk, and ",
+
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+
+	"code with input files for several examples, including an ",
+
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+		"errors review version, "), 
+
+	"a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/", 
+		"stochastic version, "), 
+
+	"is available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository."),
+    ),
+    width=3
     ),
     
     mainPanel(
@@ -713,3 +738,4 @@ server<-function(input, output) {
 }
 
 shinyApp(ui = ui, server = server) 
+
