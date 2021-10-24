@@ -110,7 +110,7 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "January 2021."),
+        "January 2021 (updated October 2021)."),
       
       p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
         tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
@@ -151,9 +151,33 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
         tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-      tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
-             "Applied Demography Toolbox listing."),
-      
+      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+             "Applied Demography Toolbox listing.")),
+
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"slides"),
+
+	"for a related talk, and ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+
+	"code with input files for several examples, including an ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+		"errors review version, "), 
+
+	"a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/", 
+		"stochastic version, "), 
+
+	"is available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository."),
+    ),
       width=3
     ),
     
