@@ -1,7 +1,7 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP - APPLIED TO CALIFORNIA COUNTIES
 ##
-##EDDIE HUNSINGER, AUGUST 2019 (UPDATED OCTOBER 2021)
+##EDDIE HUNSINGER, AUGUST 2019 (UPDATED DECEMBER 2021)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
@@ -294,7 +294,7 @@ server<-function(input, output) {
     UseImposedTFR<-input$ImposeTFR
     
     ##ADJUST BY MIGRATION OPTION
-    GrossMigrationAdjustLevel<-((input$GrossMigrationAdjustLevel*-1)+100)/100
+    GrossMigrationAdjustLevel<-input$GrossMigrationAdjustLevel/100
     NetMigrationAdjustLevel<-input$NetMigrationAdjustLevel/100
     
     ##IMPUTE MORTALITY OPTION
@@ -436,14 +436,14 @@ server<-function(input, output) {
         for (i in 1:length(SxFStart)-1){SxFStart[i]<-(LxFStart[i+1]/LxFStart[i])}
         for (i in 1:length(SxMStart)-1){SxMStart[i]<-(LxMStart[i+1]/LxMStart[i])}	
         
-        ##(OPEN-ENDED AGE GROUP OPTION (FEMALE))
-        SxFStart[length(SxFStart)-1]<-LxFStart[length(SxFStart)]/(LxFStart[length(SxFStart)-1]+LxFStart[length(SxFStart)])
-        SxFStart[length(SxFStart)]<-SxFStart[length(SxFStart)-1]
-        
-        ##(OPEN-ENDED AGE GROUP OPTION (MALE))
-        SxMStart[length(SxMStart)-1]<-LxMStart[length(SxMStart)]/(LxMStart[length(SxMStart)-1]+LxMStart[length(SxMStart)])
-        SxMStart[length(SxMStart)]<-SxMStart[length(SxMStart)-1]
-        
+	##(OPEN-ENDED AGE GROUP OPTION (FEMALE))
+	SxFStart[HALFSIZE-1]<-rev(cumsum(rev(LxFStart[HALFSIZE:length(SxFStart)])))[1]/rev(cumsum(rev(LxFStart[(HALFSIZE-1):length(SxFStart)])))[1]
+	SxFStart[HALFSIZE]<-SxFStart[HALFSIZE-1]
+	
+	##(OPEN-ENDED AGE GROUP OPTION (MALE))
+	SxMStart[HALFSIZE-1]<-rev(cumsum(rev(LxMStart[HALFSIZE:length(SxMStart)])))[1]/rev(cumsum(rev(LxMStart[(HALFSIZE-1):length(SxMStart)])))[1]
+	SxMStart[HALFSIZE]<-SxMStart[HALFSIZE-1]
+      
         ##INITIAL e0
         e0FStart<-sum(LxFStart[1:22]*5)
         e0MStart<-sum(LxMStart[1:22]*5)
@@ -475,37 +475,35 @@ server<-function(input, output) {
         for (i in 1:length(SxFAdj)-1){SxFAdj[i]<-(LxFAdj[i+1]/LxFAdj[i])}
         for (i in 1:length(SxMAdj)-1){SxMAdj[i]<-(LxMAdj[i+1]/LxMAdj[i])}
         
-        ###(OPEN-ENDED AGE GROUP OPTION (FEMALE))
-        SxFAdj[length(SxFAdj)-1]<-LxFAdj[length(SxFAdj)]/(LxFAdj[length(SxFAdj)-1]+LxFAdj[length(SxFAdj)])
-        SxFAdj[length(SxFAdj)]<-SxFAdj[length(SxFAdj)-1]
-        
-        ##(OPEN-ENDED AGE GROUP OPTION (MALE))
-        SxMAdj[length(SxMAdj)-1]<-LxMAdj[length(SxMAdj)]/(LxMAdj[length(SxMAdj)-1]+LxMAdj[length(SxMAdj)])
-        SxMAdj[length(SxMAdj)]<-SxMAdj[length(SxMAdj)-1]
+	##(OPEN-ENDED AGE GROUP OPTION (FEMALE))
+	SxFAdj[HALFSIZE-1]<-rev(cumsum(rev(LxFAdj[HALFSIZE:length(SxFAdj)])))[1]/rev(cumsum(rev(LxFAdj[(HALFSIZE-1):length(SxFAdj)])))[1]
+	SxFAdj[HALFSIZE]<-SxFAdj[HALFSIZE-1]
+
+	##(OPEN-ENDED AGE GROUP OPTION (MALE))
+	SxMAdj[HALFSIZE-1]<-rev(cumsum(rev(LxMAdj[HALFSIZE:length(SxMAdj)])))[1]/rev(cumsum(rev(LxMAdj[(HALFSIZE-1):length(SxMAdj)])))[1]
+	SxMAdj[HALFSIZE]<-SxMAdj[HALFSIZE-1]
         
         ##ADJUSTED e0
         e0FAdj<-sum(LxFAdj[1:22]*5)
         e0MAdj<-sum(LxMAdj[1:22]*5)
         
         ##ADJUST GROSS MIGRATION OPTION
-        if(GrossMigrationAdjustLevel!=0)
+        if(GrossMigrationAdjustLevel!=1)
         {
             RatiosGrossMigAdj<-Ratios
-            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i-1])*GrossMigrationAdjustLevel}
+            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-SxFStart[i-1])*GrossMigrationAdjustLevel+SxFAdj[i-1]}
             SGrossMigAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
             SGrossMigAdj_F<-rbind(0,cbind(diag(RatiosGrossMigAdj[2:HALFSIZE]),0))
             ##OPEN-ENDED AGE GROUP (FEMALE)
-            RatiosGrossMigAdj[HALFSIZE]<-(Ratios[HALFSIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[HALFSIZE-1])*GrossMigrationAdjustLevel
-            SGrossMigAdj_F[HALFSIZE,HALFSIZE]<-SGrossMigAdj_F[HALFSIZE,HALFSIZE-1]<-RatiosGrossMigAdj[HALFSIZE]
+            SGrossMigAdj_F[HALFSIZE,HALFSIZE]<-SGrossMigAdj_F[HALFSIZE,HALFSIZE-1]
             S_F<-SGrossMigAdj_F
             A_F<-B_F+S_F
             
-            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMStart[i-HALFSIZE-1])*GrossMigrationAdjustLevel}
+            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-SxMStart[i-HALFSIZE-1])*GrossMigrationAdjustLevel+SxMAdj[i-HALFSIZE-1]}
             SGrossMigAdj_M<-array(0,c(HALFSIZE,HALFSIZE))
             SGrossMigAdj_M<-rbind(0,cbind(diag(RatiosGrossMigAdj[(HALFSIZE+2):SIZE]),0))
             ##OPEN-ENDED AGE GROUP (MALE)
-            RatiosGrossMigAdj[SIZE]<-(Ratios[SIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMStart[HALFSIZE-1])*GrossMigrationAdjustLevel
-            SGrossMigAdj_M[HALFSIZE,HALFSIZE]<-SGrossMigAdj_M[HALFSIZE,HALFSIZE-1]<-RatiosGrossMigAdj[SIZE]
+            SGrossMigAdj_M[HALFSIZE,HALFSIZE]<-SGrossMigAdj_M[HALFSIZE,HALFSIZE-1]
             S_M<-SGrossMigAdj_M
         }
 
@@ -738,4 +736,3 @@ server<-function(input, output) {
 }
 
 shinyApp(ui = ui, server = server) 
-
