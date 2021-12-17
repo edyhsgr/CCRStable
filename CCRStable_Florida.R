@@ -520,23 +520,23 @@ if(input$County!="") {
         for (i in 1:length(SxFAdj)-1){SxFAdj[i]<-(LxFAdj[i+1]/LxFAdj[i])}
         for (i in 1:length(SxMAdj)-1){SxMAdj[i]<-(LxMAdj[i+1]/LxMAdj[i])}
         
-        ###(OPEN-ENDED AGE GROUP OPTION (FEMALE))
-        SxFAdj[length(SxFAdj)-1]<-LxFAdj[length(SxFAdj)]/(LxFAdj[length(SxFAdj)-1]+LxFAdj[length(SxFAdj)])
-        SxFAdj[length(SxFAdj)]<-SxFAdj[length(SxFAdj)-1]
-        
-        ##(OPEN-ENDED AGE GROUP OPTION (MALE))
-        SxMAdj[length(SxMAdj)-1]<-LxMAdj[length(SxMAdj)]/(LxMAdj[length(SxMAdj)-1]+LxMAdj[length(SxMAdj)])
-        SxMAdj[length(SxMAdj)]<-SxMAdj[length(SxMAdj)-1]
+	##(OPEN-ENDED AGE GROUP OPTION (FEMALE))
+	SxFAdj[HALFSIZE-1]<-rev(cumsum(rev(LxFAdj[HALFSIZE:length(SxFAdj)])))[1]/rev(cumsum(rev(LxFAdj[(HALFSIZE-1):length(SxFAdj)])))[1]
+	SxFAdj[HALFSIZE]<-SxFAdj[HALFSIZE-1]
+
+	##(OPEN-ENDED AGE GROUP OPTION (MALE))
+	SxMAdj[HALFSIZE-1]<-rev(cumsum(rev(LxMAdj[HALFSIZE:length(SxMAdj)])))[1]/rev(cumsum(rev(LxMAdj[(HALFSIZE-1):length(SxMAdj)])))[1]
+	SxMAdj[HALFSIZE]<-SxMAdj[HALFSIZE-1]
         
         ##ADJUSTED e0
         e0FAdj<-sum(LxFAdj[1:22]*5)
         e0MAdj<-sum(LxMAdj[1:22]*5)
         
         ##ADJUST GROSS MIGRATION OPTION
-        if(GrossMigrationAdjustLevel!=0)
+        if(GrossMigrationAdjustLevel!=1)
         {
             RatiosGrossMigAdj<-Ratios
-            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i-1])*GrossMigrationAdjustLevel}
+            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-SxFStart[i-1])*GrossMigrationAdjustLevel+SxFAdj[i-1]}
             SGrossMigAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
             SGrossMigAdj_F<-rbind(0,cbind(diag(RatiosGrossMigAdj[2:HALFSIZE]),0))
             ##OPEN-ENDED AGE GROUP (FEMALE)
@@ -544,7 +544,7 @@ if(input$County!="") {
             S_F<-SGrossMigAdj_F
             A_F<-B_F+S_F
             
-            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMStart[i-HALFSIZE-1])*GrossMigrationAdjustLevel}
+            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-SxMStart[i-HALFSIZE-1])*GrossMigrationAdjustLevel+SxMAdj[i-HALFSIZE-1]}
             SGrossMigAdj_M<-array(0,c(HALFSIZE,HALFSIZE))
             SGrossMigAdj_M<-rbind(0,cbind(diag(RatiosGrossMigAdj[(HALFSIZE+2):SIZE]),0))
             ##OPEN-ENDED AGE GROUP (MALE)
@@ -552,7 +552,7 @@ if(input$County!="") {
             S_M<-SGrossMigAdj_M
         }
 
-        ##CONSTRUCT PROJECTION MATRICES WITH SURVIVAL ADJUSTMENT
+	##CONSTRUCT PROJECTION MATRICES WITH SURVIVAL ADJUSTMENT
         SAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
         SAdj_F<-rbind(0,cbind(diag(SxFAdj[1:(HALFSIZE)-1]-SxFStart[1:(HALFSIZE)-1]),0))
         SAdj_F<-SAdj_F+S_F
