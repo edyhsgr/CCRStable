@@ -6,7 +6,7 @@
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
 ##
-##AN MS EXCEL SPREADSHEET THAT REPLICATES METHODS AND RESULTS IS AVAILABLE AT: 
+##AN MS EXCEL SPREADSHEET THAT REPLICATES METHODS AND RESULTS (2010 to 2015 ratios for Alameda County, with any adjustments) IS AVAILABLE AT: 
 ##https://github.com/edyhsgr/CCRStable/blob/master/Oct2020Presentation/CCRAdjustmentSheet_December2021.xlsx
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
