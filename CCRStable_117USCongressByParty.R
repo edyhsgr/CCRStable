@@ -1,4 +1,3 @@
-
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP - APPLIED TO 117th CONGRESSIONAL DISTRICTS BY PARTY REPRESENTATION
 ##
@@ -281,9 +280,9 @@ if(input$Party!="") {
     UseImposedTFR<-input$ImposeTFR
     
     ##ADJUST BY MIGRATION OPTION
-    GrossMigrationAdjustLevel<-((input$GrossMigrationAdjustLevel*-1)+100)/100
+    GrossMigrationAdjustLevel<-input$GrossMigrationAdjustLevel/100
     NetMigrationAdjustLevel<-input$NetMigrationAdjustLevel/100
-    
+	
     ##IMPUTE MORTALITY OPTION
     ##"BA" IS THE BRASS RELATIONAL LOGIT MODEL ALPHA
     if(input$ImputeMort=="YES") {
