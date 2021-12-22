@@ -6,6 +6,9 @@
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
 ##
+##AN MS EXCEL SPREADSHEET THAT REPLICATES THE METHODS IS AVAILABLE AT: 
+##https://github.com/edyhsgr/CCRStable/blob/master/Oct2020Presentation/CCRAdjustmentSheet_December2021.xlsx
+##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
 ##This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 International License (more information: https://creativecommons.org/licenses/by-sa/3.0/igo/).
 ##
@@ -183,7 +186,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "October 2020 (updated October 2021)."),
+        "October 2020 (updated December 2021)."),
       
       p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
         tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
@@ -339,9 +342,9 @@ if(input$County!="") {
     UseImposedTFR<-input$ImposeTFR
     
     ##ADJUST BY MIGRATION OPTION
-    GrossMigrationAdjustLevel<-((input$GrossMigrationAdjustLevel*-1)+100)/100
+    GrossMigrationAdjustLevel<-input$GrossMigrationAdjustLevel/100
     NetMigrationAdjustLevel<-input$NetMigrationAdjustLevel/100
-    
+	
     ##IMPUTE MORTALITY OPTION
     ##"BA" IS THE BRASS RELATIONAL LOGIT MODEL ALPHA
     if(input$ImputeMort=="YES") {
