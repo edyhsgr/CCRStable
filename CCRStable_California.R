@@ -160,7 +160,7 @@ ui<-fluidPage(
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "August 2019 (updated October 2021)."),
+        "August 2019 (updated December 2021)."),
       
       p("Population estimates inputs from ",
         tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
