@@ -108,7 +108,7 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "January 2021 (updated October 2021)."),
+        "January 2021 (updated December 2021)."),
       
       p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
         tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
