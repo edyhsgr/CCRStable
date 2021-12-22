@@ -187,7 +187,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "October 2020 (updated October 2021)."),
+        "October 2020 (updated December 2021)."),
       
       p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
         tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
