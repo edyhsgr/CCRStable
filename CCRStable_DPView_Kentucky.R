@@ -315,9 +315,9 @@ mainPanel(
 K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2019-alldata-21_Extract.csv",header=TRUE,sep=","))
 K_DP<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/DP2010DemoDataReview/master/nhgis_ppdd_20200723_county_KY.csv",header=TRUE,sep=","))
 
-##CENSUS ACS (via IPUMS) CA MIGRATION DATA (GENERIC) - SHOULD GET UPDATE, BUT ALSO SHOULD BE OK FOR GENERAL INFO, SEE http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/ FOR ANECDOTAL INFO
-Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
-Migration<-c(Migration$CA_F,Migration$CA_M)
+##CENSUS ACS (via IPUMS) KY MIGRATION DATA (GENERIC) - SHOULD GET UPDATE, BUT ALSO SHOULD BE OK FOR GENERAL INFO, SEE http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/ FOR ANECDOTAL INFO
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_KY_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-c(Migration$KY_F,Migration$KY_M)
 
 ##USMD KY SURVIVAL DATA (GENERIC)
 lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_KY_USMD2010to2014.csv",header=TRUE,sep=",")
