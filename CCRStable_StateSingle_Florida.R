@@ -1,13 +1,12 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP - APPLIED TO FLORIDA, SINGLE-YEAR OF AGE
 ##
-##EDDIE HUNSINGER, AUGUST 2019 (UPDATED DECEMBER 2021)
+##EDDIE HUNSINGER, OCTOBER 2020 (UPDATED DECEMBER 2021)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
 ##
-##AN MS EXCEL SPREADSHEET THAT REPLICATES METHODS AND RESULTS (2010 to 2015 ratios for Alameda County, with any adjustments) IS AVAILABLE AT: 
-##https://github.com/edyhsgr/CCRStable/blob/master/Oct2020Presentation/CCRAdjustmentSheet_December2021.xlsx
+##MORE INFORMATION IS AVAILABLE AT: https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
 ##This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 International License (more information: https://creativecommons.org/licenses/by-sa/3.0/igo/).
