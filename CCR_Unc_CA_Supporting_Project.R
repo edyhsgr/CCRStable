@@ -199,3 +199,7 @@
 	ImpliedTFR<-array(0,ITER)
 	for (i in 1:ITER){ImpliedTFR[i]<-((TMinusZeroAge[1,,i]+TMinusZeroAge[HALFSIZE+1,,i])/5)/sum(TMinusZeroAge[4:10,,i])*FERTWIDTH}
 	ImpliedTFRNew<-ImpliedTFR
+			  
+	}
+			  
+			  
