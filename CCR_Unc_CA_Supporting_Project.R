@@ -39,8 +39,8 @@
 	#for (i in 1:length(SxFStart[,1])-1){SxFStart[i,]<-(LxFStart[i+1,]/LxFStart[i,])}
 	#for (i in 1:length(SxMStart[,1])-1){SxMStart[i,]<-(LxMStart[i+1,]/LxMStart[i,])}
 
-	SxFStart<-array(,HALFSIZE,ITER)
-	SxMStart<-array(,HALFSIZE,ITER)
+	SxFStart<-array(,c(HALFSIZE,ITER))
+	SxMStart<-array(,c(HALFSIZE,ITER))
 	for (i in 2:HALFSIZE){SxFStart[i,]<-(LxFStart[i,]/LxFStart[i-1,])}
 	for (i in 2:HALFSIZE){SxMStart[i,]<-(LxMStart[i,]/LxMStart[i-1,])}	
 
