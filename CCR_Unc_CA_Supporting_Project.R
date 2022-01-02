@@ -70,8 +70,8 @@
 	for (i in 1:ITER) {e0FStart<-sum(LxFStart[1:(length(LxFStart)-1),i]*5)}
 	for (i in 1:ITER) {e0MStart<-sum(LxMStart[1:(length(LxFStart)-1),i]*5)}
 
-	lxFAdj<-array(0,length(lxF),ITER))
-	lxMAdj<-array(0,length(lxM),ITER))
+	lxFAdj<-array(0,length(lxF),ITER)
+	lxMAdj<-array(0,length(lxM),ITER)
 
 	##ADJUST SURVIVORSHIP FOR THE STEP
 	if(CURRENTSTEP<=STEPS){
