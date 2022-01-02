@@ -2,7 +2,7 @@
 R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP 
 
 -----
-Some to-do's (as of December 2021): 
+Some ideas for potential future work: 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
       -employment-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
@@ -10,8 +10,6 @@ Some to-do's (as of December 2021):
       -optimize input indices (selected, etc) for fit to historical data (to better see/understand best-possible) (may not be helpful, but may be interesting)
       -consider a 0-net-migration-level-based benchmark for gross migration adjustment
       -use age-adjusted net migration-adjustment profiles  
-      
-NOTE: FIXING OPEN-AGE (INITIAL FIX APPLIED ONLY TO CA COUNTY APP, AND TOOLBOX CODE) AND CREATING A VALIDATION RESOURCE -DECEMBER 2021
       
 -----
 References, resources, and related info: 
@@ -57,7 +55,7 @@ References, resources, and related info:
   Related Shiny for R application: 
     -(Hunsinger 2019) https://shiny.demog.berkeley.edu/eddieh/CCRStable/
     
--Eddie Hunsinger, August 2019 (updated October 2021)
+-Eddie Hunsinger, August 2019 (updated January 2022)
 
 -----
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/igo/">Creative Commons Attribution-ShareAlike 3.0 International License</a>.
