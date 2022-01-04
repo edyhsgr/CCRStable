@@ -230,9 +230,9 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
     
     "July 2020 (updated December 2021)."),
 
-      p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
-        tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
-               "using R code by Carl Schmertmann.")),
+      p("Population estimates inputs from ",
+        tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
+               "US Census Bureau Vintage 2019 Population Estimates.")),
       
       p(" More information on cohort change ratios, including a chapter on stable population: ",
         tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
