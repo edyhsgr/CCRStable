@@ -34,26 +34,44 @@
 	for (i in 1:length(LxFStart[,1])-1){LxFStart[i,]<-.5*(lxFStart[i,]+lxFStart[i+1,])}
 	for (i in 1:length(LxMStart[,1])-1){LxMStart[i,]<-.5*(lxMStart[i,]+lxMStart[i+1,])}
 	
-	SxFStart<-array(0,c(length(lxF)-1,ITER))
-	SxMStart<-array(0,c(length(lxM)-1,ITER))
-	for (i in 1:length(SxFStart[,1])-1){SxFStart[i,]<-(LxFStart[i+1,]/LxFStart[i,])}
-	for (i in 1:length(SxMStart[,1])-1){SxMStart[i,]<-(LxMStart[i+1,]/LxMStart[i,])}	
+	#SxFStart<-array(0,c(length(lxF)-1,ITER))
+	#SxMStart<-array(0,c(length(lxM)-1,ITER))
+	#for (i in 1:length(SxFStart[,1])-1){SxFStart[i,]<-(LxFStart[i+1,]/LxFStart[i,])}
+	#for (i in 1:length(SxMStart[,1])-1){SxMStart[i,]<-(LxMStart[i+1,]/LxMStart[i,])}
 
-	##(OPEN-ENDED AGE GROUP OPTION (FEMALE))
-	for (i in 1:ITER) {SxFStart[length(SxFStart[,1])-1,i]<-LxFStart[length(SxFStart[,1]),i]/(LxFStart[length(SxFStart[,1])-1,i]+LxFStart[length(SxFStart[,1]),i])}
-	for (i in 1:ITER) {SxFStart[length(SxFStart[,1]),i]<-SxFStart[length(SxFStart[,1])-1,i]}
+	SxFStart<-array(,c(HALFSIZE,ITER))
+	SxMStart<-array(,c(HALFSIZE,ITER))
+	for (i in 2:HALFSIZE){SxFStart[i,]<-(LxFStart[i,]/LxFStart[i-1,])}
+	for (i in 2:HALFSIZE){SxMStart[i,]<-(LxMStart[i,]/LxMStart[i-1,])}	
+
+	###(OPEN-ENDED AGE GROUP OPTION (FEMALE))
+	#for (i in 1:ITER) {SxFStart[length(SxFStart[,1])-1,i]<-LxFStart[length(SxFStart[,1]),i]/(LxFStart[length(SxFStart[,1])-1,i]+LxFStart[length(SxFStart[,1]),i])}
+	#for (i in 1:ITER) {SxFStart[length(SxFStart[,1]),i]<-SxFStart[length(SxFStart[,1])-1,i]}
+	#
+	###(OPEN-ENDED AGE GROUP OPTION (MALE))
+	#for (i in 1:ITER) {SxMStart[length(SxMStart[,1])-1,i]<-LxMStart[length(SxMStart[,1]),i]/(LxMStart[length(SxMStart[,1])-1,i]+LxMStart[length(SxMStart[,1]),i])}
+	#for (i in 1:ITER) {SxMStart[length(SxMStart[,1]),i]<-SxMStart[length(SxMStart[,1])-1,i]}
+
+	##(OPEN-ENDED AGE GROUP (FEMALE))
+	for (i in 1:ITER) {SxFStart[HALFSIZE,i]<-rev(cumsum(rev(LxFStart[HALFSIZE:(length(LxFStart)-1)])))[1,i]/rev(cumsum(rev(LxFStart[(HALFSIZE-1):(length(LxFStart)-1)])))[1,i]}
 	
-	##(OPEN-ENDED AGE GROUP OPTION (MALE))
-	for (i in 1:ITER) {SxMStart[length(SxMStart[,1])-1,i]<-LxMStart[length(SxMStart[,1]),i]/(LxMStart[length(SxMStart[,1])-1,i]+LxMStart[length(SxMStart[,1]),i])}
-	for (i in 1:ITER) {SxMStart[length(SxMStart[,1]),i]<-SxMStart[length(SxMStart[,1])-1,i]}
+	##(OPEN-ENDED AGE GROUP (MALE))
+	for (i in 1:ITER) {SxMStart[HALFSIZE,i]<-rev(cumsum(rev(LxMStart[HALFSIZE:(length(LxMStart)-1)])))[1,i]/rev(cumsum(rev(LxMStart[(HALFSIZE-1):(length(LxMStart)-1)])))[1,i]}
 
+	###INITIAL e0
+	#e0FStart<-e0MStart<-array(,ITER)
+	#for (i in 1:ITER) {e0FStart[i]<-sum(LxFStart[1:length(lxF)-1,i]*5)}
+	#for (i in 1:ITER) {e0MStart[i]<-sum(LxMStart[1:length(lxM)-1,i]*5)}
+	#
+	#lxFAdj<-array(0,c(length(lxF),ITER))
+	#lxMAdj<-array(0,c(length(lxM),ITER))
+		   
 	##INITIAL e0
-	e0FStart<-e0MStart<-array(,ITER)
-	for (i in 1:ITER) {e0FStart[i]<-sum(LxFStart[1:length(lxF)-1,i]*5)}
-	for (i in 1:ITER) {e0MStart[i]<-sum(LxMStart[1:length(lxM)-1,i]*5)}
+	for (i in 1:ITER) {e0FStart<-sum(LxFStart[1:(length(LxFStart)-1),i]*5)}
+	for (i in 1:ITER) {e0MStart<-sum(LxMStart[1:(length(LxFStart)-1),i]*5)}
 
-	lxFAdj<-array(0,c(length(lxF),ITER))
-	lxMAdj<-array(0,c(length(lxM),ITER))
+	lxFAdj<-array(0,length(lxF),ITER)
+	lxMAdj<-array(0,length(lxM),ITER)
 
 	##ADJUST SURVIVORSHIP FOR THE STEP
 	if(CURRENTSTEP<=STEPS){
@@ -67,23 +85,38 @@
 	for (i in 1:length(LxFAdj[,1])-1){LxFAdj[i,]<-.5*(lxFAdj[i,]+lxFAdj[i+1,])}
 	for (i in 1:length(LxMAdj[,1])-1){LxMAdj[i,]<-.5*(lxMAdj[i,]+lxMAdj[i+1,])}
 
-	SxFAdj<-array(0,c(length(lxF)-1,ITER))
-	SxMAdj<-array(0,c(length(lxM)-1,ITER))
-	for (i in 1:length(SxFAdj[,1])-1){SxFAdj[i,]<-(LxFAdj[i+1,]/LxFAdj[i,])}
-	for (i in 1:length(SxMAdj[,1])-1){SxMAdj[i,]<-(LxMAdj[i+1,]/LxMAdj[i,])}
+	#SxFAdj<-array(0,c(length(lxF)-1,ITER))
+	#SxMAdj<-array(0,c(length(lxM)-1,ITER))
+	#for (i in 1:length(SxFAdj[,1])-1){SxFAdj[i,]<-(LxFAdj[i+1,]/LxFAdj[i,])}
+	#for (i in 1:length(SxMAdj[,1])-1){SxMAdj[i,]<-(LxMAdj[i+1,]/LxMAdj[i,])}
 
-	##(OPEN-ENDED AGE GROUP OPTION (FEMALE))
-	for (i in 1:ITER) {SxFAdj[length(SxFAdj[,1])-1,i]<-LxFAdj[length(SxFAdj[,1]),i]/(LxFAdj[length(SxFAdj[,1])-1,i]+LxFAdj[length(SxFAdj[,1]),i])}
-	for (i in 1:ITER) {SxFAdj[length(SxFAdj[,1]),i]<-SxFAdj[length(SxFAdj[,1])-1,i]}
+	SxFAdj<-array(,HALFSIZE,ITER)
+	SxMAdj<-array(,HALFSIZE,ITER)
+	for (i in 2:length(SxFAdj[,1])){SxFAdj[i,]<-(LxFAdj[i,]/LxFAdj[i-1,])}
+	for (i in 2:length(SxMAdj[,1])){SxMAdj[i,]<-(LxMAdj[i,]/LxMAdj[i-1,])}
 
-	##(OPEN-ENDED AGE GROUP OPTION (MALE))
-	for (i in 1:ITER) {SxMAdj[length(SxMAdj[,1])-1,i]<-LxMAdj[length(SxMAdj[,1]),i]/(LxMAdj[length(SxMAdj[,1])-1,i]+LxMAdj[length(SxMAdj[,1]),i])}
-	for (i in 1:ITER) {SxMAdj[length(SxMAdj[,1]),i]<-SxMAdj[length(SxMAdj[,1])-1,i]}
+	###(OPEN-ENDED AGE GROUP OPTION (FEMALE))
+	#for (i in 1:ITER) {SxFAdj[length(SxFAdj[,1])-1,i]<-LxFAdj[length(SxFAdj[,1]),i]/(LxFAdj[length(SxFAdj[,1])-1,i]+LxFAdj[length(SxFAdj[,1]),i])}
+	#for (i in 1:ITER) {SxFAdj[length(SxFAdj[,1]),i]<-SxFAdj[length(SxFAdj[,1])-1,i]}
+	#
+	###(OPEN-ENDED AGE GROUP OPTION (MALE))
+	#for (i in 1:ITER) {SxMAdj[length(SxMAdj[,1])-1,i]<-LxMAdj[length(SxMAdj[,1]),i]/(LxMAdj[length(SxMAdj[,1])-1,i]+LxMAdj[length(SxMAdj[,1]),i])}
+	#for (i in 1:ITER) {SxMAdj[length(SxMAdj[,1]),i]<-SxMAdj[length(SxMAdj[,1])-1,i]}
+
+	##(OPEN-ENDED AGE GROUP (FEMALE))
+	for (i in 1:ITER) {SxFAdj[HALFSIZE,i]<-rev(cumsum(rev(LxFAdj[HALFSIZE:(length(LxFAdj)-1)])))[1,i]/rev(cumsum(rev(LxFAdj[(HALFSIZE-1):(length(LxFAdj)-1)])))[1,i]}
+
+	##(OPEN-ENDED AGE GROUP (MALE))
+	for (i in 1:ITER) {SxMAdj[HALFSIZE,i]<-rev(cumsum(rev(LxMAdj[HALFSIZE:(length(LxMAdj)-1)])))[1,i]/rev(cumsum(rev(LxMAdj[(HALFSIZE-1):(length(LxMAdj)-1)])))[1,i]}
+
+	###ADJUSTED e0
+	#e0FAdj<-e0MAdj<-array(,ITER)
+	#for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:length(lxF)-1,i]*5)}
+	#for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:length(lxM)-1,i]*5)}
 
 	##ADJUSTED e0
-	e0FAdj<-e0MAdj<-array(,ITER)
-	for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:length(lxF)-1,i]*5)}
-	for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:length(lxM)-1,i]*5)}
+	for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:(length(LxFStart)-1),i]*5)}
+	for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:(length(LxFStart)-1),i]*5)}
 
 	##ADJUST GROSS MIGRATION OPTION - STILL NEED TO UPDATE TO INCLUDE IN THIS STOCHASTIC IMPLEMENTATION
 #        if(GrossMigrationAdjustLevel!=0)
