@@ -17,6 +17,9 @@ References, resources, and related info:
     -R: https://www.r-project.org/
     -Shiny for R: https://shiny.rstudio.com/
 
+  Description and formulas used: 
+    -Hunsinger (2020 and 2021): https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation 
+  
   Population estimates inputs: 
     -US Census Bureau Population Estimates: https://www.census.gov/programs-surveys/popest.html
     -Carl Schmertmann's R code to tabulate and (re-)aggregate US Census Bureau's American Community Survey estimates by demographic characteristics: https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R 
