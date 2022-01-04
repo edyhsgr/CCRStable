@@ -2,7 +2,7 @@
 ##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE
 ##THIS FILE IS SUPPORTING FOR https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA.R
 ##
-##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED OCTOBER 2021)
+##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED JANUARY 2022)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
@@ -109,25 +109,25 @@
 #            }
 
 	##CONSTRUCT PROJECTION MATRICES WITH SURVIVAL ADJUSTMENT
-	#SAdj_F<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	#for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[1:(HALFSIZE)-1,i]-SxFStart[1:(HALFSIZE)-1,i]),0))}
-	#SAdj_F<-SAdj_F+S_F
-	#AAdj_F<-B_F+SAdj_F
-
 	SAdj_F<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[2:HALFSIZE,i]-SxFStart[2:HALFSIZE,i]),0))}
-	for (i in 1:ITER){SAdj_F[HALFSIZE,HALFSIZE,i]<-SAdj_F[HALFSIZE,HALFSIZE-1,i]}
+	for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[1:(HALFSIZE)-1,i]-SxFStart[1:(HALFSIZE)-1,i]),0))}
 	SAdj_F<-SAdj_F+S_F
 	AAdj_F<-B_F+SAdj_F
 
-	#SAdj_M<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	#for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[1:(HALFSIZE)-1,i]-SxMStart[1:(HALFSIZE)-1,i]),0))}
-	#SAdj_M<-SAdj_M+S_M
+	#SAdj_F<-array(0,c(HALFSIZE,HALFSIZE,ITER))
+	#for (i in 1:ITER){SAdj_F[,,i]<-rbind(0,cbind(diag(SxFAdj[2:HALFSIZE,i]-SxFStart[2:HALFSIZE,i]),0))}
+	#for (i in 1:ITER){SAdj_F[HALFSIZE,HALFSIZE,i]<-SAdj_F[HALFSIZE,HALFSIZE-1,i]}
+	#SAdj_F<-SAdj_F+S_F
+	#AAdj_F<-B_F+SAdj_F
 
 	SAdj_M<-array(0,c(HALFSIZE,HALFSIZE,ITER))
-	for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[2:HALFSIZE,i]-SxMStart[2:HALFSIZE,i]),0))}
-	for (i in 1:ITER){SAdj_M[HALFSIZE,HALFSIZE,i]<-SAdj_M[HALFSIZE,HALFSIZE-1,i]}
+	for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[1:(HALFSIZE)-1,i]-SxMStart[1:(HALFSIZE)-1,i]),0))}
 	SAdj_M<-SAdj_M+S_M
+
+	#SAdj_M<-array(0,c(HALFSIZE,HALFSIZE,ITER))
+	#for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[2:HALFSIZE,i]-SxMStart[2:HALFSIZE,i]),0))}
+	#for (i in 1:ITER){SAdj_M[HALFSIZE,HALFSIZE,i]<-SAdj_M[HALFSIZE,HALFSIZE-1,i]}
+	#SAdj_M<-SAdj_M+S_M
 
 	AAdj_Zero<-A_Zero<-array(0,c(HALFSIZE,HALFSIZE,ITER))
 
