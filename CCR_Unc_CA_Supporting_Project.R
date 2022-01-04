@@ -124,7 +124,7 @@
 	#for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[1:(HALFSIZE)-1,i]-SxMStart[1:(HALFSIZE)-1,i]),0))}
 	#SAdj_M<-SAdj_M+S_M
 
-	SAdj_M<-array(0,c(HALFSIZE,HALFSIZE))
+	SAdj_M<-array(0,c(HALFSIZE,HALFSIZE,ITER))
 	for (i in 1:ITER){SAdj_M[,,i]<-rbind(0,cbind(diag(SxMAdj[2:HALFSIZE,i]-SxMStart[2:HALFSIZE,i]),0))}
 	for (i in 1:ITER){SAdj_M[HALFSIZE,HALFSIZE,i]<-SAdj_M[HALFSIZE,HALFSIZE-1,i]}
 	SAdj_M<-SAdj_M+S_M
