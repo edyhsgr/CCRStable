@@ -136,7 +136,7 @@
 	TMinusOneAgeNew<-TMinusZeroAge
 	for(i in 1:ITER) {TMinusZeroAge[,,i]<-AAdj[,,i]%*%TMinusZeroAge[,,i]}
 
-if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
+	if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
 		
 		if(input$AdjustMigr=="YES")
 			for (i in 1:ITER){	
@@ -145,10 +145,11 @@ if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
 		for (i in 1:ITER){			
 			TMinusZeroAge[,,i]<-(NetMigrAdjust[i])*5*sum(TMinusOneAgeNew[,,i])*Migration+TMinusZeroAge[,,i]}
 
-		if(UseImposedTFR=="YES") 
+		if(UseImposedTFR=="YES"){
 			for (i in 1:ITER){
-			{TMinusZeroAge[1,,i]<-(ImpliedTFR[i]*ImposedTFR_ar[i]+ImposedTFR[i]*(1-ImposedTFR_ar[i])+rnorm(1,0,ImposedTFR_se[i]))*(sum(TMinusZeroAge[4:10,,i])/FERTWIDTH)*5*ffab
-			TMinusZeroAge[HALFSIZE+1,,i]<-(ImpliedTFR[i]*ImposedTFR_ar[i]+ImposedTFR[i]*(1-ImposedTFR_ar[i])+rnorm(1,0,ImposedTFR_se[i]))*(sum(TMinusZeroAge[4:10,,i])/FERTWIDTH)*5*(1-ffab)}}
+			ImposedTFR_seData<-rnorm(ITER,0,ImposedTFR_se)
+			TMinusZeroAge[1,,i]<-(ImpliedTFR[i]*ImposedTFR_ar[i]+ImposedTFR[i]*(1-ImposedTFR_ar[i])+ImposedTFR_seData[i])*(sum(TMinusZeroAge[4:10,,i])/FERTWIDTH)*5*ffab
+			TMinusZeroAge[HALFSIZE+1,,i]<-(ImpliedTFR[i]*ImposedTFR_ar[i]+ImposedTFR[i]*(1-ImposedTFR_ar[i])+ImposedTFR_seData[i])*(sum(TMinusZeroAge[4:10,,i])/FERTWIDTH)*5*(1-ffab)}}
 
 		if(UseImposedTFR=="NO"){ 
 			for (i in 1:ITER){
