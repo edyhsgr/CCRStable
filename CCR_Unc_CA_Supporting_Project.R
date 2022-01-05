@@ -2,7 +2,7 @@
 ##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE
 ##THIS FILE IS SUPPORTING FOR https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA.R
 ##
-##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED OCTOBER 2021)
+##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED JANUARY 2022)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
@@ -85,27 +85,24 @@
 	for (i in 1:ITER) {e0FAdj[i]<-sum(LxFAdj[1:length(lxF)-1,i]*5)}
 	for (i in 1:ITER) {e0MAdj[i]<-sum(LxMAdj[1:length(lxM)-1,i]*5)}
 
-	##ADJUST GROSS MIGRATION OPTION - STILL NEED TO UPDATE TO INCLUDE IN THIS STOCHASTIC IMPLEMENTATION
-#        if(GrossMigrationAdjustLevel!=0)
-#        {
+#	##ADJUST GROSS MIGRATION OPTION - WOULD NEED TO UPDATE TO INCLUDE IN THIS STOCHASTIC IMPLEMENTATION
+#        if(GrossMigrationAdjustLevel!=1){
 #            RatiosGrossMigAdj<-Ratios
-#            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[i])*GrossMigrationAdjustLevel}
+#            for (i in 2:HALFSIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-SxFStart[i])*GrossMigrationAdjustLevel+SxFStart[i]}
 #            SGrossMigAdj_F<-array(0,c(HALFSIZE,HALFSIZE))
 #            SGrossMigAdj_F<-rbind(0,cbind(diag(RatiosGrossMigAdj[2:HALFSIZE]),0))
 #            ##OPEN-ENDED AGE GROUP (FEMALE)
-#            RatiosGrossMigAdj[HALFSIZE]<-(Ratios[HALFSIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxFStart[HALFSIZE])*GrossMigrationAdjustLevel
-#            SGrossMigAdj_F[HALFSIZE,HALFSIZE]<-SGrossMigAdj_F[HALFSIZE,HALFSIZE-1]<-RatiosGrossMigAdj[HALFSIZE]
+#            SGrossMigAdj_F[HALFSIZE,HALFSIZE]<-SGrossMigAdj_F[HALFSIZE,HALFSIZE-1]
 #            S_F<-SGrossMigAdj_F
 #            A_F<-B_F+S_F
-#           
-#            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMStart[i-HALFSIZE])*GrossMigrationAdjustLevel}
+#            
+#            for (i in (HALFSIZE+2):SIZE) {RatiosGrossMigAdj[i]<-(Ratios[i]-SxMStart[i-HALFSIZE])*GrossMigrationAdjustLevel+SxMStart[i-HALFSIZE]}
 #            SGrossMigAdj_M<-array(0,c(HALFSIZE,HALFSIZE))
 #            SGrossMigAdj_M<-rbind(0,cbind(diag(RatiosGrossMigAdj[(HALFSIZE+2):SIZE]),0))
 #            ##OPEN-ENDED AGE GROUP (MALE)
-#            RatiosGrossMigAdj[SIZE]<-(Ratios[SIZE]-1)*(1-GrossMigrationAdjustLevel)+1-(1-SxMStart[HALFSIZE])*GrossMigrationAdjustLevel
-#            SGrossMigAdj_M[HALFSIZE,HALFSIZE]<-SGrossMigAdj_M[HALFSIZE,HALFSIZE-1]<-RatiosGrossMigAdj[SIZE]
+#            SGrossMigAdj_M[HALFSIZE,HALFSIZE]<-SGrossMigAdj_M[HALFSIZE,HALFSIZE-1]
 #            S_M<-SGrossMigAdj_M
-#        }
+#            }
 
 	##CONSTRUCT PROJECTION MATRICES WITH SURVIVAL ADJUSTMENT
 	SAdj_F<-array(0,c(HALFSIZE,HALFSIZE,ITER))
@@ -153,6 +150,11 @@ if(CURRENTSTEP<2) {NetMigrAdjust<-array(0,ITER)}
 			{TMinusZeroAge[1,,i]<-(ImpliedTFR[i]*ImposedTFR_ar[i]+ImposedTFR[i]*(1-ImposedTFR_ar[i])+rnorm(1,0,ImposedTFR_se[i]))*(sum(TMinusZeroAge[4:10,,i])/FERTWIDTH)*5*ffab
 			TMinusZeroAge[HALFSIZE+1,,i]<-(ImpliedTFR[i]*ImposedTFR_ar[i]+ImposedTFR[i]*(1-ImposedTFR_ar[i])+rnorm(1,0,ImposedTFR_se[i]))*(sum(TMinusZeroAge[4:10,,i])/FERTWIDTH)*5*(1-ffab)}}
 
+		if(UseImposedTFR=="NO"){ 
+			for (i in 1:ITER){
+			TMinusZeroAge[1,,i]<-ImpliedTFR[i]*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*ffab
+			TMinusZeroAge[HALFSIZE+1,,i]<-ImpliedTFR[i]*(sum(TMinusZeroAge[4:10])/FERTWIDTH)*5*(1-ffab)}}
+						
 	##CALCULATE iTFR
 	ImpliedTFR<-array(0,ITER)
 	for (i in 1:ITER){ImpliedTFR[i]<-((TMinusZeroAge[1,,i]+TMinusZeroAge[HALFSIZE+1,,i])/5)/sum(TMinusZeroAge[4:10,,i])*FERTWIDTH}
