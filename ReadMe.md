@@ -17,7 +17,7 @@ References, resources, and related info:
     -R: https://www.r-project.org/
     -Shiny for R: https://shiny.rstudio.com/
 
-  Description and formulas used: 
+  Description, formulas used, and spreadsheet demonstration: 
     -Hunsinger (2020 and 2021): https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation 
   
   Population estimates inputs: 
