@@ -1,7 +1,7 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP - APPLIED TO 117th CONGRESSIONAL DISTRICTS BY PARTY REPRESENTATION
 ##
-##EDDIE HUNSINGER, JANUARY 2021 (UPDATED DECEMBER 2021)
+##EDDIE HUNSINGER, JANUARY 2021 (UPDATED JANUARY 2022)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
@@ -108,7 +108,26 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "January 2021 (updated December 2021)."),
+        "January 2021 (updated January 2022)."),
+
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"formulas, a spreadsheet demonstration, and slides for a related talk, "),
+	"as well as ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+	"code with input files for several examples, including a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/",
+		"stochastic version, "), 
+	"an ",	
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+		"errors review version"), 
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+	"is all available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository.")),
       
       p("Population estimates inputs based on the US Census Bureau's American Community Survey data, ",
         tags$a(href="https://github.com/schmert/bonecave/blob/master/demography-US-congressional-districts/population-pyramids-by-party.R", 
@@ -152,30 +171,6 @@ options = list(placeholder = "Type in a party to see graphs", multiple = TRUE, m
       p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
-      p("Information including ", 
-	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
-		"slides"),
-
-	"for a related talk, and ",
-	tags$a(href="https://www.r-project.org/",
-		"R"),
-
-	"code with input files for several examples, including an ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
-		"errors review version, "), 
-
-	"a ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
-		"single-year-of-age version, "), 
-
-	"and a ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/", 
-		"stochastic version, "), 
-
-	"is available in the ",
-	tags$a(href="https://github.com/edyhsgr/CCRStable", 
-		"related GitHub repository."),
-    ),
       width=3
     ),
     
@@ -712,3 +707,4 @@ if(input$Party=="Republican") {TMinusZeroAgeRatios_M<-MaleRepublican2019}
 }
 
 shinyApp(ui = ui, server = server) 
+
