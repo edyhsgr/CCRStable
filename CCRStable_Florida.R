@@ -1,7 +1,7 @@
 ##########
 ##R CODE FOR COHORT CHANGE RATIO-BASED (HAMILTON-PERRY) WITH COMPONENTS AND STABLE POPULATION REVIEW SHINY APP - APPLIED TO FLORIDA COUNTIES
 ##
-##EDDIE HUNSINGER, AUGUST 2019 (UPDATED DECEMBER 2021)
+##EDDIE HUNSINGER, AUGUST 2019 (UPDATED JANUARY 2022)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##APPLIED DEMOGRAPHY TOOLBOX LISTING: https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
@@ -188,7 +188,26 @@ ui<-fluidPage(
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "August 2019 (updated December 2021)."),
+        "August 2019 (updated January 2022)."),
+
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"formulas, a spreadsheet demonstration, and slides for a related talk, "),
+	"as well as ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+	"code with input files for several examples, including a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/",
+		"stochastic version, "), 
+	"an ",	
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+		"errors review version"), 
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+	"is all available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository.")),
       
       p("Population estimates inputs from ",
         tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
@@ -232,31 +251,6 @@ ui<-fluidPage(
       p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
-      p("Information including ", 
-	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
-		"slides"),
-	"for a related talk, and ",
-
-	tags$a(href="https://www.r-project.org/",
-		"R"),
-
-	"code with input files for several examples, including an ",
-
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
-		"errors review version, "), 
-
-	"a ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
-		"single-year-of-age version, "), 
-
-	"and a ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/", 
-		"stochastic version, "), 
-
-	"is available in the ",
-	tags$a(href="https://github.com/edyhsgr/CCRStable", 
-		"related GitHub repository."),
-    ),
     width=3
     ),
     
@@ -789,4 +783,3 @@ if(input$County!="") {
 }
 
 shinyApp(ui = ui, server = server) 
-
