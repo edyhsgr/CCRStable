@@ -187,8 +187,24 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         tags$a(href="https://edyhsgr.github.io/eddieh/", 
                "Eddie Hunsinger,"), 
         
-        "October 2020 (updated December 2021)."),
-      
+        "October 2020 (updated January 2022)."),
+
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"formulas, a spreadsheet demonstration, and slides for a related talk, "),
+	"as well as ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+	"code with input files for several examples, including a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/",
+		"stochastic version "), 
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+	"is all available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository.")),
+
       p("Population estimates inputs from ",
         tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
                "US Census Bureau Vintage 2019 Population Estimates.")),
@@ -231,26 +247,6 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
       p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
-      p("Information including ", 
-	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
-		"slides"),
-
-	"for a related talk, and ",
-	tags$a(href="https://www.r-project.org/",
-		"R"),
-
-	"code with input files for several examples, including a ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
-		"single-year-of-age version "), 
-
-	"and a ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/", 
-		"stochastic version, "), 
-
-	"is available in the ",
-	tags$a(href="https://github.com/edyhsgr/CCRStable", 
-		"related GitHub repository."),
-    ),
       width=3
     ),
     
@@ -948,6 +944,5 @@ if(input$STEP>2015) {
 }
 
 shinyApp(ui = ui, server = server) 
-
 
 
