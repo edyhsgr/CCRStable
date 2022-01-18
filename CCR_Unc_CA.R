@@ -138,14 +138,11 @@ ui<-fluidPage(
       
       hr(),
       
-      selectInput("ImputeMort", "Impute mortality?",
-                  c(
-                    "Yes"="YES",
-                    "No"="NO"
-                  ),
-      ),
+      #selectInput("ImputeMort", "Impute mortality?",
+      #            c("Yes"="YES","No"="NO"),
+      #),
       
-      sliderInput("BAStart","If yes, Brass' model alpha for First projection step (range inputs give uniform range option, for uncertain drift, etc.)",min=-.5,max=.5,value=c(.03,.03),step=0.01),
+      sliderInput("BAStart","Brass' mortality model alpha for First projection step (range inputs give uniform range option, for uncertain drift, etc.)",min=-.5,max=.5,value=c(.03,.03),step=0.01),
       sliderInput("BAEnd","...and Brass' model alpha drift term (increase per step)",min=-.5,max=.5,value=c(.03,.03),step=0.01),
       sliderInput("BA_se","...and Brass' model alpha standard error term",min=0,max=.25,value=c(.02,.02),step=0.01),
       
@@ -160,6 +157,25 @@ ui<-fluidPage(
         
         "November 2020 (updated January 2022)."),
       
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"formulas, a spreadsheet demonstration, and slides for a related talk, "),
+	"as well as ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+	"code with input files for several examples, including the ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable/",
+		"main stable population review version "), 
+	"that it's based on, an ",	
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+		"errors review version"), 
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+	"is all available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository.")),
+
       p("Population estimates inputs from ",
         tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
                "US Census Bureau Vintage 2019 Population Estimates.")),
@@ -202,26 +218,6 @@ ui<-fluidPage(
       p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
-      p("Information including ", 
-	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
-		"slides"),
-
-	"for a related talk, and ",
-	tags$a(href="https://www.r-project.org/",
-		"R"),
-
-	"code with input files for several examples, including an ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
-		"errors review version"), 
-
-	"and a ",
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
-		"single-year-of-age version, "), 
-
-	"is available in the ",
-	tags$a(href="https://github.com/edyhsgr/CCRStable", 
-		"related GitHub repository."),
-    ),
       width=3
     ),
     
@@ -303,10 +299,10 @@ BA_start_init<-BA_start
 BA_end<-array(runif(ITER,input$BAEnd[1],input$BAEnd[2]))
 BA_se<-array(runif(ITER,input$BA_se[1],input$BA_se[2]))
 BB<-1
-ImputeMort<-input$ImputeMort
+#ImputeMort<-input$ImputeMort
 
-if(ImputeMort=="NO") {for (i in 1:ITER) {BA_start[i]<-BA_end[i]<-1}}
-if(ImputeMort=="NO") {for (i in 1:ITER) {BA_se[i]<-0}}
+#if(ImputeMort=="NO") {for (i in 1:ITER) {BA_start[i]<-BA_end[i]<-1}}
+#if(ImputeMort=="NO") {for (i in 1:ITER) {BA_se[i]<-0}}
 
 ##SELECT BY SEX
 SelectBySex<-"Total"
@@ -417,7 +413,8 @@ SurvChange<-array(0,ITER)
 SurvChange_e<-array(0,ITER)
 		##ADDING TO BRASS ALPHA WITH EACH STEP
 		for (i in 1:ITER) {SurvChange_e[i]<-rnorm(1,0,BA_se[i])}
-		if(ImputeMort=="YES") {for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_e[i]}}
+		#if(ImputeMort=="YES") {for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_e[i]}}
+		for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_e[i]}
 		for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
 	source("https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA_Supporting_Project.R",local=TRUE)
 		
@@ -452,7 +449,6 @@ SurvChange_e<-array(0,ITER)
 	CURRENTSTEP <- CURRENTSTEP+1
 
 	if(CURRENTSTEP > STEPS) {break}}
-
 	}
 
     ##########
@@ -499,7 +495,7 @@ agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
        
 ##FIRST GRAPH - PYRAMID (FEMALE PORTION)
     barplot2(NewAge_F,plot.ci=TRUE,ci.l=NewAge_F_Low,ci.u=NewAge_F_High,horiz=T,names=agegroups,cex.main=2,cex.names=1.2,cex.axis=1.5,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
-#mtext(side=1,c((e0FAdj[1])),line=0,adj=.29,col="dark green")
+#mtext(side=1,c(sum(NewAge_T[1:18])),line=-10,adj=.29,col="dark green")
 
 ##SECOND GRAPH - PYRAMID (MALE PORTION)
     barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,cex.main=2,cex.names=1.25,cex.axis=1.5,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
@@ -535,4 +531,3 @@ plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step End Year",ylab="",m
 }
 
 shinyApp(ui = ui, server = server) 
-
