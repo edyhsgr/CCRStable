@@ -183,6 +183,10 @@ ui<-fluidPage(
       p(" More information on cohort change ratios: ",
         tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
                "Baker, Swanson, Tayman, and Tedrow (2017)."),
+
+       p("Supporting work and thinking on stochastic population projection: ",
+        tags$a(href="https://applieddemogtoolbox.github.io/#StochasticForecast", 
+               "Hunsinger (2011).")),
         
         p("More information on iTFR: ",
           tags$a(href="https://osf.io/adu98/", 
@@ -214,10 +218,6 @@ ui<-fluidPage(
         "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
         tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
-
-       p("Supporting work and thinking on stochastic population projection: ",
-        tags$a(href="https://applieddemogtoolbox.github.io/#StochasticForecast", 
-               "Hunsinger (2011).")),
 
       p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
              "Applied Demography Toolbox listing.")),
@@ -535,3 +535,4 @@ plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step End Year",ylab="",m
 }
 
 shinyApp(ui = ui, server = server) 
+
