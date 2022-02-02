@@ -180,7 +180,7 @@ ui<-fluidPage(
         tags$a(href="https://www.census.gov/programs-surveys/popest.html", 
                "US Census Bureau Vintage 2019 Population Estimates.")),
       
-      p(" More information on cohort change ratios, including a chapter on stable population: ",
+      p(" More information on cohort change ratios: ",
         tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
                "Baker, Swanson, Tayman, and Tedrow (2017)."),
         
@@ -214,7 +214,11 @@ ui<-fluidPage(
         "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
         tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
-      
+
+       p("Supporting work and thinking on stochastic population projection: ",
+        tags$a(href="https://applieddemogtoolbox.github.io/#StochasticForecast", 
+               "Hunsinger (2011).")),
+
       p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
