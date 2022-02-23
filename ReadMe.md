@@ -58,7 +58,7 @@ References, resources, and related info:
   Related Shiny for R application: 
     -(Hunsinger 2019) https://shiny.demog.berkeley.edu/eddieh/CCRStable/
     
--Eddie Hunsinger, August 2019 (updated January 2022)
+-Eddie Hunsinger, August 2019 (updated February 2022)
 
 -----
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/igo/">Creative Commons Attribution-ShareAlike 3.0 International License</a>.
