@@ -4,7 +4,7 @@ R CODE FOR HAMILTON-PERRY PROJECTION WITH COMPONENTS AND STABLE POPULATION INFOR
 -----
 Some ideas for potential future work: 
       -possible cohort change ratios averaging and/or trending (on longer time series of single-year data)
-      -employment-based migration setup
+      -employment- and/or housing-based migration setup
             (following https://applieddemogtoolbox.github.io/Toolbox/#EmplPopHousProj)
       -use of uncertain starting data (along with stochastic option) as a potential way to manage uncertain from Differential Privacy on inputs
       -optimize input indices (selected, etc) for fit to historical data (to better see/understand best-possible) (may not be helpful, but may be interesting)
