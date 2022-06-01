@@ -280,12 +280,12 @@ server<-function(input, output) {
 
 ##UPDATE 1-TO-4 YEAR OLD POPULATION ROWS IN K_INT WITH 0-TO-4 YEAR OLD POPULATION ROWS
 K_Int0to4Subset<-subset(K_Int,K_Int$AGEGRP<2)
-K_Int0to4_TOT<-aggregate(K_Int0to4Subset$TOT_POP,by=list(K_Int0to4Subset$CTYNAME,K_Int0to4Subset$YEAR),FUN=sum)
+K_Int0to4_TOT<-setNames(aggregate(K_Int0to4Subset$TOT_POP,by=list(K_Int0to4Subset$CTYNAME,K_Int0to4Subset$YEAR),FUN=sum),c("Group1","Group2","x"))
 K_Int0to4_MALE<-aggregate(K_Int0to4Subset$TOT_MALE,by=list(K_Int0to4Subset$CTYNAME,K_Int0to4Subset$YEAR),FUN=sum)
 K_Int0to4_FEMALE<-aggregate(K_Int0to4Subset$TOT_FEMALE,by=list(K_Int0to4Subset$CTYNAME,K_Int0to4Subset$YEAR),FUN=sum)
 AGEGRP<-data.frame(array(1,dim=nrow(K_Int0to4_TOT)))
 names(AGEGRP)<-"AGEGRP"
-K_Int0to4<-data.frame(cbind(K_Int0to4_TOT$Group.1,K_Int0to4_TOT$Group.2,AGEGRP$AGEGRP,K_Int0to4_TOT$x,K_Int0to4_MALE$x,K_Int0to4_FEMALE$x))
+K_Int0to4<-data.frame(cbind(K_Int0to4_TOT$Group1,K_Int0to4_TOT$Group2,AGEGRP$AGEGRP,K_Int0to4_TOT$x,K_Int0to4_MALE$x,K_Int0to4_FEMALE$x))
 names(K_Int0to4)<-c("CTYNAME","YEAR","AGEGRP","TOT_POP","TOT_MALE","TOT_FEMALE")
 K_Int0to4$TOT_POP<-as.numeric(K_Int0to4$TOT_POP)
 K_Int0to4$TOT_MALE<-as.numeric(K_Int0to4$TOT_MALE)
@@ -944,5 +944,4 @@ if(input$STEP>2015) {
 }
 
 shinyApp(ui = ui, server = server) 
-
 
