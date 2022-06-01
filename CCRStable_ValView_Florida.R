@@ -184,7 +184,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         tags$a(href="https://shiny.rstudio.com/", 
                "Shiny for R."),
         
-        tags$a(href="https://edyhsgr.github.io/eddieh/", 
+        tags$a(href="https://edyhsgr.github.io/", 
                "Eddie Hunsinger,"), 
         
         "October 2020 (updated January 2022)."),
@@ -244,7 +244,7 @@ options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, 
         tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+      p(tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
       width=3
