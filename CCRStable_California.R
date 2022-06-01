@@ -222,7 +222,7 @@ ui<-fluidPage(
           tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+      p(tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
     width=3
