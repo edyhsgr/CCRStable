@@ -115,7 +115,7 @@ ui<-fluidPage(
         tags$a(href="https://shiny.rstudio.com/", 
                "Shiny for R."),
         
-        tags$a(href="https://edyhsgr.github.io/eddieh/", 
+        tags$a(href="https://edyhsgr.github.io/", 
                "Eddie Hunsinger,"), 
         
         "August 2019 (updated January 2022)."),
@@ -130,7 +130,7 @@ ui<-fluidPage(
 	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/",
 		"stochastic version "), 
 	"and an ",	
-	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_ValView_Florida/",
+	tags$a(href="https://edyhsgr.shinyapps.io/CCRStable_ValView_Florida/",
 		"errors review version"), 
 	"is all available in the ",
 	tags$a(href="https://github.com/edyhsgr/CCRStable", 
@@ -175,7 +175,7 @@ ui<-fluidPage(
           tags$a(href="https://usa.mortality.org/index.php", 
                "United States Mortality Database.")),
       
-      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+      p(tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
     width=3
