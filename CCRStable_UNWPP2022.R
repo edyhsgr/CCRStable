@@ -22,7 +22,7 @@
 library(shiny)
 ui<-fluidPage(
   
-  tags$h3("DRAFTING - Cohort Change Ratio-Based Stable Population Review Shiny App - Applied to UN WPP 2022 Data - DRAFTING"),
+  tags$h3("DRAFTING - Cohort Change Ratio-Based Stable Population Review Shiny App - Applied to UN WPP 2022 Data"),
   p("Related information and ",
     tags$a(href="https://www.r-project.org/", "R"),
     "code available at: ",
@@ -37,234 +37,280 @@ ui<-fluidPage(
 
 	selectizeInput(inputId = "Area", label = "Area", 
 	choices = c(
-"Africa"="Africa",
-"Asia"="Asia",
-"Europe"="Europe",
-"Latin America and the Caribbean"="Latin America and the Caribbean",
-"Northern America"="Northern America",
-"Oceania"="Oceania",
-"Eastern Africa"="Eastern Africa",
-"Burundi"="Burundi",
-"Comoros"="Comoros",
-"Djibouti"="Djibouti",
-"Eritrea"="Eritrea",
-"Ethiopia"="Ethiopia",
-"Kenya"="Kenya",
-"Madagascar"="Madagascar",
-"Malawi"="Malawi",
-"Mauritius"="Mauritius",
-"Mayotte"="Mayotte",
-"Mozambique"="Mozambique",
-"RÃ©union"="RÃ©union",
-"Rwanda"="Rwanda",
-"Seychelles"="Seychelles",
-"Somalia"="Somalia",
-"South Sudan"="South Sudan",
-"Uganda"="Uganda",
-"United Republic of Tanzania"="United Republic of Tanzania",
-"Zambia"="Zambia",
-"Zimbabwe"="Zimbabwe",
-"Middle Africa"="Middle Africa",
-"Angola"="Angola",
-"Cameroon"="Cameroon",
-"Central African Republic"="Central African Republic",
-"Chad"="Chad",
-"Congo"="Congo",
-"Democratic Republic of the Congo"="Democratic Republic of the Congo",
-"Equatorial Guinea"="Equatorial Guinea",
-"Gabon"="Gabon",
-"Sao Tome and Principe"="Sao Tome and Principe",
-"Southern Africa"="Southern Africa",
-"Botswana"="Botswana",
-"Eswatini"="Eswatini",
-"Lesotho"="Lesotho",
-"Namibia"="Namibia",
-"South Africa"="South Africa",
-"Western Africa"="Western Africa",
-"Benin"="Benin",
-"Burkina Faso"="Burkina Faso",
-"Cabo Verde"="Cabo Verde",
-"CÃ´te d'Ivoire"="CÃ´te d'Ivoire",
-"Gambia"="Gambia",
-"Ghana"="Ghana",
-"Guinea"="Guinea",
-"Guinea-Bissau"="Guinea-Bissau",
-"Liberia"="Liberia",
-"Mali"="Mali",
-"Mauritania"="Mauritania",
-"Niger"="Niger",
-"Nigeria"="Nigeria",
-"Senegal"="Senegal",
-"Sierra Leone"="Sierra Leone",
-"Togo"="Togo",
-"Northern Africa"="Northern Africa",
-"Algeria"="Algeria",
-"Egypt"="Egypt",
-"Libya"="Libya",
-"Morocco"="Morocco",
-"Sudan"="Sudan",
-"Tunisia"="Tunisia",
-"Western Sahara"="Western Sahara",
-"Western Asia"="Western Asia",
-"Armenia"="Armenia",
-"Azerbaijan"="Azerbaijan",
-"Bahrain"="Bahrain",
-"Cyprus"="Cyprus",
-"Georgia"="Georgia",
-"Iraq"="Iraq",
-"Israel"="Israel",
-"Jordan"="Jordan",
-"Kuwait"="Kuwait",
-"Lebanon"="Lebanon",
-"Oman"="Oman",
-"Qatar"="Qatar",
-"Saudi Arabia"="Saudi Arabia",
-"State of Palestine"="State of Palestine",
-"Syrian Arab Republic"="Syrian Arab Republic",
-"Turkey"="Turkey",
-"United Arab Emirates"="United Arab Emirates",
-"Yemen"="Yemen",
-"Central Asia"="Central Asia",
-"Kazakhstan"="Kazakhstan",
-"Kyrgyzstan"="Kyrgyzstan",
-"Tajikistan"="Tajikistan",
-"Turkmenistan"="Turkmenistan",
-"Uzbekistan"="Uzbekistan",
-"Southern Asia"="Southern Asia",
 "Afghanistan"="Afghanistan",
-"Bangladesh"="Bangladesh",
-"Bhutan"="Bhutan",
-"India"="India",
-"Iran (Islamic Republic of)"="Iran (Islamic Republic of)",
-"Maldives"="Maldives",
-"Nepal"="Nepal",
-"Pakistan"="Pakistan",
-"Sri Lanka"="Sri Lanka",
-"Eastern Asia"="Eastern Asia",
-"China"="China",
-"China, Hong Kong SAR"="China, Hong Kong SAR",
-"China, Macao SAR"="China, Macao SAR",
-"China, Taiwan Province of China"="China, Taiwan Province of China",
-"Dem. People's Republic of Korea"="Dem. People's Republic of Korea",
-"Japan"="Japan",
-"Mongolia"="Mongolia",
-"Republic of Korea"="Republic of Korea",
-"South-Eastern Asia"="South-Eastern Asia",
-"Brunei Darussalam"="Brunei Darussalam",
-"Cambodia"="Cambodia",
-"Indonesia"="Indonesia",
-"Lao People's Democratic Republic"="Lao People's Democratic Republic",
-"Malaysia"="Malaysia",
-"Myanmar"="Myanmar",
-"Philippines"="Philippines",
-"Singapore"="Singapore",
-"Thailand"="Thailand",
-"Timor-Leste"="Timor-Leste",
-"Viet Nam"="Viet Nam",
-"Caribbean"="Caribbean",
+"Albania"="Albania",
+"Algeria"="Algeria",
+"American Samoa"="American Samoa",
+"Andorra"="Andorra",
+"Angola"="Angola",
 "Antigua and Barbuda"="Antigua and Barbuda",
-"Aruba"="Aruba",
+"Azerbaijan"="Azerbaijan",
+"Argentina"="Argentina",
+"Australia"="Australia",
+"Austria"="Austria",
 "Bahamas"="Bahamas",
+"Bahrain"="Bahrain",
+"Bangladesh"="Bangladesh",
+"Armenia"="Armenia",
 "Barbados"="Barbados",
+"Belgium"="Belgium",
+"Bermuda"="Bermuda",
+"Bhutan"="Bhutan",
+"Bolivia (Plurinational State of)"="Bolivia (Plurinational State of)",
+"Bosnia and Herzegovina"="Bosnia and Herzegovina",
+"Botswana"="Botswana",
+"Brazil"="Brazil",
+"Belize"="Belize",
+"Solomon Islands"="Solomon Islands",
+"British Virgin Islands"="British Virgin Islands",
+"Brunei Darussalam"="Brunei Darussalam",
+"Bulgaria"="Bulgaria",
+"Myanmar"="Myanmar",
+"Burundi"="Burundi",
+"Belarus"="Belarus",
+"Cambodia"="Cambodia",
+"Cameroon"="Cameroon",
+"Canada"="Canada",
+"Cabo Verde"="Cabo Verde",
+"Cayman Islands"="Cayman Islands",
+"Central African Republic"="Central African Republic",
+"Sri Lanka"="Sri Lanka",
+"Chad"="Chad",
+"Chile"="Chile",
+"China"="China",
+"China, Taiwan Province of China"="China, Taiwan Province of China",
+"Colombia"="Colombia",
+"Comoros"="Comoros",
+"Mayotte"="Mayotte",
+"Congo"="Congo",
+"Dem. Rep. of the Congo"="Dem. Rep. of the Congo",
+"Cook Islands"="Cook Islands",
+"Costa Rica"="Costa Rica",
+"Croatia"="Croatia",
 "Cuba"="Cuba",
-"CuraÃ§ao"="CuraÃ§ao",
+"Cyprus"="Cyprus",
+"Czechia"="Czechia",
+"Benin"="Benin",
+"Denmark"="Denmark",
+"Dominica"="Dominica",
 "Dominican Republic"="Dominican Republic",
+"Ecuador"="Ecuador",
+"El Salvador"="El Salvador",
+"Equatorial Guinea"="Equatorial Guinea",
+"Ethiopia"="Ethiopia",
+"Eritrea"="Eritrea",
+"Estonia"="Estonia",
+"Faroe Islands"="Faroe Islands",
+"Falkland Islands (Malvinas)"="Falkland Islands (Malvinas)",
+"Fiji"="Fiji",
+"Finland"="Finland",
+"France"="France",
+"French Guiana"="French Guiana",
+"French Polynesia"="French Polynesia",
+"Djibouti"="Djibouti",
+"Gabon"="Gabon",
+"Georgia"="Georgia",
+"Gambia"="Gambia",
+"State of Palestine"="State of Palestine",
+"Germany"="Germany",
+"Ghana"="Ghana",
+"Gibraltar"="Gibraltar",
+"Kiribati"="Kiribati",
+"Greece"="Greece",
+"Greenland"="Greenland",
 "Grenada"="Grenada",
 "Guadeloupe"="Guadeloupe",
-"Haiti"="Haiti",
-"Jamaica"="Jamaica",
-"Martinique"="Martinique",
-"Puerto Rico"="Puerto Rico",
-"Saint Lucia"="Saint Lucia",
-"Saint Vincent and the Grenadines"="Saint Vincent and the Grenadines",
-"Trinidad and Tobago"="Trinidad and Tobago",
-"United States Virgin Islands"="United States Virgin Islands",
-"Central America"="Central America",
-"Belize"="Belize",
-"Costa Rica"="Costa Rica",
-"El Salvador"="El Salvador",
+"Guam"="Guam",
 "Guatemala"="Guatemala",
-"Honduras"="Honduras",
-"Mexico"="Mexico",
-"Nicaragua"="Nicaragua",
-"Panama"="Panama",
-"South America"="South America",
-"Argentina"="Argentina",
-"Bolivia (Plurinational State of)"="Bolivia (Plurinational State of)",
-"Brazil"="Brazil",
-"Chile"="Chile",
-"Colombia"="Colombia",
-"Ecuador"="Ecuador",
-"French Guiana"="French Guiana",
+"Guinea"="Guinea",
 "Guyana"="Guyana",
+"Haiti"="Haiti",
+"Honduras"="Honduras",
+"China, Hong Kong SAR"="China, Hong Kong SAR",
+"Hungary"="Hungary",
+"Iceland"="Iceland",
+"India"="India",
+"Indonesia"="Indonesia",
+"Iran (Islamic Republic of)"="Iran (Islamic Republic of)",
+"Iraq"="Iraq",
+"Ireland"="Ireland",
+"Israel"="Israel",
+"Italy"="Italy",
+"CÃ´te d'Ivoire"="CÃ´te d'Ivoire",
+"Jamaica"="Jamaica",
+"Japan"="Japan",
+"Kazakhstan"="Kazakhstan",
+"Jordan"="Jordan",
+"Kenya"="Kenya",
+"Dem. People's Rep. of Korea"="Dem. People's Rep. of Korea",
+"Republic of Korea"="Republic of Korea",
+"Kuwait"="Kuwait",
+"Kyrgyzstan"="Kyrgyzstan",
+"Lao People's Dem. Republic"="Lao People's Dem. Republic",
+"Lebanon"="Lebanon",
+"Lesotho"="Lesotho",
+"Latvia"="Latvia",
+"Liberia"="Liberia",
+"Libya"="Libya",
+"Liechtenstein"="Liechtenstein",
+"Lithuania"="Lithuania",
+"Luxembourg"="Luxembourg",
+"China, Macao SAR"="China, Macao SAR",
+"Madagascar"="Madagascar",
+"Malawi"="Malawi",
+"Malaysia"="Malaysia",
+"Maldives"="Maldives",
+"Mali"="Mali",
+"Malta"="Malta",
+"Martinique"="Martinique",
+"Mauritania"="Mauritania",
+"Mauritius"="Mauritius",
+"Mexico"="Mexico",
+"Monaco"="Monaco",
+"Mongolia"="Mongolia",
+"Republic of Moldova"="Republic of Moldova",
+"Montenegro"="Montenegro",
+"Montserrat"="Montserrat",
+"Morocco"="Morocco",
+"Mozambique"="Mozambique",
+"Oman"="Oman",
+"Namibia"="Namibia",
+"Nauru"="Nauru",
+"Nepal"="Nepal",
+"Netherlands"="Netherlands",
+"CuraÃ§ao"="CuraÃ§ao",
+"Aruba"="Aruba",
+"Sint Maarten (Dutch part)"="Sint Maarten (Dutch part)",
+"Bonaire, Sint Eustatius and Saba"="Bonaire, Sint Eustatius and Saba",
+"New Caledonia"="New Caledonia",
+"Vanuatu"="Vanuatu",
+"New Zealand"="New Zealand",
+"Nicaragua"="Nicaragua",
+"Niger"="Niger",
+"Nigeria"="Nigeria",
+"Niue"="Niue",
+"Norway"="Norway",
+"Northern Mariana Islands"="Northern Mariana Islands",
+"Micronesia (Fed. States of)"="Micronesia (Fed. States of)",
+"Marshall Islands"="Marshall Islands",
+"Palau"="Palau",
+"Pakistan"="Pakistan",
+"Panama"="Panama",
+"Papua New Guinea"="Papua New Guinea",
 "Paraguay"="Paraguay",
 "Peru"="Peru",
-"Suriname"="Suriname",
-"Uruguay"="Uruguay",
-"Venezuela (Bolivarian Republic of)"="Venezuela (Bolivarian Republic of)",
-"Australia"="Australia",
-"New Zealand"="New Zealand",
-"Melanesia"="Melanesia",
-"Fiji"="Fiji",
-"New Caledonia"="New Caledonia",
-"Papua New Guinea"="Papua New Guinea",
-"Solomon Islands"="Solomon Islands",
-"Vanuatu"="Vanuatu",
-"Micronesia"="Micronesia",
-"Guam"="Guam",
-"Kiribati"="Kiribati",
-"Micronesia (Fed. States of)"="Micronesia (Fed. States of)",
-"Polynesia"="Polynesia",
-"French Polynesia"="French Polynesia",
-"Samoa"="Samoa",
-"Tonga"="Tonga",
-"EUROPE"="EUROPE",
-"Eastern Europe"="Eastern Europe",
-"Belarus"="Belarus",
-"Bulgaria"="Bulgaria",
-"Czechia"="Czechia",
-"Hungary"="Hungary",
+"Philippines"="Philippines",
 "Poland"="Poland",
-"Republic of Moldova"="Republic of Moldova",
+"Portugal"="Portugal",
+"Guinea-Bissau"="Guinea-Bissau",
+"Timor-Leste"="Timor-Leste",
+"Puerto Rico"="Puerto Rico",
+"Qatar"="Qatar",
+"RÃ©union"="RÃ©union",
 "Romania"="Romania",
 "Russian Federation"="Russian Federation",
-"Slovakia"="Slovakia",
-"Ukraine"="Ukraine",
-"Northern Europe"="Northern Europe",
-"Channel Islands"="Channel Islands",
-"Denmark"="Denmark",
-"Estonia"="Estonia",
-"Finland"="Finland",
-"Iceland"="Iceland",
-"Ireland"="Ireland",
-"Latvia"="Latvia",
-"Lithuania"="Lithuania",
-"Norway"="Norway",
-"Sweden"="Sweden",
-"United Kingdom"="United Kingdom",
-"Southern Europe"="Southern Europe",
-"Albania"="Albania",
-"Bosnia and Herzegovina"="Bosnia and Herzegovina",
-"Croatia"="Croatia",
-"Greece"="Greece",
-"Italy"="Italy",
-"Malta"="Malta",
-"Montenegro"="Montenegro",
-"North Macedonia"="North Macedonia",
-"Portugal"="Portugal",
+"Rwanda"="Rwanda",
+"Saint Helena"="Saint Helena",
+"Saint Kitts and Nevis"="Saint Kitts and Nevis",
+"Anguilla"="Anguilla",
+"Saint Lucia"="Saint Lucia",
+"Saint Pierre and Miquelon"="Saint Pierre and Miquelon",
+"Saint Vincent and the Grenadines"="Saint Vincent and the Grenadines",
+"San Marino"="San Marino",
+"Sao Tome and Principe"="Sao Tome and Principe",
+"Saudi Arabia"="Saudi Arabia",
+"Senegal"="Senegal",
 "Serbia"="Serbia",
+"Seychelles"="Seychelles",
+"Sierra Leone"="Sierra Leone",
+"Singapore"="Singapore",
+"Slovakia"="Slovakia",
+"Viet Nam"="Viet Nam",
 "Slovenia"="Slovenia",
+"Somalia"="Somalia",
+"South Africa"="South Africa",
+"Zimbabwe"="Zimbabwe",
 "Spain"="Spain",
-"Western Europe"="Western Europe",
-"Austria"="Austria",
-"Belgium"="Belgium",
-"France"="France",
-"Germany"="Germany",
-"Luxembourg"="Luxembourg",
-"Netherlands"="Netherlands",
+"South Sudan"="South Sudan",
+"Sudan"="Sudan",
+"Western Sahara"="Western Sahara",
+"Suriname"="Suriname",
+"Eswatini"="Eswatini",
+"Sweden"="Sweden",
 "Switzerland"="Switzerland",
-"Canada"="Canada",
-"United States of America"="United States of America"
+"Syrian Arab Republic"="Syrian Arab Republic",
+"Tajikistan"="Tajikistan",
+"Thailand"="Thailand",
+"Togo"="Togo",
+"Tokelau"="Tokelau",
+"Tonga"="Tonga",
+"Trinidad and Tobago"="Trinidad and Tobago",
+"United Arab Emirates"="United Arab Emirates",
+"Tunisia"="Tunisia",
+"TÃ¼rkiye"="TÃ¼rkiye",
+"Turkmenistan"="Turkmenistan",
+"Turks and Caicos Islands"="Turks and Caicos Islands",
+"Tuvalu"="Tuvalu",
+"Uganda"="Uganda",
+"Ukraine"="Ukraine",
+"North Macedonia"="North Macedonia",
+"Egypt"="Egypt",
+"United Kingdom"="United Kingdom",
+"Isle of Man"="Isle of Man",
+"United Republic of Tanzania"="United Republic of Tanzania",
+"United States of America"="United States of America",
+"United States Virgin Islands"="United States Virgin Islands",
+"Burkina Faso"="Burkina Faso",
+"Uruguay"="Uruguay",
+"Uzbekistan"="Uzbekistan",
+"Venezuela (Bolivarian Republic of)"="Venezuela (Bolivarian Republic of)",
+"Wallis and Futuna Islands"="Wallis and Futuna Islands",
+"Samoa"="Samoa",
+"Yemen"="Yemen",
+"Zambia"="Zambia",
+"Developed regions"="Developed regions",
+"Developing regions"="Developing regions",
+"Africa"="Africa",
+"Latin America and the Caribbean"="Latin America and the Caribbean",
+"Northern America"="Northern America",
+"Eastern Asia"="Eastern Asia",
+"Europe"="Europe",
+"Oceania"="Oceania",
+"Eastern Africa"="Eastern Africa",
+"Middle Africa"="Middle Africa",
+"Northern Africa"="Northern Africa",
+"Southern Africa"="Southern Africa",
+"Western Africa"="Western Africa",
+"Caribbean"="Caribbean",
+"Central America"="Central America",
+"South-Eastern Asia"="South-Eastern Asia",
+"Western Asia"="Western Asia",
+"Eastern Europe"="Eastern Europe",
+"Northern Europe"="Northern Europe",
+"Southern Europe"="Southern Europe",
+"Western Europe"="Western Europe",
+"Australia/New Zealand"="Australia/New Zealand",
+"Melanesia"="Melanesia",
+"South America"="South America",
+"Other developing regions"="Other developing regions",
+"Asia"="Asia",
+"Least developed countries"="Least developed countries",
+"Sub-Saharan Africa"="Sub-Saharan Africa",
+"Micronesia"="Micronesia",
+"Polynesia"="Polynesia",
+"Low-income countries"="Low-income countries",
+"Lower-middle-income countries"="Lower-middle-income countries",
+"Upper-middle-income countries"="Upper-middle-income countries",
+"High-income countries"="High-income countries",
+"Middle-income countries"="Middle-income countries",
+"No income group available"="No income group available",
+"Europe and Northern America"="Europe and Northern America",
+"Central and Southern Asia"="Central and Southern Asia",
+"Eastern and South-Eastern Asia"="Eastern and South-Eastern Asia",
+"Northern Africa and Western Asia"="Northern Africa and Western Asia",
+"Oceania (excluding Australia and New Zealand)"="Oceania(excluding Australia and New Zealand)",
+"Central Asia"="Central Asia",
+"Southern Asia"="Southern Asia"
 	),
 	options = list(placeholder = "Type in an area to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
 	),
@@ -277,7 +323,7 @@ ui<-fluidPage(
                   ),
       ),
       
-      numericInput("STEP","Project to (year)",2030,2020,3000,step=5),
+      numericInput("STEP","Project to (year)",2030,2020,2100,step=5),
       
       selectInput("RatiosFrom", "Using ratios from",
                   c(
@@ -299,7 +345,7 @@ ui<-fluidPage(
                   ),
       ),
       
-      numericInput("ImposedTFR","If Yes, iTFR level",1.8,0,10,step=.1),
+      numericInput("ImposedTFR","If Yes, iTFR level",1.5,0,10,step=.1),
       numericInput("ImposedTFR_ar","If Yes, iTFR AR(1)",.90,.00,.99,step=.01),
 
       hr(),
@@ -333,6 +379,9 @@ ui<-fluidPage(
       selectInput("LifeTable", "Life table standard to use", selected="Albania",
                   c(
 		    "Albania 2011"="Albania",
+		    "Belgium 2010 to 2012"="Belgium",
+		    "Cameroon 2005"="Cameroon",
+		    "Korea (Republic of) 2017"="Korea",
 		    "Venezuela 2010"="Venezuela"
                   ),
       ),
@@ -398,12 +447,15 @@ ui<-fluidPage(
           American Community Survey Public Use Microdata Sample, accessed via the ", 
           tags$a(href="https://usa.ipums.org/usa/", 
                  "IPUMS USA, University of Minnesota.")),
+
+         p(tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
+               "Graph of e0 and Brass' relational life table alpha by US state.")),
         
           "Life tables are from the ",
           tags$a(href="https://www.lifetable.de/", 
                "Human Life Table Database.")),
       
-      p(tags$a(href="https://applieddemogtoolbox.github.io/Toolbox/#CCRStable", 
+      p(tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
              "Applied Demography Toolbox listing.")),
 
     width=3
@@ -422,17 +474,23 @@ server<-function(input, output) {
     ##NUMBER FORMATTING
     options(scipen=999)
 
-##USMD CA SURVIVAL DATA (GENERIC)
+##HLD SURVIVAL DATA (GENERIC)
 if(input$LifeTable=="Albania") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_Albania2011_HLD.csv",header=TRUE,sep=",")
-}
+lmax<-21}
+if(input$LifeTable=="Belgium") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_Belgium2010to2012_HLD.csv",header=TRUE,sep=",")
+lmax<-23}
+if(input$LifeTable=="Cameroon") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_Cameroon2005_HLD.csv",header=TRUE,sep=",")
+lmax<-21}
+if(input$LifeTable=="Korea") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_Korea2017_HLD.csv",header=TRUE,sep=",")
+lmax<-22}
 if(input$LifeTable=="Venezuela") {lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_Venezuela2010_HLD.csv",header=TRUE,sep=",")
-}
+lmax<-22}
 lxF<-lt$lx_Female/100000
 lxM<-lt$lx_Male/100000
 lxT<-lt$lx_Both/100000
-lxF<-c(lxF[1],lxF[3:21])
-lxM<-c(lxM[1],lxM[3:21])
-lxT<-c(lxT[1],lxT[3:21])
+lxF<-c(lxF[1],lxF[3:lmax])
+lxM<-c(lxM[1],lxM[3:lmax])
+lxT<-c(lxT[1],lxT[3:lmax])
 
 ##SELECT CENSUS ACS (via IPUMS) MIGRATION DATA
 if(input$GrossMigrationProfile=="California") {
@@ -441,23 +499,21 @@ Migration<-c(Migration$CA_F,Migration$CA_M)
 }
 
     ##RUN ONLY IF AREA INPUTS ARE PROVIDED
-    if(input$Area=="") {
+    if(input$Area=="") {										# | input$STEP>2100) {
       plot.new()
-      legend("topleft",legend=c("Select an area with the panel to the left"),cex=2,bty="n")
+      legend("topleft",legend=c("Select an area with the panel to the left"),cex=1.85,bty="n")		#, "'Project to (year)' maximum for this version is 2100"),cex=1.85,bty="n")
     }
   
-if(input$Area!="") {
+if(input$Area!="" & input$STEP<=3000) {
 
 ##########
 ##READING EXTERNAL DATA IN
 ##########
-
 base_url<-"https://population.un.org/dataportalapi/api/v1"
 Area_select<-data.frame(read.csv(paste(c(base_url,"/locations?sort=id&format=csv"),collapse=""),sep="|",skip=1))
-
-Select_url<-paste(c(base_url,
+Select_url<-paste(c(base_url,		#Thanks for guidance from https://bonecave.schmert.net/un-api-1-year-pyramids-Argentina.html !
 	"/data/indicators/",
-	46,			#46 is PopByAge5AndSex
+	46,				#46 is PopByAge5AndSex
 	"/locations/",
 	Area_select$Id[Area_select$Name==input$Area],
 	"/start/",2010,
@@ -465,6 +521,7 @@ Select_url<-paste(c(base_url,
 	"/?format=csv"),collapse="")
 Select<-read.csv(Select_url,sep="|",skip=1)
 
+if(input$STEP<=2100) {
 SelectVal_url<-paste(c(base_url,
 	"/data/indicators/",
 	46,			#46 is PopByAge5AndSex
@@ -474,6 +531,7 @@ SelectVal_url<-paste(c(base_url,
 	"/end/",input$STEP,
 	"/?format=csv"),collapse="")
 SelectVal<-read.csv(SelectVal_url,sep="|",skip=1)
+	}
 
     ##########
     ##SCRIPT INPUTS
@@ -579,6 +637,7 @@ TMinusZeroAgeInitRatios_M[18]<-sum(TMinusZeroAgeInitRatios_M_Max$Value)
     
     TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-c(TMinusZeroAgeRatios_F,TMinusZeroAgeRatios_M)
 
+if(input$STEP<=2100) {
     TValAge_F<-subset(SelectVal,Sex=="Female" & TimeLabel==input$STEP & AgeStart<90 & Variant=="Median")
     TValAge_F<-TValAge_F$Value  
 TValAge_F_Max<-subset(SelectVal,Sex=="Female" & TimeLabel==input$STEP & AgeStart>80 & Variant=="Median")
@@ -588,6 +647,7 @@ TValAge_F[18]<-sum(TValAge_F_Max$Value)
 TValAge_M_Max<-subset(SelectVal,Sex=="Male" & TimeLabel==input$STEP & AgeStart>80 & Variant=="Median")
 TValAge_M[18]<-sum(TValAge_M_Max$Value)
     TValAge<-c(TValAge_F,TValAge_M)
+	}
 
     ##########
     ##CALCULATIONS
@@ -861,18 +921,18 @@ TValAge_M[18]<-sum(TValAge_M_Max$Value)
     }
     
     mtext(side=1,c("Sum 2010:"),line=-15,adj=.125,col="orange")
-    if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusOneAgeInit[,1])),line=-15,adj=.3,col="orange")}
-    if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusOneAgeInit[,2])),line=-15,adj=.3,col="orange")}
-    if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusOneAgeInit[,3])),line=-15,adj=.3,col="orange")}
+    if(SelectBySex=="Total") {mtext(side=1,c(round(sum(TMinusOneAgeInit[,1]),0)),line=-15,adj=.3,col="orange")}
+    if(SelectBySex=="Female") {mtext(side=1,c(round(sum(TMinusOneAgeInit[,2]),0)),line=-15,adj=.3,col="orange")}
+    if(SelectBySex=="Male") {mtext(side=1,c(round(sum(TMinusOneAgeInit[,3]),0)),line=-15,adj=.3,col="orange")}
     
     mtext(side=1,c("Sum 2015:"),line=-14,adj=.125,col="blue")
-    if(SelectBySex=="Total") {mtext(side=1,c(sum(TMinusZeroAgeInit[,1])),line=-14,adj=.3,col="blue")}
-    if(SelectBySex=="Female") {mtext(side=1,c(sum(TMinusZeroAgeInit[,2])),line=-14,adj=.3,col="blue")}
-    if(SelectBySex=="Male") {mtext(side=1,c(sum(TMinusZeroAgeInit[,3])),line=-14,adj=.3,col="blue")}
+    if(SelectBySex=="Total") {mtext(side=1,c(round(sum(TMinusZeroAgeInit[,1]),0)),line=-14,adj=.3,col="blue")}
+    if(SelectBySex=="Female") {mtext(side=1,c(round(sum(TMinusZeroAgeInit[,2]),0)),line=-14,adj=.3,col="blue")}
+    if(SelectBySex=="Male") {mtext(side=1,c(round(sum(TMinusZeroAgeInit[,3]),0)),line=-14,adj=.3,col="blue")}
     
     mtext(side=1,c("Sum "),line=-13,adj=.117,col="dark green")
     mtext(side=1,c(PROJECTIONYEAR),line=-13,adj=.18,col="dark green")
-    mtext(side=1,c(":"),line=-13,adj=.225,col="dark green")
+    mtext(side=1,c(":"),line=-13,adj=.23,col="dark green")
     if(SelectBySex=="Total") {mtext(side=1,c(round(sum(NewAge[,1]))),line=-13,adj=.3,col="dark green")}
     if(SelectBySex=="Female") {mtext(side=1,c(round(sum(NewAge[,2]))),line=-13,adj=.3,col="dark green")}
     if(SelectBySex=="Male") {mtext(side=1,c(round(sum(NewAge[,3]))),line=-13,adj=.3,col="dark green")}
@@ -885,7 +945,7 @@ TValAge_M[18]<-sum(TValAge_M_Max$Value)
     
     mtext(side=1,c("iTFR"),line=-5,adj=.12,col="dark green")
     mtext(side=1,c(PROJECTIONYEAR),line=-5,adj=.185,col="dark green")
-    mtext(side=1,c(":"),line=-5,adj=.23,col="dark green")
+    mtext(side=1,c(":"),line=-5,adj=.235,col="dark green")
     mtext(side=1,c(round(ImpliedTFRNew,2)),line=-5,adj=.29,col="dark green")
     
     if(SelectBySex=="Total") {LASTGROWTHRATE<-paste(text=c("R (2010 to 2015):  ", round(log(sum(TMinusZeroAgeInit[,1])/sum(TMinusOneAgeInit[,1]))/5*100,2)),collapse="")}
@@ -945,7 +1005,7 @@ TValAge_M[18]<-sum(TValAge_M_Max$Value)
     mtext(side=1,"Age groups",line=4,cex=.75)
     axis(side=1,at=1:(HALFSIZE-1),labels=agegroups2,las=2,cex.axis=0.9)
     axis(side=2)
-    legend(7,1.75, legend=c("Female","Male", "Female, with migration and mortality adjustments","Male, with migration and mortality adjustments"),
+    legend(6,1.75, legend=c("Female","Male", "Female, with migration and mortality adjustments","Male, with migration and mortality adjustments"),
            col=c("dodger blue","gold","dodger blue","gold"), lty=c(1,1,2,2),lwd=c(4,4,2,2),cex=1.2)
     
     if (input$ImputeMort=="YES") {
@@ -957,13 +1017,14 @@ TValAge_M[18]<-sum(TValAge_M_Max$Value)
     
     ##THIRD GRAPH - PYRAMID (FEMALE PORTION)
     barplot(NewAge_F,horiz=T,names=agegroups,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
-    barplot(TValAge[1:18],horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)    
+if(input$STEP<=2100) {barplot(TValAge[1:18],horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)}
 
     ##FOURTH GRAPH - PYRAMID (MALE PORTION)
     barplot(NewAge_M,horiz=T,names=FALSE,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
-    barplot(TValAge[19:36],horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)    
-
-legend("topright",inset=.165,legend="UN WPP 2022 Projection", col=1, angle=45, density=5, cex=1.85, bty="n")
+if(input$STEP<=2100) {barplot(TValAge[19:36],horiz=T,names=FALSE,col=1,space=0,density=5,angle=45,add=TRUE)    
+	if(input$STEP<2025) {legend("topright",inset=.165,legend="UN WPP Estimate", col=1, angle=45, density=5, cex=1.95, bty="n")}
+	if(input$STEP>2020) {legend("topright",inset=.165,legend="UN WPP Projection", col=1, angle=45, density=5, cex=1.95, bty="n")}
+	}
 
 }
     
