@@ -1,5 +1,5 @@
 ##########
-##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA
+##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA - DRAFTING
 ##
 ##EDDIE HUNSINGER, AUGUST 2022 (based on work from November 2020: https://shiny.demog.berkeley.edu/eddieh/CCRUnc/)
 ##https://edyhsgr.github.io/
@@ -315,7 +315,7 @@ ui<-fluidPage(
       
       numericInput("STEP","Project to (year)",2030,2020,2100,step=5),
       
-      selectInput("RatiosFrom", "Using ratios from",
+      selectInput("RatiosFrom", "Using ratios from", selected="Combined",
                   c("2015 to 2020"="2015",
                     "2014 to 2019"="2014",
                     "2013 to 2018"="2013",
