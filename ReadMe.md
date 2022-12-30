@@ -41,8 +41,8 @@ References, resources, and related info:
   Interface with net migration adjustment examples and comparisons: 
     -Hunsinger (2019): http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/ 
     
-  Graph of e0 and Brass' relational life table alpha by US state: 
-    -https://twitter.com/ApplDemogToolbx/status/1079286699941752832 
+  Graphs of e0 and Brass relational life table model by US state: 
+    -https://github.com/edyhsgr/BrassRelationalMortOverTime_USAStates 
     
   Model life table (0.0 alpha) is the 5x5 and 1x5 2010 to 2014 life tables for selected states from the United States Mortality Database:
     -https://usa.mortality.org/index.php
