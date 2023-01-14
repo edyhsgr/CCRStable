@@ -134,7 +134,7 @@ ui<-fluidPage(
                        "Ireland"="Ireland",
                        "Israel"="Israel",
                        "Italy"="Italy",
-                       "CÃ´te d'Ivoire"="CÃ´te d'Ivoire",
+                       "Côte d'Ivoire"="Côte d'Ivoire",
                        "Jamaica"="Jamaica",
                        "Japan"="Japan",
                        "Kazakhstan"="Kazakhstan",
@@ -176,7 +176,7 @@ ui<-fluidPage(
                        "Nauru"="Nauru",
                        "Nepal"="Nepal",
                        "Netherlands"="Netherlands",
-                       "CuraÃ§ao"="CuraÃ§ao",
+                       "Curaçao"="Curaçao",
                        "Aruba"="Aruba",
                        "Sint Maarten (Dutch part)"="Sint Maarten (Dutch part)",
                        "Bonaire, Sint Eustatius and Saba"="Bonaire, Sint Eustatius and Saba",
@@ -204,7 +204,7 @@ ui<-fluidPage(
                        "Timor-Leste"="Timor-Leste",
                        "Puerto Rico"="Puerto Rico",
                        "Qatar"="Qatar",
-                       "RÃ©union"="RÃ©union",
+                       "Réunion"="Réunion",
                        "Romania"="Romania",
                        "Russian Federation"="Russian Federation",
                        "Rwanda"="Rwanda",
@@ -245,7 +245,7 @@ ui<-fluidPage(
                        "Trinidad and Tobago"="Trinidad and Tobago",
                        "United Arab Emirates"="United Arab Emirates",
                        "Tunisia"="Tunisia",
-                       "TÃ¼rkiye"="TÃ¼rkiye",
+                       "Türkiye"="Türkiye",
                        "Turkmenistan"="Turkmenistan",
                        "Turks and Caicos Islands"="Turks and Caicos Islands",
                        "Tuvalu"="Tuvalu",
@@ -337,14 +337,14 @@ ui<-fluidPage(
       
       hr(),
       
-      selectInput("ImposeTFR", "Impose iTFR?",
-                  c(
-                    "Yes"="YES",
-                    "No"="NO"
-                  ),
-      ),
+ #     selectInput("ImposeTFR", "Impose iTFR?",
+ #                 c(
+ #                   "Yes"="YES",
+ #                   "No"="NO"
+ #                 ),
+ #     ),
       
-      sliderInput("ImposedTFR_ar","If Yes, iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.75,1),step=0.05),
+      sliderInput("ImposedTFR_ar","iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.75,1),step=0.05),
       sliderInput("ImposedTFR","...and iTFR level term",min=0,max=5,value=c(1.2,2.1),step=0.1),
       sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.05,.25),step=0.05),
       
@@ -454,7 +454,7 @@ ui<-fluidPage(
           tags$a(href="https://usa.ipums.org/usa/", 
                  "IPUMS USA, University of Minnesota.")),
         
-        p(tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
+        p(tags$a(href="https://github.com/edyhsgr/BrassRelationalMortOverTime_USAStates", 
                  "Graph of e0 and Brass' relational life table alpha by US state."),
           
           "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table for California from the ",
@@ -554,7 +554,7 @@ server<-function(input, output) {
       ImposedTFR_ar<-array(runif(ITER,input$ImposedTFR_ar[1],input$ImposedTFR_ar[2]))
       ImposedTFR_se<-array(runif(ITER,input$ImposedTFR_se[1],input$ImposedTFR_se[2]))
       ffab<-.4886
-      UseImposedTFR<-input$ImposeTFR
+      UseImposedTFR<-"YES"  #input$ImposeTFR
       
       ##ADJUST BY MIGRATION OPTION
       NetMigrationAdjustLevel<-array(runif(ITER,input$NetMigrationAdjustLevel[1]/100,input$NetMigrationAdjustLevel[2]/100))
@@ -848,5 +848,4 @@ server<-function(input, output) {
 }
 
 shinyApp(ui = ui, server = server) 
-
 
