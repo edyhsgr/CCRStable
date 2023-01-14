@@ -112,16 +112,16 @@ ui<-fluidPage(
       
       hr(),
       
-      selectInput("ImposeTFR", "Impose iTFR?",
-                  c(
-                    "Yes"="YES",
-                    "No"="NO"
-                  ),
-      ),
+#      selectInput("ImposeTFR", "Impose iTFR?",
+#                  c(
+#                    "Yes"="YES",
+#                    "No"="NO"
+#                  ),
+#      ),
       
-      sliderInput("ImposedTFR_ar","If Yes, iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.5,1),step=0.05),
-      sliderInput("ImposedTFR","...and iTFR level term",min=0,max=5,value=c(1.8,1.8),step=0.1),
-      sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.25,.25),step=0.05),
+      sliderInput("ImposedTFR_ar","iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.75,1),step=0.05),
+      sliderInput("ImposedTFR","...and iTFR level term",min=0,max=5,value=c(1.2,2.1),step=0.1),
+      sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.05,.25),step=0.05),
       
       hr(),
       
@@ -133,8 +133,8 @@ ui<-fluidPage(
       ),
 
       sliderInput("NetMigrationAdjustLevel_ar","If yes, net migration adjustment AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=-1,max=1,value=c(-.5,1),step=0.05),
-      sliderInput("NetMigrationAdjustLevel","...and net migration adjustment level term",min=-2,max=2,value=c(0,0),step=0.1),
-      sliderInput("NetMigrationAdjustLevel_se","...and net migration adjustment standard error term",min=0,max=.5,value=c(.25,.25),step=0.05),
+      sliderInput("NetMigrationAdjustLevel","...and net migration adjustment level term",min=-2,max=2,value=c(-1,1),step=0.1),
+      sliderInput("NetMigrationAdjustLevel_se","...and net migration adjustment standard error term",min=0,max=.5,value=c(.05,.5),step=0.05),
       
       hr(),
       
@@ -142,9 +142,9 @@ ui<-fluidPage(
       #            c("Yes"="YES","No"="NO"),
       #),
       
-      sliderInput("BAStart","Brass' mortality model alpha for First projection step (range inputs give uniform range option, for uncertain drift, etc.)",min=-.5,max=.5,value=c(.03,.03),step=0.01),
-      sliderInput("BAEnd","...and Brass' model alpha drift term (increase per step)",min=-.5,max=.5,value=c(.03,.03),step=0.01),
-      sliderInput("BA_se","...and Brass' model alpha standard error term",min=0,max=.25,value=c(.02,.02),step=0.01),
+      sliderInput("BAStart","Brass' mortality model alpha for First projection step (range inputs give uniform range option, for uncertain drift, etc.)",min=-.5,max=.5,value=c(-.5,.25),step=0.01),
+      sliderInput("BAEnd","...and Brass' model alpha drift term (increase per step)",min=-.5,max=.5,value=c(-.02,.1),step=0.01),
+      sliderInput("BA_se","...and Brass' model alpha standard error term",min=0,max=.25,value=c(.0,.05),step=0.01),
       
       hr(),
       
@@ -212,7 +212,7 @@ ui<-fluidPage(
           tags$a(href="https://usa.ipums.org/usa/", 
                  "IPUMS USA, University of Minnesota.")),
         
-        tags$a(href="https://twitter.com/ApplDemogToolbx/status/1079286699941752832", 
+        tags$a(href="https://github.com/edyhsgr/BrassRelationalMortOverTime_USAStates", 
                "Graph of e0 and Brass' relational life table alpha by US state."),
         
         "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
@@ -289,7 +289,7 @@ ImposedTFR<-array(runif(ITER,input$ImposedTFR[1],input$ImposedTFR[2]))
 ImposedTFR_ar<-array(runif(ITER,input$ImposedTFR_ar[1],input$ImposedTFR_ar[2]))
 ImposedTFR_se<-array(runif(ITER,input$ImposedTFR_se[1],input$ImposedTFR_se[2]))
 ffab<-.4886
-UseImposedTFR<-input$ImposeTFR
+UseImposedTFR<-"YES"  #input$ImposeTFR
 
 ##ADJUST BY MIGRATION OPTION
 NetMigrationAdjustLevel<-array(runif(ITER,input$NetMigrationAdjustLevel[1]/100,input$NetMigrationAdjustLevel[2]/100))
@@ -517,7 +517,7 @@ plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step End Year",ylab=
 		axis(side=2,cex.axis=1.5)
 
 ##FIFTH GRAPH - NET MIGRATION
-plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step End Year",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
+plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.05,.05),xlab="Time Step End Year",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
 	for (i in 1:ITER) {lines(NetMigrAdj_Project[i,],col=sample(6))}
 		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
 		axis(side=2,cex.axis=1.5)
