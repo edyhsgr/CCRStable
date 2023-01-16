@@ -1,0 +1,535 @@
+##########
+##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE
+##
+##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED JANUARY 2023)
+##https://edyhsgr.github.io/eddieh/
+##
+##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
+##This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 International License (more information: https://creativecommons.org/licenses/by-sa/3.0/igo/).
+##
+##EXAMPLE DATA IS LINKED, SO YOU SHOULD BE ABLE TO SIMPLY COPY ALL AND PASTE INTO R TO SEE IT WORK
+##
+##THERE IS NO WARRANTY FOR THIS CODE
+##THIS CODE HAS NOT BEEN PEER-REVIEWED OR CAREFULLY TESTED - QUESTIONS AND COMMENTS ARE WELCOME, OF COURSE (edyhsgr@gmail.com)
+##########
+
+#install.packages("shiny")
+#install.packages("gplots")
+library(shiny)
+library(gplots)
+
+ui<-fluidPage(
+  
+  tags$h3("Cohort Change Ratio-Based Stochastic Population Projection Review Shiny App - Based on Cohort Change Ratio-Based Stable Population Review Shiny App"),
+  p("Related information and ",
+    tags$a(href="https://www.r-project.org/", "R"),
+    "code available at: ",
+    tags$a(href="https://github.com/edyhsgr/CCRStable", 
+           "CCRStable GitHub Repository")
+  ),
+  
+  hr(),
+  
+  sidebarLayout(
+    sidebarPanel(
+      
+	selectizeInput(inputId = "Area", label = "Area Name", 
+	choices = c(
+                    "Alaska"="Alaska",
+                    "Aleutians East Borough"="Aleutians East Borough",
+                    "Aleutians West Census Area"="Aleutians West Census Area",
+                    "Anchorage Municipality"="Anchorage Municipality",
+                    "Bethel Census Area"="Bethel Census Area",
+                    "Bristol Bay Borough"="Bristol Bay Borough",
+                    "Chugach Census Area"="Chugach Census Area",
+                    "Copper River Census Area"="Copper River Census Area",
+                    "Denali Borough"="Denali Borough",
+                    "Dillingham Census Area"="Dillingham Census Area",
+                    "Fairbanks North Star Borough"="Fairbanks North Star Borough",
+                    "Haines Borough"="Haines Borough",
+                    "Hoonah-Angoon Census Area"="Hoonah-Angoon Census Area",
+                    "Juneau City and Borough"="Juneau City and Borough",
+                    "Kenai Peninsula Borough"="Kenai Peninsula Borough",
+                    "Ketchikan Gateway Borough"="Ketchikan Gateway Borough",
+                    "Kodiak Island Borough"="Kodiak Island Borough",
+                    "Kusilvak Census Area"="Kusilvak Census Area",
+                    "Lake and Peninsula Borough"="Lake and Peninsula Borough",
+                    "Matanuska-Susitna Borough"="Matanuska-Susitna Borough",
+                    "Nome Census Area"="Nome Census Area",
+                    "North Slope Borough"="North Slope Borough",
+                    "Northwest Arctic Borough"="Northwest Arctic Borough",
+                    "Petersburg Borough"="Petersburg Borough",
+                    "Prince of Wales-Hyder Census Area"="Prince of Wales-Hyder Census Area",
+                    "Sitka City and Borough"="Sitka City and Borough",
+                    "Skagway Borough, Municipality"="Skagway Borough, Municipality",
+                    "Southeast Fairbanks Census Area"="Southeast Fairbanks Census Area",
+                    "Wrangell City and Borough"="Wrangell City and Borough",
+                    "Yakutat City and Borough"="Yakutat City and Borough",
+                    "Yukon-Koyukuk Census Area"="Yukon-Koyukuk Census Area"
+                  ),
+#options = list(placeholder = "Type in a county to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
+	          ),
+            
+      numericInput("STEP","Project to (year)",2030,2020,2100,step=5),
+      
+      selectInput("RatiosFrom", "Using ratios from", selected="Combined", 
+                  c(
+                    "2015 to 2020"=2015,
+                    "2014 to 2019"=2014,
+                    "2013 to 2018"=2013,
+                    "2012 to 2017"=2012,
+                    "2011 to 2016"=2011,
+                    "2010 to 2015"=2010,
+                    "Sample from listed periods"="Combined"
+                  ),
+      ),
+
+      numericInput("ITER","Number of projection iterations (sample size)",100,100,1000,step=100),
+      
+      hr(),
+      
+#      selectInput("ImposeTFR", "Impose iTFR?",
+#                  c(
+#                    "Yes"="YES",
+#                    "No"="NO"
+#                  ),
+#      ),
+      
+      sliderInput("ImposedTFR_ar","iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.75,1),step=0.05),
+      sliderInput("ImposedTFR","...and iTFR level term",min=0,max=5,value=c(1.5,2.3),step=0.1),
+      sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.05,.25),step=0.05),
+      
+      hr(),
+      
+      selectInput("AdjustMigr", "Adjust net migration? (Annual, percent of total population)",
+                  c(
+                    "Yes"="YES",
+                    "No"="NO"
+                  ),
+      ),
+
+      sliderInput("NetMigrationAdjustLevel_ar","If yes, net migration adjustment AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=-1,max=1,value=c(-.5,1),step=0.05),
+      sliderInput("NetMigrationAdjustLevel","...and net migration adjustment level term",min=-2,max=2,value=c(-1,1),step=0.1),
+      sliderInput("NetMigrationAdjustLevel_se","...and net migration adjustment standard error term",min=0,max=.5,value=c(.05,.5),step=0.05),
+      
+      hr(),
+      
+      #selectInput("ImputeMort", "Impute mortality?",
+      #            c("Yes"="YES","No"="NO"),
+      #),
+      
+      sliderInput("BAStart","Brass' mortality model alpha for First projection step (range inputs give uniform range option, for uncertain drift, etc.)",min=-.5,max=.5,value=c(-.5,.25),step=0.01),
+      sliderInput("BAEnd","...and Brass' model alpha drift term (increase per step)",min=-.5,max=.5,value=c(-.02,.1),step=0.01),
+      sliderInput("BA_se","...and Brass' model alpha standard error term",min=0,max=.25,value=c(.0,.05),step=0.01),
+      
+      hr(),
+      
+      p("This interface was made with ",
+        tags$a(href="https://shiny.rstudio.com/", 
+               "Shiny for R."),
+        
+        tags$a(href="https://edyhsgr.github.io/", 
+               "Eddie Hunsinger,"), 
+        
+        "January 2023."),
+      
+      p("Information including ", 
+	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
+		"formulas, a spreadsheet demonstration, and slides for a related talk, "),
+	"as well as ",
+	tags$a(href="https://www.r-project.org/",
+		"R"),
+	"code with input files for several examples, including the ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable/",
+		"main stable population review version "), 
+	"that it's based on, an ",	
+	tags$a(href="https://edyhsgr.shinyapps.io/CCRStable_ValView_Florida/",
+		"errors review version"), 
+	"and a ",
+	tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
+		"single-year-of-age version, "), 
+	"is all available in the ",
+	tags$a(href="https://github.com/edyhsgr/CCRStable", 
+		"related GitHub repository.")),
+
+      p("Population estimates inputs from ",
+        tags$a(href="https://web.archive.org/web/20210821065342/https://live.laborstats.alaska.gov//pop/index.cfm", 
+               "Alaska Department of Labor and Workforce Development's Vintage 2020 Population Estimates.")),
+      
+      p(" More information on cohort change ratios: ",
+        tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
+               "Baker, Swanson, Tayman, and Tedrow (2017)."),
+
+       p("Supporting work and thinking on stochastic population projection: ",
+        tags$a(href="https://applieddemogtoolbox.github.io/#StochasticForecast", 
+               "Hunsinger (2011).")),
+        
+        p("More information on iTFR: ",
+          tags$a(href="https://osf.io/adu98/", 
+                 "Hauer and Schmertmann (2019)"),
+          " and ",
+          tags$a(href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0067226", 
+                 "Hauer, Baker, and Brown (2013).")),
+        
+        p("Slides with background thoughts on adjusting net migration: ",
+          tags$a(href="https://edyhsgr.github.io/documents/ProjPresentation.pdf", 
+                 "Hunsinger (2007)."),
+          
+          "Migration by age over time comparisons from Alaska data: ",
+          tags$a(href="http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/", 
+                 "Hunsinger (2018)."),
+          
+          "Interface with net migration adjustment examples and comparisons: ",
+          tags$a(href="http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/", 
+                 "Hunsinger (2019)."),
+          
+          "Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 
+          American Community Survey Public Use Microdata Sample, accessed via the ", 
+          tags$a(href="https://usa.ipums.org/usa/", 
+                 "IPUMS USA, University of Minnesota.")),
+        
+        tags$a(href="https://github.com/edyhsgr/BrassRelationalMortOverTime_USAStates", 
+               "Graph of e0 and Brass' relational life table alpha by US state."),
+        
+        "Model life table (0.0 alpha) is the 5x5 2010 to 2014 life table from the ",
+        tags$a(href="https://usa.mortality.org/index.php", 
+               "United States Mortality Database.")),
+
+      p(tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
+             "Applied Demography Toolbox listing.")),
+
+      width=3
+    ),
+    
+    mainPanel(
+      
+      plotOutput("plots")
+    ))
+  )
+
+##########
+##READING EXTERNAL DATA IN
+##########
+
+##DATA (ALASKA DEPARTMENT OF LABOR AND WORKFORCE DEVELOPMENT VINTAGE 2020 POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
+##https://web.archive.org/web/20210821065342/https://live.laborstats.alaska.gov//pop/index.cfm
+K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/AgeBySexBCA_AKDOLv2020_Extract.csv",header=TRUE,sep=","))
+
+##CENSUS ACS (via IPUMS) CA MIGRATION DATA (GENERIC)
+Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
+Migration<-c(Migration$CA_F,Migration$CA_M)
+
+##USMD CA SURVIVAL DATA (GENERIC)
+lt<-read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Mortality/lt_CA_USMD2010to2014.csv",header=TRUE,sep=",")
+lxF<-lt$lx_Female/100000
+lxM<-lt$lx_Male/100000
+lxT<-lt$lx_Both/100000
+lxF<-c(lxF[1],lxF[3:24])
+lxM<-c(lxM[1],lxM[3:24])
+lxT<-c(lxT[1],lxT[3:24])
+
+server<-function(input, output) {	
+  output$plots<-renderPlot({
+    par(mfrow=c(3,2))
+    
+    ##RUN ONLY IF COUNTY INPUTS ARE PROVIDED
+    #if(input$County=="") {
+    #  plot.new()
+    #  legend("topleft",legend=c("Select a county with the panel to the left"),cex=2,bty="n")
+    #}
+    
+    ##NUMBER FORMATTING
+    options(scipen=999)
+
+##########
+##SCRIPT INPUTS
+##########
+
+##DIMENSIONS
+ITER<-input$ITER
+SIZE<-36
+HALFSIZE<-SIZE/2
+STEPS<-(input$STEP-2015)/5
+CURRENTSTEP<-(2020-2015)/5
+PROJECTIONYEAR<-STEPS*5+2015
+FERTWIDTH<-35
+
+##SELECTING RATIOS BASIS
+##(Year "6" is 2013, 7 is 2014, 8 is 2015...)
+FirstYear<-rep(strtoi(input$RatiosFrom),ITER)
+SecondYear<-FirstYear+5
+if(input$RatiosFrom=="Combined") {
+  FirstYear<-sample(c(2010:2015),ITER,replace=TRUE)
+  SecondYear<-FirstYear+5
+}
+
+##IMPOSED TFR OPTION (WITH AUTOCORRELATION OPTION)
+ImposedTFR<-array(runif(ITER,input$ImposedTFR[1],input$ImposedTFR[2]))
+ImposedTFR_ar<-array(runif(ITER,input$ImposedTFR_ar[1],input$ImposedTFR_ar[2]))
+ImposedTFR_se<-array(runif(ITER,input$ImposedTFR_se[1],input$ImposedTFR_se[2]))
+ffab<-.4886
+UseImposedTFR<-"YES"  #input$ImposeTFR
+
+##ADJUST BY MIGRATION OPTION
+NetMigrationAdjustLevel<-array(runif(ITER,input$NetMigrationAdjustLevel[1]/100,input$NetMigrationAdjustLevel[2]/100))
+NetMigration_ar<-array(runif(ITER,input$NetMigrationAdjustLevel_ar[1],input$NetMigrationAdjustLevel_ar[2]))
+NetMigration_se<-array(runif(ITER,input$NetMigrationAdjustLevel_se[1]/100,input$NetMigrationAdjustLevel_se[2]/100))
+
+##IMPUTE MORTALITY OPTION
+##"BA" IS THE BRASS RELATIONAL LOGIT MODEL ALPHA
+BA_start<-array(runif(ITER,input$BAStart[1],input$BAStart[2]))
+BA_start_init<-BA_start
+BA_end<-array(runif(ITER,input$BAEnd[1],input$BAEnd[2]))
+BA_se<-array(runif(ITER,input$BA_se[1],input$BA_se[2]))
+BB<-1
+#ImputeMort<-input$ImputeMort
+
+#if(ImputeMort=="NO") {for (i in 1:ITER) {BA_start[i]<-BA_end[i]<-1}}
+#if(ImputeMort=="NO") {for (i in 1:ITER) {BA_se[i]<-0}}
+
+##SELECT BY SEX
+SelectBySex<-"Total"
+
+##SELECT AREA
+Name<-paste(input$Area)
+
+##NUMBER FORMATTING
+options(scipen=999)
+
+if(input$Area!="") {
+
+##SELECTING FROM THE INPUT POPULATION TABLE (K) BASED ON INPUTS (DATA FOR JUMP-OFF, AND DATA FOR RATIOS)
+TMinusOneAgeInit_F<-subset(K,AreaName==Name & Year==2020 & AgeGroup>0)
+TMinusOneAgeInit_F<-TMinusOneAgeInit_F$Female
+TMinusOneAge_F<-TMinusOneAgeInit_F
+
+TMinusOneAgeInit_M<-subset(K,AreaName==Name & Year==2020 & AgeGroup>0)
+TMinusOneAgeInit_M<-TMinusOneAgeInit_M$Male
+TMinusOneAge_M<-TMinusOneAgeInit_M
+
+TMinusOneAge<-TMinusOneAgeInit<-array(c(TMinusOneAge_F,TMinusOneAge_M),c(SIZE,1,ITER))
+
+TMinusOneAgeRatios_F<-TMinusOneAgeInitRatios_F<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusOneAgeInitRatios_F[[i]]<-subset(K,AreaName==Name & Year==FirstYear[i] & AgeGroup>0)
+  TMinusOneAgeInitRatios_F[[i]]<-TMinusOneAgeInitRatios_F[[i]]$Female
+  TMinusOneAgeRatios_F<-TMinusOneAgeInitRatios_F
+}
+
+TMinusOneAgeRatios_M<-TMinusOneAgeInitRatios_M<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusOneAgeInitRatios_M[[i]]<-subset(K,AreaName==Name & Year==FirstYear[i] & AgeGroup>0)
+  TMinusOneAgeInitRatios_M[[i]]<-TMinusOneAgeInitRatios_M[[i]]$Male
+  TMinusOneAgeRatios_M<-TMinusOneAgeInitRatios_M
+}
+
+TMinusOneAgeRatios<-TMinusOneAgeInitRatios<-array(0,c(SIZE,1,ITER))
+for (i in 1:ITER) {
+  TMinusOneAgeRatios[,,i]<-TMinusOneAgeInitRatios[,,i]<-c(unlist(TMinusOneAgeRatios_F[[i]]),unlist(TMinusOneAgeRatios_M[[i]]))
+}
+
+TMinusZeroAgeInit_F<-subset(K,AreaName==Name & Year==2015 & AgeGroup>0)
+TMinusZeroAgeInit_F<-TMinusZeroAgeInit_F$Female
+TMinusZeroAge_F<-TMinusZeroAgeInit_F
+
+TMinusZeroAgeInit_M<-subset(K,AreaName==Name & Year==2015 & AgeGroup>0)
+TMinusZeroAgeInit_M<-TMinusZeroAgeInit_M$Male
+TMinusZeroAge_M<-TMinusZeroAgeInit_M
+
+TMinusZeroAge<-TMinusZeroAgeInit<-array(c(TMinusZeroAge_F,TMinusZeroAge_M),c(SIZE,1,ITER))
+
+TMinusZeroAgeRatios_F<-TMinusZeroAgeInitRatios_F<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusZeroAgeInitRatios_F[[i]]<-subset(K,AreaName==Name & Year==SecondYear[i] & AgeGroup>0)
+  TMinusZeroAgeInitRatios_F[[i]]<-TMinusZeroAgeInitRatios_F[[i]]$Female
+  TMinusZeroAgeRatios_F<-TMinusZeroAgeInitRatios_F
+}
+
+TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusZeroAgeInitRatios_M[[i]]<-subset(K,AreaName==Name & Year==SecondYear[i] & AgeGroup>0)
+  TMinusZeroAgeInitRatios_M[[i]]<-TMinusZeroAgeInitRatios_M[[i]]$Male
+  TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M
+}
+
+TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-array(0,c(SIZE,1,ITER))
+for (i in 1:ITER) {
+  TMinusZeroAgeRatios[,,i]<-TMinusZeroAgeInitRatios[,,i]<-c(unlist(TMinusZeroAgeRatios_F[[i]]),unlist(TMinusZeroAgeRatios_M[[i]]))
+}
+
+##########
+##CALCULATIONS
+##########
+
+##COHORT CHANGE RATIOS
+Ratios<-array(0,c(SIZE,ITER))
+for (i in 2:SIZE) {Ratios[i,]<-TMinusZeroAgeRatios[i,,]/TMinusOneAgeRatios[i-1,,]}
+for (i in 1:ITER) {Ratios[1,i]<-(TMinusZeroAgeRatios[1,,i]+TMinusZeroAgeRatios[HALFSIZE+1,,i])/sum(TMinusOneAgeRatios[4:10,,i])}
+
+##PLACING COHORT CHANGE RATIOS (FEMALE)
+S_F<-array(0,c(HALFSIZE,HALFSIZE,ITER))
+for (i in 1:ITER) {S_F[,,i]<-rbind(0,cbind(diag(Ratios[2:(HALFSIZE),i]),0))}
+
+##OPEN-ENDED AGE GROUP OPTION (FEMALE)
+for (i in 1:ITER) {S_F[HALFSIZE,HALFSIZE-1,i]<-TMinusZeroAgeRatios[HALFSIZE,,i]/(TMinusOneAgeRatios[HALFSIZE-1,,i]+TMinusOneAgeRatios[HALFSIZE,,i])}
+for (i in 1:ITER) {Ratios[HALFSIZE,i]<-S_F[HALFSIZE,HALFSIZE,i]<-S_F[HALFSIZE,HALFSIZE-1,i]}
+
+##BIRTHS AND MATRIX PORTION CONSTRUCTION (FEMALE)
+B_F<-0*S_F
+for (i in 1:ITER) {B_F[1,4:10,i]<-Ratios[1,i]*ffab}
+A_F<-B_F+S_F
+
+##PLACING COHORT CHANGE RATIOS (MALE)
+S_M<-array(0,c(HALFSIZE,HALFSIZE,ITER))
+for (i in 1:ITER) {S_M[,,i]<-rbind(0,cbind(diag(Ratios[20:SIZE,i]),0))}
+
+##OPEN-ENDED AGE GROUP OPTION (MALE)
+for (i in 1:ITER) {S_M[HALFSIZE,HALFSIZE-1,i]<-TMinusZeroAgeRatios[SIZE,,i]/(TMinusOneAgeRatios[SIZE-1,,i]+TMinusOneAgeRatios[SIZE,,i])}
+for (i in 1:ITER) {Ratios[SIZE,i]<-S_M[HALFSIZE,HALFSIZE,i]<-S_M[HALFSIZE,HALFSIZE-1,i]}
+
+##BIRTHS AND MATRIX PORTION CONSTRUCTION (MALE)
+B_M<-0*S_M
+for (i in 1:ITER) {B_M[1,4:10,i]<-Ratios[1,i]*(1-ffab)}
+
+##STRUCTURAL ZEROES
+AEnd_Zero<-A_Zero<-array(0,c(HALFSIZE,HALFSIZE,ITER))
+
+##MAKING FULL PROJECTION MATRIX (TWO-SEX)
+Acoltwo<-Acolone<-array(0,c(HALFSIZE,SIZE,ITER))
+for (i in 1:ITER) {Acolone[,,i]<-cbind(A_F[,,i],A_Zero[,,i])}
+for (i in 1:ITER) {Acoltwo[,,i]<-cbind(B_M[,,i],S_M[,,i])}
+A<-array(0,c(SIZE,SIZE,ITER))
+for (i in 1:ITER) {A[,,i]<-rbind(Acolone[,,i],Acoltwo[,,i])}
+
+##IMPLIED TFR CALCULATION
+ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+ImpliedTFR<-array(ImpliedTFR2015,ITER)
+
+if(STEPS<=37 & ITER<=2000){		##MAX STEPS AND ITER IN CASE USER (ESP ME) GETS CARRIED AWAY
+
+##RUN THE PROJECTION WITH SURV ADJUSTMENT (BY SOURCE() OF PROJECTION FILE)
+repeat{
+SurvChange<-array(0,ITER)
+SurvChange_e<-array(0,ITER)
+		##ADDING TO BRASS ALPHA WITH EACH STEP
+		for (i in 1:ITER) {SurvChange_e[i]<-rnorm(1,0,BA_se[i])}
+		#if(ImputeMort=="YES") {for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_e[i]}}
+		for (i in 1:ITER) {SurvChange[i]<-BA_start[i]+BA_end[i]+SurvChange_e[i]}
+		for (i in 1:ITER) {BA_start[i]<-SurvChange[i]}
+	source("https://raw.githubusercontent.com/edyhsgr/CCRStable/master/CCR_Unc_CA_Supporting_Project.R",local=TRUE)
+		
+		##MAKING TIME SERIES OBJECTS
+		KProj<-array(0,dim=ITER)
+		for (i in 1:ITER) {KProj[i]<-sum(TMinusZeroAge[,,i])}
+	
+		assign(paste(text=c("K_",CURRENTSTEP),collapse=""),KProj[])
+		assign(paste(text=c("ImpliedTFR_",CURRENTSTEP),collapse=""),ImpliedTFRNew[])
+		assign(paste(text=c("NetMigrAdj_",CURRENTSTEP),collapse=""),NetMigrAdjust[])
+		assign(paste(text=c("e0F_",CURRENTSTEP),collapse=""),e0FAdj[])
+		assign(paste(text=c("e0M_",CURRENTSTEP),collapse=""),e0MAdj[])
+
+		K_0<-sum(TMinusZeroAgeInit[,,1])
+		ImpliedTFR_0<-ImpliedTFR2015
+		NetMigrAdj_0<-0
+		e0F_0<-e0FStart
+		e0M_0<-e0MStart
+
+		K_Project<-paste0('K_',0:CURRENTSTEP)
+		ImpliedTFR_Project<-paste0('ImpliedTFR_',0:CURRENTSTEP)
+		NetMigrAdj_Project<-paste0('NetMigrAdj_',0:CURRENTSTEP)
+		e0F_Project<-paste0('e0F_',0:CURRENTSTEP)
+		e0M_Project<-paste0('e0M_',0:CURRENTSTEP)
+		
+		K_Project<-do.call(cbind,mget(K_Project))
+		ImpliedTFR_Project<-do.call(cbind,mget(ImpliedTFR_Project))
+		NetMigrAdj_Project<-do.call(cbind,mget(NetMigrAdj_Project))
+		e0F_Project<-do.call(cbind,mget(e0F_Project))
+		e0M_Project<-do.call(cbind,mget(e0M_Project))
+
+	CURRENTSTEP <- CURRENTSTEP+1
+
+	if(CURRENTSTEP > STEPS) {break}}
+	}
+
+    ##########
+    ##TABLING DATA
+    ##########
+    
+    #JUST ALL POPULATIONS USED IN GRAPHS
+    NewAge_F<-array(0,c(HALFSIZE,1,ITER))
+    NewAge_F_Median<-NewAge_F_Low<-NewAge_F_High<-array(0,c(HALFSIZE))
+    NewAge_M<-array(0,c(HALFSIZE,1,ITER))
+    NewAge_M_Median<-NewAge_M_Low<-NewAge_M_High<-array(0,c(HALFSIZE))
+
+    for (i in 1:ITER) {NewAge_F[1:HALFSIZE,,i]<-TMinusZeroAge[1:HALFSIZE,,i]}
+    for (i in 1:HALFSIZE) {NewAge_F_Median[i]<-median(NewAge_F[i,,])}
+    for (i in 1:HALFSIZE) {NewAge_F_Low[i]<-quantile(NewAge_F[i,1,],.05,na.rm=TRUE)}
+    for (i in 1:HALFSIZE) {NewAge_F_High[i]<-quantile(NewAge_F[i,1,],.95,na.rm=TRUE)}
+NewAge_F<-NewAge_F_Median
+    TMinusOneAgeInit_F<-TMinusOneAgeInit[1:HALFSIZE]
+    TMinusZeroAgeInit_F<-TMinusZeroAgeInit[1:HALFSIZE]
+    
+    for (i in 1:ITER) {NewAge_M[1:HALFSIZE,,i]<-TMinusZeroAge[(HALFSIZE+1):SIZE,,i]}
+    for (i in 1:HALFSIZE) {NewAge_M_Median[i]<-median(NewAge_M[i,,])}
+    for (i in 1:HALFSIZE) {NewAge_M_Low[i]<-quantile(NewAge_M[i,1,],.05,na.rm=TRUE)}
+    for (i in 1:HALFSIZE) {NewAge_M_High[i]<-quantile(NewAge_M[i,1,],.95,na.rm=TRUE)}
+NewAge_M<-NewAge_M_Median
+    TMinusOneAgeInit_M<-TMinusOneAgeInit[(HALFSIZE+1):SIZE]
+    TMinusZeroAgeInit_M<-TMinusZeroAgeInit[(HALFSIZE+1):SIZE]
+    
+    NewAge_T<-NewAge_F+NewAge_M
+    NewAge_T_Low<-NewAge_F_Low+NewAge_M_Low
+    NewAge_T_High<-NewAge_F_High+NewAge_M_High
+    TMinusOneAgeInit_T<-TMinusOneAgeInit_F+TMinusOneAgeInit_M
+    TMinusZeroAgeInit_T<-TMinusZeroAgeInit_F+TMinusZeroAgeInit_M
+    
+    NewAge<-array(c(NewAge_T,NewAge_F,NewAge_M),c(HALFSIZE,3))
+    TMinusOneAgeInit<-array(c(TMinusOneAgeInit_T,TMinusOneAgeInit_F,TMinusOneAgeInit_M),c(HALFSIZE,3))
+    TMinusZeroAgeInit<-array(c(TMinusZeroAgeInit_T,TMinusZeroAgeInit_F,TMinusZeroAgeInit_M),c(HALFSIZE,3))
+    
+    ##########
+    ##GRAPHING DATA (SOME ~HACKY LABELING SO MAY [LIKELY] NOT RENDER WELL)
+    ##########
+
+agegroups<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
+       
+##FIRST GRAPH - PYRAMID (FEMALE PORTION)
+    barplot2(NewAge_F,plot.ci=TRUE,ci.l=NewAge_F_Low,ci.u=NewAge_F_High,horiz=T,names=agegroups,cex.main=2,cex.names=1.2,cex.axis=1.5,space=0,xlim=c(max(NewAge_M)*2,0),col="dodger blue",las=1,main=paste(text=c("Female, ",PROJECTIONYEAR),collapse=""))
+#mtext(side=1,c(sum(NewAge_T[1:18])),line=-10,adj=.29,col="dark green")
+
+##SECOND GRAPH - PYRAMID (MALE PORTION)
+    barplot2(NewAge_M,plot.ci=TRUE,ci.l=NewAge_M_Low,ci.u=NewAge_M_High,horiz=T,names=FALSE,cex.main=2,cex.names=1.25,cex.axis=1.5,space=0,xlim=c(0,max(NewAge_M)*2),col="gold",main=paste(text=c("Male, ",PROJECTIONYEAR),collapse=""))
+
+##THIRD GRAPH - TOTAL POPULATION
+plot(K_Project[1,],type="l",ylim=c(min(K_Project)*.9,max(K_Project)*1.1),xlab="Year",ylab="",main="Total Population by Year",cex.lab=2,cex.main=2,axes=F)
+	for (i in 1:ITER) {lines(K_Project[i,],col=sample(6))}
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
+
+##FOURTH GRAPH - iTFR
+plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,5),xlab="Time Step End Year",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
+	for (i in 1:ITER) {lines(ImpliedTFR_Project[i,],col=sample(6))}
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
+
+##FIFTH GRAPH - NET MIGRATION
+plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.05,.05),xlab="Time Step End Year",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
+	for (i in 1:ITER) {lines(NetMigrAdj_Project[i,],col=sample(6))}
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
+
+##SIXTH GRAPH - LIFE EXPECTANCY AT BIRTH (FEMALE AND MALE)
+plot(e0F_Project[1,],type="l",ylim=c(60,110),xlab="Time Step End Year",ylab="",main="e0 (Female and Male) by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
+	for (i in 1:ITER) {lines(e0F_Project[i,],col=sample(6))}
+	for (i in 1:ITER) {lines(e0M_Project[i,],col=sample(6))}
+		axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+		axis(side=2,cex.axis=1.5)
+
+    }   
+    },height=1800,width=1200)
+
+}
+
+shinyApp(ui = ui, server = server) 
+
