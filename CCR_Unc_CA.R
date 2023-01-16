@@ -1,7 +1,7 @@
 ##########
 ##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE
 ##
-##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED JANUARY 2022)
+##EDDIE HUNSINGER, NOVEMBER 2020 (UPDATED JANUARY 2023)
 ##https://edyhsgr.github.io/eddieh/
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
@@ -98,13 +98,15 @@ ui<-fluidPage(
             
       numericInput("STEP","Project to (year)",2030,2020,2100,step=5),
       
-      selectInput("RatiosFrom", "Using ratios from",
+      selectInput("RatiosFrom", "Using ratios from", selected="Combined", 
                   c(
+                    "2015 to 2020"="8",
                     "2014 to 2019"="7",
                     "2013 to 2018"="6",
                     "2012 to 2017"="5",
                     "2011 to 2016"="4",
-                    "2010 to 2015"="3"
+                    "2010 to 2015"="3",
+                    "Sample from listed periods"="Combined"
                   ),
       ),
 
@@ -155,7 +157,7 @@ ui<-fluidPage(
         tags$a(href="https://edyhsgr.github.io/", 
                "Eddie Hunsinger,"), 
         
-        "November 2020 (updated January 2022)."),
+        "November 2020 (updated January 2023)."),
       
       p("Information including ", 
 	tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
@@ -236,9 +238,9 @@ ui<-fluidPage(
 ##########
 
 ##DATA (CENSUS BUREAU VINTAGE 2019 POPULATION ESTIMATES BY DEMOGRAPHIC CHARACTERISTICS)
-##https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/asrh/cc-est2019-alldata-06.csv 
-##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2019/
-K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/cc-est2019-alldata-06_Extract.csv",header=TRUE,sep=","))
+##https://www2.census.gov/programs-surveys/popest/datasets/2010-2020/counties/asrh/CC-EST2020-ALLDATA6-06.csv
+##https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2020/
+K<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/PopEstimates/CC-EST2020-ALLDATA6-06_Extract.csv",header=TRUE,sep=","))
 
 ##CENSUS ACS (via IPUMS) CA MIGRATION DATA (GENERIC)
 Migration<-data.frame(read.table(file="https://raw.githubusercontent.com/edyhsgr/CCRStable/master/InputData/Migration/AGenericMigrationProfile_CA_2013to2017ACS.csv",header=TRUE,sep=","))
@@ -281,8 +283,12 @@ FERTWIDTH<-35
 
 ##SELECTING RATIOS BASIS
 ##(Year "6" is 2013, 7 is 2014, 8 is 2015...)
-FirstYear<-strtoi(input$RatiosFrom)
-SecondYear<-strtoi(input$RatiosFrom)+5
+FirstYear<-rep(strtoi(input$RatiosFrom),ITER)
+SecondYear<-FirstYear+5
+if(input$RatiosFrom=="Combined") {
+  FirstYear<-sample(c(3:8),ITER,replace=TRUE)
+  SecondYear<-FirstYear+5
+}
 
 ##IMPOSED TFR OPTION (WITH AUTOCORRELATION OPTION)
 ImposedTFR<-array(runif(ITER,input$ImposedTFR[1],input$ImposedTFR[2]))
@@ -330,15 +336,24 @@ TMinusOneAge_M<-TMinusOneAgeInit_M
 
 TMinusOneAge<-TMinusOneAgeInit<-array(c(TMinusOneAge_F,TMinusOneAge_M),c(SIZE,1,ITER))
 
-TMinusOneAgeInitRatios_F<-subset(K,CTYNAME==Name & YEAR==FirstYear & AGEGRP>0)
-TMinusOneAgeInitRatios_F<-TMinusOneAgeInitRatios_F$TOT_FEMALE
-TMinusOneAgeRatios_F<-TMinusOneAgeInitRatios_F
+TMinusOneAgeRatios_F<-TMinusOneAgeInitRatios_F<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusOneAgeInitRatios_F[[i]]<-subset(K,CTYNAME==Name & YEAR==FirstYear[i] & AGEGRP>0)
+  TMinusOneAgeInitRatios_F[[i]]<-TMinusOneAgeInitRatios_F[[i]]$TOT_FEMALE
+  TMinusOneAgeRatios_F<-TMinusOneAgeInitRatios_F
+}
 
-TMinusOneAgeInitRatios_M<-subset(K,CTYNAME==Name & YEAR==FirstYear & AGEGRP>0)
-TMinusOneAgeInitRatios_M<-TMinusOneAgeInitRatios_M$TOT_MALE
-TMinusOneAgeRatios_M<-TMinusOneAgeInitRatios_M
+TMinusOneAgeRatios_M<-TMinusOneAgeInitRatios_M<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusOneAgeInitRatios_M[[i]]<-subset(K,CTYNAME==Name & YEAR==FirstYear[i] & AGEGRP>0)
+  TMinusOneAgeInitRatios_M[[i]]<-TMinusOneAgeInitRatios_M[[i]]$TOT_MALE
+  TMinusOneAgeRatios_M<-TMinusOneAgeInitRatios_M
+}
 
-TMinusOneAgeRatios<-TMinusOneAgeInitRatios<-array(c(TMinusOneAgeRatios_F,TMinusOneAgeRatios_M),c(SIZE,1,ITER))
+TMinusOneAgeRatios<-TMinusOneAgeInitRatios<-array(0,c(SIZE,1,ITER))
+for (i in 1:ITER) {
+  TMinusOneAgeRatios[,,i]<-TMinusOneAgeInitRatios[,,i]<-c(unlist(TMinusOneAgeRatios_F[[i]]),unlist(TMinusOneAgeRatios_M[[i]]))
+}
 
 TMinusZeroAgeInit_F<-subset(K,CTYNAME==Name & YEAR==8 & AGEGRP>0)
 TMinusZeroAgeInit_F<-TMinusZeroAgeInit_F$TOT_FEMALE
@@ -350,15 +365,24 @@ TMinusZeroAge_M<-TMinusZeroAgeInit_M
 
 TMinusZeroAge<-TMinusZeroAgeInit<-array(c(TMinusZeroAge_F,TMinusZeroAge_M),c(SIZE,1,ITER))
 
-TMinusZeroAgeInitRatios_F<-subset(K,CTYNAME==Name & YEAR==SecondYear & AGEGRP>0)
-TMinusZeroAgeInitRatios_F<-TMinusZeroAgeInitRatios_F$TOT_FEMALE
-TMinusZeroAgeRatios_F<-TMinusZeroAgeInitRatios_F
+TMinusZeroAgeRatios_F<-TMinusZeroAgeInitRatios_F<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusZeroAgeInitRatios_F[[i]]<-subset(K,CTYNAME==Name & YEAR==SecondYear[i] & AGEGRP>0)
+  TMinusZeroAgeInitRatios_F[[i]]<-TMinusZeroAgeInitRatios_F[[i]]$TOT_FEMALE
+  TMinusZeroAgeRatios_F<-TMinusZeroAgeInitRatios_F
+}
 
-TMinusZeroAgeInitRatios_M<-subset(K,CTYNAME==Name & YEAR==SecondYear & AGEGRP>0)
-TMinusZeroAgeInitRatios_M<-TMinusZeroAgeInitRatios_M$TOT_MALE
-TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M
+TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M<-list(K,ITER)
+for (i in 1:ITER) {
+  TMinusZeroAgeInitRatios_M[[i]]<-subset(K,CTYNAME==Name & YEAR==SecondYear[i] & AGEGRP>0)
+  TMinusZeroAgeInitRatios_M[[i]]<-TMinusZeroAgeInitRatios_M[[i]]$TOT_MALE
+  TMinusZeroAgeRatios_M<-TMinusZeroAgeInitRatios_M
+}
 
-TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-array(c(TMinusZeroAgeRatios_F,TMinusZeroAgeRatios_M),c(SIZE,1,ITER))
+TMinusZeroAgeRatios<-TMinusZeroAgeInitRatios<-array(0,c(SIZE,1,ITER))
+for (i in 1:ITER) {
+  TMinusZeroAgeRatios[,,i]<-TMinusZeroAgeInitRatios[,,i]<-c(unlist(TMinusZeroAgeRatios_F[[i]]),unlist(TMinusZeroAgeRatios_M[[i]]))
+}
 
 ##########
 ##CALCULATIONS
