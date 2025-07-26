@@ -1,7 +1,7 @@
 ##########
 ##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA - DRAFTING
 ##
-##EDDIE HUNSINGER, AUGUST 2022 (based on work from November 2020: https://shiny.demog.berkeley.edu/eddieh/CCRUnc/)
+##EDDIE HUNSINGER, AUGUST 2022 (based on work from November 2020: https://edyhsgr.shinyapps.io/CCR_Unc_CA/, updated July 2025)
 ##https://edyhsgr.github.io/
 ##
 ##IF YOU WOULD LIKE TO USE, SHARE OR REPRODUCE THIS CODE, PLEASE CITE THE SOURCE
@@ -10,17 +10,19 @@
 ##EXAMPLE DATA IS LINKED, SO YOU SHOULD BE ABLE TO SIMPLY COPY ALL AND PASTE INTO R TO SEE IT WORK
 ##
 ##THERE IS NO WARRANTY FOR THIS CODE
-##THIS CODE HAS NOT BEEN PEER-REVIEWED OR CAREFULLY TESTED - QUESTIONS AND COMMENTS ARE WELCOME, OF COURSE (edyhsgr@gmail.com)
+##THIS CODE HAS NOT BEEN PEER-REVIEWED OR CAREFULLY TESTED - QUESTIONS AND COMMENTS ARE WELCOME, OF COURSE (edyhsgr@protonmail.com)
 ##########
 
 #install.packages("shiny")
 #install.packages("gplots")
+#install.packages("RCurl")
 library(shiny)
 library(gplots)
+library(RCurl)
 
 ui<-fluidPage(
   
-  tags$h3("Cohort Change Ratio-Based Stochastic Population Projection Review Shiny App - Applied to UN WPP 2022 Data"),
+  tags$h3("Cohort Change Ratio-Based Stochastic Population Projection Review Shiny App - Applied to UN WPP 2022 Data - Draft"),
   p("Related information and ",
     tags$a(href="https://www.r-project.org/", "R"),
     "code available at: ",
@@ -32,7 +34,7 @@ ui<-fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      
+          
       selectizeInput(inputId = "Area", label = "Area", 
                      choices = c(
                        "Afghanistan"="Afghanistan",
@@ -312,26 +314,27 @@ ui<-fluidPage(
                      ),
                      options = list(placeholder = "Type in an area to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
       ),
-      
-      numericInput("STEP","Project to (year)",2030,2020,2100,step=5),
-      
-      selectInput("RatiosFrom", "Using ratios from", selected="Combined",
-                  c("2015 to 2020"="2015",
-                    "2014 to 2019"="2014",
-                    "2013 to 2018"="2013",
-                    "2012 to 2017"="2012",
-                    "2011 to 2016"="2011",
-                    "2010 to 2015"="2010",
-                    "Sample from listed periods"="Combined"
+      hr(),
+
+     selectInput("RunProjection", "Run projection (area data download is slow)",
+                  c(
+                    "No"="NO",
+                    "Yes"="YES"
                   ),
       ),
+      hr(),
+
+      numericInput("START","Project from (year)",1975,1950,2095,step=5),
+      numericInput("STEP","Project to (year)",2030,1955,2100,step=5),
+
+      sliderInput("RATIOSYEARS",label = "Cohort change ratio years",min = 1950, max = 2100, value = c(2000,2010),step= 5,sep=""),
       
       numericInput("ITER","Number of projection iterations (sample size)",100,100,1000,step=100),
       
       selectInput("ShowUN", "Show UN WPP Median Projection?",
                   c(
-                    "No"="NO",
-                    "Yes"="YES"
+                    "Yes"="YES",
+                    "No"="NO"
                   ),
       ),
       
@@ -387,7 +390,7 @@ ui<-fluidPage(
         
         "based on",
         
-        tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRUnc/", 
+        tags$a(href="https://edyhsgr.shinyapps.io/CCR_Unc_CA/", 
                "work from November 2020."), 
         
         tags$a(href="https://edyhsgr.github.io/", 
@@ -402,15 +405,9 @@ ui<-fluidPage(
         tags$a(href="https://www.r-project.org/",
                "R"),
         "code with input files for several examples, including the ",
-        tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable/",
+        tags$a(href="https://edyhsgr.shinyapps.io/CCRStable_California/",
                "main stable population review version "), 
-        "that it's based on, an ",	
-        tags$a(href="https://edyhsgr.shinyapps.io/CCRStable_ValView_Florida/",
-               "errors review version"), 
-        "and a ",
-        tags$a(href="https://shiny.demog.berkeley.edu/eddieh/CCRStable_StateSingle_Florida/",
-               "single-year-of-age version, "), 
-        "is all available in the ",
+        "is available in the ",
         tags$a(href="https://github.com/edyhsgr/CCRStable", 
                "related GitHub repository.")),
       
@@ -418,7 +415,7 @@ ui<-fluidPage(
         tags$a(href="https://population.un.org/wpp/", 
                "United Nations World Population Prospects 2022."),
         
-        "Information on accessing United Nations World Population Prospects 2022 data through R statistical software: ",
+        "Information on accessing United Nations World Population Prospects 2022 data through R statistical software (later note, a token is now required): ",
         tags$a(href="https://bonecave.schmert.net/un-api-1-year-pyramids-Argentina.html", 
                "Schmertmann (2022).")),
       
@@ -437,16 +434,12 @@ ui<-fluidPage(
           tags$a(href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0067226", 
                  "Hauer, Baker, and Brown (2013).")),
         
-        p("Slides with background thoughts on adjusting net migration: ",
-          tags$a(href="https://edyhsgr.github.io/documents/ProjPresentation.pdf", 
-                 "Hunsinger (2007)."),
-          
-          "Migration by age over time comparisons from Alaska data: ",
-          tags$a(href="http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/", 
+        p("Migration by age over time comparisons from Alaska data: ",
+          tags$a(href="https://raw.githubusercontent.com/edyhsgr/AKMigrationProfiles/refs/heads/master/AKMigrationProfiles_app.R", 
                  "Hunsinger (2018)."),
           
           "Interface with net migration adjustment examples and comparisons: ",
-          tags$a(href="http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/", 
+          tags$a(href="https://raw.githubusercontent.com/edyhsgr/NetMigrationAdjustCompare/refs/heads/master/app.R", 
                  "Hunsinger (2019)."),
           
           "Migration adjustment profile was made from the US Census Bureau's 2013 to 2017 
@@ -497,37 +490,44 @@ server<-function(input, output) {
     lxT<-c(lxT[1],lxT[3:24])
     
     ##RUN ONLY IF AREA INPUTS ARE PROVIDED
-    if(input$Area=="") {										# | input$STEP>2100) {
+    if(input$Area=="" | input$RunProjection=="NO" | input$RATIOSYEARS[1]==input$RATIOSYEARS[2]) {										# | input$STEP>2100) {
       plot.new()
-      legend("topleft",legend=c("Select an area with the panel to the left"),cex=2,bty="n")		#, "'Project to (year)' maximum for this version is 2100"),cex=1.85,bty="n")
+      legend("topleft",legend=c("Select an area, choose parameters, and set Run Projection to Yes"),cex=2,bty="n")		#, "'Project to (year)' maximum for this version is 2100"),cex=1.85,bty="n")
     }
     
-    if(input$Area!="" & input$STEP<=2200) {
-      
-      base_url<-"https://population.un.org/dataportalapi/api/v1"
-      Area_select<-data.frame(read.csv(paste(c(base_url,"/locations?sort=id&format=csv"),collapse=""),sep="|",skip=1))
-      Select_url<-paste(c(base_url,		#Thanks for guidance from https://bonecave.schmert.net/un-api-1-year-pyramids-Argentina.html !
-                          "/data/indicators/",
-                          46,				#46 is PopByAge5AndSex
-                          "/locations/",
-                          Area_select$Id[Area_select$Name==input$Area],
-                          "/start/",2010,
-                          "/end/",2020,
-                          "/?format=csv"),collapse="")
-      Select<-read.csv(Select_url,sep="|",skip=1)
-      
-      if(input$STEP<=2100) {
-        SelectVal_url<-paste(c(base_url,
-                               "/data/indicators/",
-                               46,			#46 is PopByAge5AndSex
-                               "/locations/",
-                               Area_select$Id[Area_select$Name==input$Area],
-                               "/start/",input$STEP,
-                               "/end/",input$STEP,
-                               "/?format=csv"),collapse="")
-        SelectVal<-read.csv(SelectVal_url,sep="|",skip=1)
-      }
-      
+    if(input$Area!="" & input$STEP<=2200 & input$RunProjection=="YES" & input$RATIOSYEARS[1]!=input$RATIOSYEARS[2]) {
+
+base_url <- "https://population.un.org/dataportalapi/api/v1"
+headers <- c(
+  "Authorization" = "Bearer #####[TOKEN HERE]#####"
+)
+
+#Get locations
+locations_url <- paste0(base_url, "/locations?sort=id&format=csv")
+locations_csv <- getURL(locations_url, .opts=list(httpheader = headers, followlocation = TRUE))
+Area_select <- read.csv(text = locations_csv, sep = "|", skip = 1)
+
+#area ID
+area_id <- Area_select$Id[Area_select$Name == input$Area]
+
+#Build the indicator data URL
+indicator_id <- 46 # PopByAge5AndSex
+start_year <- 1950
+end_year <- 2100
+Select_url <- paste0(
+  base_url, "/data/indicators/", indicator_id,
+  "/locations/", area_id,
+  "/start/", start_year,
+  "/end/", end_year,
+  "/?format=csv"
+)
+
+#Download and read the indicator data
+Select_csv <- getURL(Select_url, .opts=list(httpheader = headers, followlocation = TRUE))
+Select <- read.csv(text = Select_csv, sep = "|", skip = 1)
+
+SelectVal<-Select[Select$TimeLabel==input$STEP,]
+
       ##########
       ##SCRIPT INPUTS
       ##########
@@ -536,18 +536,14 @@ server<-function(input, output) {
       ITER<-input$ITER
       SIZE<-36
       HALFSIZE<-SIZE/2
-      STEPS<-(input$STEP-2015)/5
-      CURRENTSTEP<-(2020-2015)/5
-      PROJECTIONYEAR<-STEPS*5+2015
+      STEPS<-(input$STEP-input$START)/5
+      CURRENTSTEP<-1  #(1980-1975)/5
+      PROJECTIONYEAR<-STEPS*5+input$START
       FERTWIDTH<-35
       
       ##SELECTING RATIOS BASIS
-      FirstYear<-rep(strtoi(input$RatiosFrom),ITER)
-      SecondYear<-FirstYear+5
-      if(input$RatiosFrom=="Combined") {
-        FirstYear<-sample(c(2010:2015),ITER,replace=TRUE)
+        FirstYear<-sample(c(input$RATIOSYEARS[1]:input$RATIOSYEARS[2]),ITER,replace=TRUE)
         SecondYear<-FirstYear+5
-      }
       
       ##IMPOSED TFR OPTION (WITH AUTOCORRELATION OPTION)
       ImposedTFR<-array(runif(ITER,input$ImposedTFR[1],input$ImposedTFR[2]))
@@ -579,15 +575,15 @@ server<-function(input, output) {
       options(scipen=999)
       
       ##SELECTING FROM THE INPUT POPULATION TABLE (Select) BASED ON INPUTS
-      TMinusOneAgeInit_F<-subset(Select,Sex=="Female" & TimeLabel==2010 & AgeStart<90)
+      TMinusOneAgeInit_F<-subset(Select,Sex=="Female" & TimeLabel==input$START-5 & AgeStart<90)
       TMinusOneAgeInit_F<-TMinusOneAgeInit_F$Value
-      TMinusOneAgeInit_F_Max<-subset(Select,Sex=="Female" & TimeLabel==2010 & AgeStart>80)
+      TMinusOneAgeInit_F_Max<-subset(Select,Sex=="Female" & TimeLabel==input$START-5 & AgeStart>80)
       TMinusOneAgeInit_F[18]<-sum(TMinusOneAgeInit_F_Max$Value)
       TMinusOneAge_F<-TMinusOneAgeInit_F
       
-      TMinusOneAgeInit_M<-subset(Select,Sex=="Male" & TimeLabel==2010 & AgeStart<90)
+      TMinusOneAgeInit_M<-subset(Select,Sex=="Male" & TimeLabel==input$START-5 & AgeStart<90)
       TMinusOneAgeInit_M<-TMinusOneAgeInit_M$Value
-      TMinusOneAgeInit_M_Max<-subset(Select,Sex=="Male" & TimeLabel==2010 & AgeStart>80)
+      TMinusOneAgeInit_M_Max<-subset(Select,Sex=="Male" & TimeLabel==input$START-5 & AgeStart>80)
       TMinusOneAgeInit_M[18]<-sum(TMinusOneAgeInit_M_Max$Value)
       TMinusOneAge_M<-TMinusOneAgeInit_M
       
@@ -616,15 +612,15 @@ server<-function(input, output) {
         TMinusOneAgeRatios[,,i]<-TMinusOneAgeInitRatios[,,i]<-c(unlist(TMinusOneAgeRatios_F[[i]]),unlist(TMinusOneAgeRatios_M[[i]]))
       }
       
-      TMinusZeroAgeInit_F<-subset(Select,Sex=="Female" & TimeLabel==2015 & AgeStart<90)
+      TMinusZeroAgeInit_F<-subset(Select,Sex=="Female" & TimeLabel==input$START & AgeStart<90)
       TMinusZeroAgeInit_F<-TMinusZeroAgeInit_F$Value
-      TMinusZeroAgeInit_F_Max<-subset(Select,Sex=="Female" & TimeLabel==2015 & AgeStart>80)
+      TMinusZeroAgeInit_F_Max<-subset(Select,Sex=="Female" & TimeLabel==input$START & AgeStart>80)
       TMinusZeroAgeInit_F[18]<-sum(TMinusZeroAgeInit_F_Max$Value)
       TMinusZeroAge_F<-TMinusZeroAgeInit_F
       
-      TMinusZeroAgeInit_M<-subset(Select,Sex=="Male" & TimeLabel==2015 & AgeStart<90)
+      TMinusZeroAgeInit_M<-subset(Select,Sex=="Male" & TimeLabel==input$START & AgeStart<90)
       TMinusZeroAgeInit_M<-TMinusZeroAgeInit_M$Value
-      TMinusZeroAgeInit_M_Max<-subset(Select,Sex=="Male" & TimeLabel==2015 & AgeStart>80)
+      TMinusZeroAgeInit_M_Max<-subset(Select,Sex=="Male" & TimeLabel==input$START & AgeStart>80)
       TMinusZeroAgeInit_M[18]<-sum(TMinusZeroAgeInit_M_Max$Value)
       TMinusZeroAge_M<-TMinusZeroAgeInit_M
       
@@ -713,9 +709,9 @@ server<-function(input, output) {
       for (i in 1:ITER) {A[,,i]<-rbind(Acolone[,,i],Acoltwo[,,i])}
       
       ##IMPLIED TFR CALCULATION
-      ImpliedTFR2010<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
-      ImpliedTFR2015<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
-      ImpliedTFR<-array(ImpliedTFR2015,ITER)
+      ImpliedTFRTMinusFive<-((TMinusOneAgeInit[1]+TMinusOneAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+      ImpliedTFRTMinusZero<-((TMinusZeroAgeInit[1]+TMinusZeroAgeInit[HALFSIZE+1])/5)/sum(TMinusZeroAgeInit[4:10])*FERTWIDTH
+      ImpliedTFR<-array(ImpliedTFRTMinusZero,ITER)
       
       if(STEPS<=37 & ITER<=2000){		##MAX STEPS AND ITER IN CASE USER (ESP ME) GETS CARRIED AWAY
         
@@ -741,7 +737,7 @@ server<-function(input, output) {
           assign(paste(text=c("e0M_",CURRENTSTEP),collapse=""),e0MAdj[])
           
           K_0<-sum(TMinusZeroAgeInit[,,1])
-          ImpliedTFR_0<-ImpliedTFR2015
+          ImpliedTFR_0<-ImpliedTFRTMinusZero
           NetMigrAdj_0<-0
           e0F_0<-e0FStart
           e0M_0<-e0MStart
@@ -819,26 +815,26 @@ server<-function(input, output) {
       ##THIRD GRAPH - TOTAL POPULATION
       plot(K_Project[1,],type="l",ylim=c(min(K_Project)*.9,max(K_Project)*1.1),xlab="Year",ylab="",main="Total Population by Year",cex.lab=2,cex.main=2,axes=F)
       for (i in 1:ITER) {lines(K_Project[i,],col=sample(6))}
-      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(input$START-5,CURRENTSTEP*5+input$START-5,5)),cex.axis=1.5)
       axis(side=2,cex.axis=1.5)
       
       ##FOURTH GRAPH - iTFR
       plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,8),xlab="Time Step End Year",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
       for (i in 1:ITER) {lines(ImpliedTFR_Project[i,],col=sample(6))}
-      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(input$START-5,CURRENTSTEP*5+input$START-5,5)),cex.axis=1.5)
       axis(side=2,cex.axis=1.5)
       
       ##FIFTH GRAPH - NET MIGRATION
       plot(NetMigrAdj_Project[1,],type="l",ylim=c(-.02,.02),xlab="Time Step End Year",ylab="",main="Net Migration Adjustment by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
       for (i in 1:ITER) {lines(NetMigrAdj_Project[i,],col=sample(6))}
-      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(input$START-5,CURRENTSTEP*5+input$START-5,5)),cex.axis=1.5)
       axis(side=2,cex.axis=1.5)
       
       ##SIXTH GRAPH - LIFE EXPECTANCY AT BIRTH (FEMALE AND MALE)
       plot(e0F_Project[1,],type="l",ylim=c(50,110),xlab="Time Step End Year",ylab="",main="e0 (Female and Male) by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
       for (i in 1:ITER) {lines(e0F_Project[i,],col=sample(6))}
       for (i in 1:ITER) {lines(e0M_Project[i,],col=sample(6))}
-      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(2010,CURRENTSTEP*5+2010,5)),cex.axis=1.5)
+      axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(input$START-5,CURRENTSTEP*5+input$START-5,5)),cex.axis=1.5)
       axis(side=2,cex.axis=1.5)
       
     }   
