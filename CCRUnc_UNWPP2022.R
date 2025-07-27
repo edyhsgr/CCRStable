@@ -327,7 +327,7 @@ ui<-fluidPage(
       numericInput("START","Project from (year)",1975,1950,2095,step=5),
       numericInput("STEP","Project to (year)",2030,1955,2100,step=5),
 
-      sliderInput("RATIOSYEARS",label = "Cohort change ratio years",min = 1950, max = 2100, value = c(2000,2010),step= 5,sep=""),
+      sliderInput("RATIOSYEARS",label = "Cohort change ratio starting years",min = 1950, max = 2020, value = c(2000,2010),step= 1,sep=""),
       
       numericInput("ITER","Number of projection iterations (sample size)",100,100,1000,step=100),
       
@@ -384,7 +384,7 @@ ui<-fluidPage(
       
       hr(),
       
-      p("This interface was made with ",
+        p("This interface was made with ",
         tags$a(href="https://shiny.rstudio.com/", 
                "Shiny for R,"),
         
@@ -396,9 +396,9 @@ ui<-fluidPage(
         tags$a(href="https://edyhsgr.github.io/", 
                "Eddie Hunsinger,"), 
         
-        "August 2022."),
+        "August 2022 (updated July 2025)."),
       
-      p("Information including ", 
+        p("Information including ", 
         tags$a(href="https://github.com/edyhsgr/CCRStable/tree/master/Oct2020Presentation",
                "formulas, a spreadsheet demonstration, and slides for a related talk, "),
         "as well as ",
@@ -411,17 +411,13 @@ ui<-fluidPage(
         tags$a(href="https://github.com/edyhsgr/CCRStable", 
                "related GitHub repository.")),
       
-      p("Population estimates inputs from ",
+        p("Population estimates inputs from ",
         tags$a(href="https://population.un.org/wpp/", 
                "United Nations World Population Prospects 2022."),
         
-        "Information on accessing United Nations World Population Prospects 2022 data through R statistical software (later note, a token is now required): ",
+        p("Information on accessing United Nations World Population Prospects 2022 data through R statistical software (later note, a token is now required): ",
         tags$a(href="https://bonecave.schmert.net/un-api-1-year-pyramids-Argentina.html", 
                "Schmertmann (2022).")),
-      
-      p("More information on cohort change ratios: ",
-        tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
-               "Baker, Swanson, Tayman, and Tedrow (2017)."),
         
         p("Supporting work and thinking on stochastic population projection: ",
           tags$a(href="https://applieddemogtoolbox.github.io/#StochasticForecast", 
@@ -454,7 +450,7 @@ ui<-fluidPage(
           tags$a(href="https://usa.mortality.org/index.php", 
                  "United States Mortality Database."))),
       
-      p(tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
+        p(tags$a(href="https://applieddemogtoolbox.github.io/#CCRStable", 
                "Applied Demography Toolbox listing.")),
       
       width=3
@@ -490,12 +486,12 @@ server<-function(input, output) {
     lxT<-c(lxT[1],lxT[3:24])
     
     ##RUN ONLY IF AREA INPUTS ARE PROVIDED
-    if(input$Area=="" | input$RunProjection=="NO" | input$RATIOSYEARS[1]==input$RATIOSYEARS[2]) {										# | input$STEP>2100) {
+    if(input$Area=="" | input$RunProjection=="NO") {										# | input$STEP>2100) {
       plot.new()
       legend("topleft",legend=c("Select an area, choose parameters, and set Run Projection to Yes"),cex=2,bty="n")		#, "'Project to (year)' maximum for this version is 2100"),cex=1.85,bty="n")
     }
     
-    if(input$Area!="" & input$STEP<=2200 & input$RunProjection=="YES" & input$RATIOSYEARS[1]!=input$RATIOSYEARS[2]) {
+    if(input$Area!="" & input$STEP<=2200 & input$RunProjection=="YES") {
 
 base_url <- "https://population.un.org/dataportalapi/api/v1"
 headers <- c(
@@ -542,7 +538,8 @@ SelectVal<-Select[Select$TimeLabel==input$STEP,]
       FERTWIDTH<-35
       
       ##SELECTING RATIOS BASIS
-        FirstYear<-sample(c(input$RATIOSYEARS[1]:input$RATIOSYEARS[2]),ITER,replace=TRUE)
+        if (input$RATIOSYEARS[1]==input$RATIOSYEARS[2]) {FirstYear<-sample(c(input$RATIOSYEARS[1],input$RATIOSYEARS[1]),ITER,replace=TRUE)}
+	if (input$RATIOSYEARS[1]!=input$RATIOSYEARS[2]) {FirstYear<-sample(c(input$RATIOSYEARS[1]:input$RATIOSYEARS[2]),ITER,replace=TRUE)}
         SecondYear<-FirstYear+5
       
       ##IMPOSED TFR OPTION (WITH AUTOCORRELATION OPTION)
