@@ -29,17 +29,11 @@ References, resources, and related info:
     -Hauer and Schmertmann (2019): https://osf.io/adu98/
     -Hauer, Baker, and Brown (2013): https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0067226
 
-  More information on cohort change ratios, including a chapter on stable population: 
-    -Baker, Swanson, Tayman, and Tedrow (2017): https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033
-    
-  Slides with background thoughts on adjusting net migration: 
-    -Hunsinger (2007): https://edyhsgr.github.io/documents/ProjPresentation.pdf
-   
   Net migration by age over time comparisons from Alaska data: 
-    -Hunsinger (2018): http://shiny.demog.berkeley.edu/eddieh/AKPFDMigrationReview/
+    -Hunsinger (2018): https://raw.githubusercontent.com/edyhsgr/AKMigrationProfiles/refs/heads/master/AKMigrationProfiles_app.R 
     
   Interface with net migration adjustment examples and comparisons: 
-    -Hunsinger (2019): http://shiny.demog.berkeley.edu/eddieh/NMAdjustCompare/ 
+    -Hunsinger (2019): https://raw.githubusercontent.com/edyhsgr/NetMigrationAdjustCompare/refs/heads/master/app.R  
     
   Graphs of e0 and Brass relational life table model by US state: 
     -https://github.com/edyhsgr/BrassRelationalMortOverTime_USAStates 
@@ -51,15 +45,15 @@ References, resources, and related info:
     -https://usa.ipums.org/usa/
 
   Supporting work and thinking on stochastic population projection: 
-    -https://applieddemogtoolbox.github.io/#StochasticForecast
+    -https://applieddemogtoolbox.github.io#StochasticForecast
 
   Applied Demography Toolbox listing: 
-    -https://applieddemogtoolbox.github.io/Toolbox/#CCRStable
+    -https://applieddemogtoolbox.github.io#CCRStable
 
   Related Shiny for R application: 
-    -(Hunsinger 2019) https://shiny.demog.berkeley.edu/eddieh/CCRStable/
+    -(Hunsinger 2019) https://edyhsgr.shinyapps.io/CCRStable_California/
     
--Eddie Hunsinger, August 2019 (updated June 2022)
+-Eddie Hunsinger, August 2019 (updated July 2025)
 
 -----
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/igo/">Creative Commons Attribution-ShareAlike 3.0 International License</a>.
