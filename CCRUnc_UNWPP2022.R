@@ -1,5 +1,5 @@
 ##########
-##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA - DRAFTING
+##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA 
 ##
 ##EDDIE HUNSINGER, AUGUST 2022 (based on work from November 2020: https://edyhsgr.shinyapps.io/CCR_Unc_CA/, updated July 2025)
 ##https://edyhsgr.github.io/
@@ -316,7 +316,7 @@ ui<-fluidPage(
       ),
       hr(),
 
-     selectInput("RunProjection", "Run projection (area data download is slow)",
+     selectInput("RunProjection", "Run projection (area data download is slow, so can set parameters first)",
                   c(
                     "No"="NO",
                     "Yes"="YES"
@@ -327,7 +327,7 @@ ui<-fluidPage(
       numericInput("START","Project from (year)",1975,1950,2095,step=5),
       numericInput("STEP","Project to (year)",2030,1955,2100,step=5),
 
-      sliderInput("RATIOSYEARS",label = "Cohort change ratio starting years",min = 1950, max = 2020, value = c(2000,2010),step= 1,sep=""),
+      sliderInput("RATIOSYEARS",label = "Cohort change ratio starting years (for example, selecting 2000 will sample the 2000 to 2005 cohort change ratios)",min = 1950, max = 2018, value = c(2000,2010),step= 1,sep=""),
       
       numericInput("ITER","Number of projection iterations (sample size)",100,100,1000,step=100),
       
@@ -415,7 +415,7 @@ ui<-fluidPage(
         tags$a(href="https://population.un.org/wpp/", 
                "United Nations World Population Prospects 2022."),
         
-        p("Information on accessing United Nations World Population Prospects 2022 data through R statistical software (later note, a token is now required): ",
+        p("Information on accessing United Nations World Population Prospects 2022 data through R statistical software (update: a token is now required): ",
         tags$a(href="https://bonecave.schmert.net/un-api-1-year-pyramids-Argentina.html", 
                "Schmertmann (2022).")),
         
@@ -488,14 +488,14 @@ server<-function(input, output) {
     ##RUN ONLY IF AREA INPUTS ARE PROVIDED
     if(input$Area=="" | input$RunProjection=="NO") {										# | input$STEP>2100) {
       plot.new()
-      legend("topleft",legend=c("Select an area, choose parameters, and set Run Projection to Yes"),cex=2,bty="n")		#, "'Project to (year)' maximum for this version is 2100"),cex=1.85,bty="n")
+      legend("topleft",legend=c("Select an area, choose parameters, and set run projection to Yes"),cex=2,bty="n")		#, "'Project to (year)' maximum for this version is 2100"),cex=1.85,bty="n")
     }
     
     if(input$Area!="" & input$STEP<=2200 & input$RunProjection=="YES") {
 
 base_url <- "https://population.un.org/dataportalapi/api/v1"
 headers <- c(
-  "Authorization" = "Bearer #####[TOKEN HERE]#####"
+  "Authorization" = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVkeWhzZ3JAcHJvdG9ubWFpbC5jb20iLCJuYmYiOjE3MzYyNzE3MDQsImV4cCI6MTc2NzgwNzcwNCwiaWF0IjoxNzM2MjcxNzA0LCJpc3MiOiJkb3RuZXQtdXNlci1qd3RzIiwiYXVkIjoiZGF0YS1wb3J0YWwtYXBpIn0.5Mx2vIJL0SqcL7m60-wIQZ2gS2iOkCv1zzyUafJm9z8"
 )
 
 #Get locations
