@@ -1,5 +1,5 @@
 ##########
-##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA - DRAFTING
+##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2024 DATA - DRAFTING
 ##
 ##EDDIE HUNSINGER, AUGUST 2022 (based on work from November 2020: https://edyhsgr.shinyapps.io/CCR_Unc_CA/, updated July 2025)
 ##https://edyhsgr.github.io/
@@ -22,7 +22,7 @@ library(RCurl)
 
 ui<-fluidPage(
   
-  tags$h3("Cohort Change Ratio-Based Stochastic Population Projection Review Shiny App - Applied to UN WPP 2022 Data - Draft"),
+  tags$h3("Cohort Change Ratio-Based Stochastic Population Projection Review Shiny App - Applied to UN WPP 2024 Data - Draft"),
   p("Related information and ",
     tags$a(href="https://www.r-project.org/", "R"),
     "code available at: ",
@@ -413,7 +413,7 @@ ui<-fluidPage(
       
         p("Population estimates inputs from ",
         tags$a(href="https://population.un.org/wpp/", 
-               "United Nations World Population Prospects 2022."),
+               "United Nations World Population Prospects 2024."),
         
         p("Information on accessing United Nations World Population Prospects 2022 data through R statistical software (update: a token is now required): ",
         tags$a(href="https://bonecave.schmert.net/un-api-1-year-pyramids-Argentina.html", 
