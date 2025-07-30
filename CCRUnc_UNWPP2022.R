@@ -1,5 +1,5 @@
 ##########
-##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA 
+##HAMILTON-PERRY WITH STOCHASTIC COMPONENTS POPULATION PROJECTION CODE - APPLIED TO UN WPP 2022 DATA - DRAFTING
 ##
 ##EDDIE HUNSINGER, AUGUST 2022 (based on work from November 2020: https://edyhsgr.shinyapps.io/CCR_Unc_CA/, updated July 2025)
 ##https://edyhsgr.github.io/
@@ -324,8 +324,8 @@ ui<-fluidPage(
       ),
       hr(),
 
-      numericInput("START","Project from (year)",1975,1950,2095,step=5),
-      numericInput("STEP","Project to (year)",2030,1955,2100,step=5),
+      numericInput("START","Project from (year)",2015,1950,2095,step=5),
+      numericInput("STEP","Project to (year)",2050,1955,2100,step=5),
 
       sliderInput("RATIOSYEARS",label = "Cohort change ratio starting years (for example, selecting 2000 will sample the 2000 to 2005 cohort change ratios)",min = 1950, max = 2018, value = c(2000,2010),step= 1,sep=""),
       
@@ -348,7 +348,7 @@ ui<-fluidPage(
  #     ),
       
       sliderInput("ImposedTFR_ar","iTFR AR(1) term (range inputs give uniform range option, for uncertain autocorrelation, etc.)",min=0,max=1,value=c(.75,1),step=0.05),
-      sliderInput("ImposedTFR","...and iTFR level term",min=0,max=5,value=c(1.2,2.1),step=0.1),
+      sliderInput("ImposedTFR","...and iTFR level term",min=0.1,max=5,value=c(1.2,2.1),step=0.1),
       sliderInput("ImposedTFR_se","...and iTFR standard error term",min=0,max=.5,value=c(.05,.25),step=0.05),
       
       hr(),
@@ -495,7 +495,7 @@ server<-function(input, output) {
 
 base_url <- "https://population.un.org/dataportalapi/api/v1"
 headers <- c(
-  "Authorization" = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVkeWhzZ3JAcHJvdG9ubWFpbC5jb20iLCJuYmYiOjE3MzYyNzE3MDQsImV4cCI6MTc2NzgwNzcwNCwiaWF0IjoxNzM2MjcxNzA0LCJpc3MiOiJkb3RuZXQtdXNlci1qd3RzIiwiYXVkIjoiZGF0YS1wb3J0YWwtYXBpIn0.5Mx2vIJL0SqcL7m60-wIQZ2gS2iOkCv1zzyUafJm9z8"
+  "Authorization" = "Bearer #####TOKEN HERE#####"
 )
 
 #Get locations
