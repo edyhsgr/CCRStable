@@ -310,7 +310,8 @@ ui<-fluidPage(
                        "Northern Africa and Western Asia"="Northern Africa and Western Asia",
                        "Oceania (excluding Australia and New Zealand)"="Oceania (excluding Australia and New Zealand)",
                        "Central Asia"="Central Asia",
-                       "Southern Asia"="Southern Asia"
+                       "Southern Asia"="Southern Asia",
+		       "World"="World"
                      ),
                      options = list(placeholder = "Type in an area to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
       ),
@@ -418,6 +419,10 @@ ui<-fluidPage(
         p("Information on accessing United Nations World Population Prospects 2022 data through R statistical software (update: a token is now required): ",
         tags$a(href="https://bonecave.schmert.net/un-api-1-year-pyramids-Argentina.html", 
                "Schmertmann (2022).")),
+
+      p(" More information on cohort change ratios: ",
+        tags$a(href="https://www.worldcat.org/title/cohort-change-ratios-and-their-applications/oclc/988385033", 
+               "Baker, Swanson, Tayman, and Tedrow (2017).")),
         
         p("Supporting work and thinking on stochastic population projection: ",
           tags$a(href="https://applieddemogtoolbox.github.io/#StochasticForecast", 
@@ -486,16 +491,16 @@ server<-function(input, output) {
     lxT<-c(lxT[1],lxT[3:24])
     
     ##RUN ONLY IF AREA INPUTS ARE PROVIDED
-    if(input$Area=="" | input$RunProjection=="NO") {										# | input$STEP>2100) {
+    if(input$Area=="" | input$RunProjection=="NO" | input$START>2020 | input$STEP>2200) {								# | input$STEP>2100) {
       plot.new()
       legend("topleft",legend=c("Select an area, choose parameters, and set run projection to Yes"),cex=2,bty="n")		#, "'Project to (year)' maximum for this version is 2100"),cex=1.85,bty="n")
     }
     
-    if(input$Area!="" & input$STEP<=2200 & input$RunProjection=="YES") {
+    if(input$Area!="" & input$START<=2020 & input$STEP<=2200 & input$RunProjection=="YES") {
 
 base_url <- "https://population.un.org/dataportalapi/api/v1"
 headers <- c(
-  "Authorization" = "Bearer #####TOKEN HERE#####"
+  "Authorization" = "Bearer ##PLACE TOKEN TO ACCESS DATA FROM THE UN DATA PORTAL HERE##"
 )
 
 #Get locations
@@ -814,6 +819,21 @@ SelectVal<-Select[Select$TimeLabel==input$STEP,]
       for (i in 1:ITER) {lines(K_Project[i,],col=sample(6))}
       axis(side=1,at=0:CURRENTSTEP,labels=paste(seq(input$START-5,CURRENTSTEP*5+input$START-5,5)),cex.axis=1.5)
       axis(side=2,cex.axis=1.5)
+	mtext(side=1,line=-49,adj=.025,text="Final Year Total Population",font=2,cex=1.1,col=1)
+	mtext(side=1,line=-47,adj=.025,text="Max: ",font=1,cex=1.1,col=1)
+	mtext(side=1,line=-47,adj=.25,text=round(quantile(K_Project[,CURRENTSTEP],1),0),font=1,cex=1.1,col=1)
+	mtext(side=1,line=-45,adj=.025,text="95th Percentile: ",font=1,cex=1.1,col=1)
+	mtext(side=1,line=-45,adj=.25,text=round(quantile(K_Project[,CURRENTSTEP],.95),0),font=1,cex=1.1,col=1)
+	mtext(side=1,line=-43,adj=.025,text="75th Percentile: ",font=1,cex=1.1,col=1)
+	mtext(side=1,line=-43,adj=.25,text=round(quantile(K_Project[,CURRENTSTEP],.75),0),font=1,cex=1.1,col=1)
+	mtext(side=1,line=-41,adj=.025,text="Median: ",font=1,cex=1.1,col="red")
+	mtext(side=1,line=-41,adj=.25,text=round(quantile(K_Project[,CURRENTSTEP],.5),0),font=1,cex=1.1,col="red")
+	mtext(side=1,line=-39,adj=.025,text="25th Percentile: ",font=1,cex=1.1,col=1)
+	mtext(side=1,line=-39,adj=.25,text=round(quantile(K_Project[,CURRENTSTEP],.25),0),font=1,cex=1.1,col=1)
+	mtext(side=1,line=-37,adj=.025,text="5th Percentile: ",font=1,cex=1.1,col=1)
+	mtext(side=1,line=-37,adj=.25,text=round(quantile(K_Project[,CURRENTSTEP],.05),0),font=1,cex=1.1,col=1)
+	mtext(side=1,line=-35,adj=.025,text="Min: ",font=1,cex=1.1,col=1)
+	mtext(side=1,line=-35,adj=.25,text=round(quantile(K_Project[,CURRENTSTEP],0),0),font=1,cex=1.1,col=1)
       
       ##FOURTH GRAPH - iTFR
       plot(ImpliedTFR_Project[1,],type="l",ylim=c(0,8),xlab="Time Step End Year",ylab="",main="Implied TFR by Time Step End Year",cex.lab=2,cex.main=2,axes=F)
